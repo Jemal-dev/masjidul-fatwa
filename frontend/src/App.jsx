@@ -10,6 +10,17 @@ import Reports from "./Reports";
 import AdminManagement from "./AdminManagement";
 
 /* =========================================================
+   AXIOS BASE URL
+   Local: uses Vite proxy → http://localhost:5000
+   Production: uses deployed backend
+========================================================= */
+
+axios.defaults.baseURL =
+  import.meta.env.PROD
+    ? "https://masjidul-fatwa-backend.vercel.app"
+    : "";
+
+/* =========================================================
    AXIOS REQUEST INTERCEPTOR
 ========================================================= */
 
