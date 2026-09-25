@@ -1540,11 +1540,23 @@ app.patch(
 const PORT =
     process.env.PORT || 5000;
 
-app.listen(
-    PORT,
-    () => {
-        console.log(
-            `Server running on http://localhost:${PORT}`
-        );
-    }
-);
+/*
+   Vercel needs access to the Express app.
+   Export it without removing local development support.
+*/
+module.exports = app;
+
+/*
+   Start the normal HTTP server only when
+   running directly with Node locally.
+*/
+if (require.main === module) {
+    app.listen(
+        PORT,
+        () => {
+            console.log(
+                `Server running on http://localhost:${PORT}`
+            );
+        }
+    );
+}
