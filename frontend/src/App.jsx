@@ -17,7 +17,7 @@ import AdminManagement from "./AdminManagement";
 
 axios.defaults.baseURL =
   import.meta.env.PROD
-    ? "https://masjidul-fatwa-backend.vercel.app"
+    ? "https://masjidul-fatwa-l6ao.vercel.app"
     : "";
 
 /* =========================================================
