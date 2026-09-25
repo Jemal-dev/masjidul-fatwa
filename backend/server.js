@@ -1620,12 +1620,9 @@ const PORT =
    TELEGRAM WEBHOOK CONFIGURATION
 ========================================================= */
 
-if (
-    process.env.VERCEL_URL &&
-    process.env.TELEGRAM_BOT_TOKEN
-) {
+if (process.env.TELEGRAM_BOT_TOKEN) {
     const webhookUrl =
-        `https://${process.env.VERCEL_URL}/api/telegram/webhook`;
+        "https://masjidul-fatwa-l6ao.vercel.app/api/telegram/webhook";
 
     setTelegramWebhook(webhookUrl);
 }
