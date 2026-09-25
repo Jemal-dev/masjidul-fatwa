@@ -1539,6 +1539,57 @@ app.patch(
 );
 
 /* =========================================================
+   TELEGRAM WEBHOOK STATUS - TEMPORARY
+========================================================= */
+
+app.get("/api/telegram/status", async (req, res) => {
+    try {
+        const token = process.env.TELEGRAM_BOT_TOKEN;
+
+        if (!token) {
+            return res.status(500).json({
+                success: false,
+                message: "TELEGRAM_BOT_TOKEN is missing"
+            });
+        }
+
+        const response = await fetch(
+            `https://api.telegram.org/bot${token}/getWebhookInfo`
+        );
+
+        const result = await response.json();
+
+        res.json({
+            success: result.ok,
+            webhook: result.result
+                ? {
+                      url: result.result.url,
+                      has_custom_certificate:
+                          result.result.has_custom_certificate,
+                      pending_update_count:
+                          result.result.pending_update_count,
+                      last_error_date:
+                          result.result.last_error_date,
+                      last_error_message:
+                          result.result.last_error_message
+                  }
+                : null
+        });
+
+    } catch (error) {
+        console.error(
+            "Telegram status error:",
+            error.message
+        );
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+/* =========================================================
    TELEGRAM BOT WEBHOOK
 ========================================================= */
 
