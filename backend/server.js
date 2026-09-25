@@ -7,6 +7,11 @@ require("dotenv").config();
 
 const db = require("./config/db");
 
+const {
+    processTelegramUpdate,
+    setTelegramWebhook
+} = require("./telegram");
+
 const app = express();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -1534,11 +1539,45 @@ app.patch(
 );
 
 /* =========================================================
+   TELEGRAM BOT WEBHOOK
+========================================================= */
+
+app.post("/api/telegram/webhook", async (req, res) => {
+    try {
+        await processTelegramUpdate(req.body);
+
+        res.sendStatus(200);
+
+    } catch (error) {
+        console.error(
+            "Telegram webhook error:",
+            error.message
+        );
+
+        res.sendStatus(500);
+    }
+});
+
+/* =========================================================
    SERVER
 ========================================================= */
 
 const PORT =
     process.env.PORT || 5000;
+
+    /* =========================================================
+   TELEGRAM WEBHOOK CONFIGURATION
+========================================================= */
+
+if (
+    process.env.VERCEL_URL &&
+    process.env.TELEGRAM_BOT_TOKEN
+) {
+    const webhookUrl =
+        `https://${process.env.VERCEL_URL}/api/telegram/webhook`;
+
+    setTelegramWebhook(webhookUrl);
+}
 
 /*
    Vercel needs access to the Express app.
