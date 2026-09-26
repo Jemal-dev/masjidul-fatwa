@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 
 const db = require("./config/db");
@@ -79,7 +78,10 @@ function normalizeEthiopianPhone(phone) {
         return "251" + digits.substring(1);
     }
 
-    if (digits.length === 9 && digits.startsWith("9")) {
+    if (
+        digits.length === 9 &&
+        digits.startsWith("9")
+    ) {
         return "251" + digits;
     }
 
@@ -129,7 +131,7 @@ async function findMemberByPhone(phoneNumber) {
 }
 
 /* =========================================================
-   FIND REGISTERED MEMBER BY TELEGRAM CHAT ID
+   FIND MEMBER BY TELEGRAM CHAT ID
 ========================================================= */
 
 async function findMemberByTelegramChatId(chatId) {
@@ -282,6 +284,413 @@ to connect your Telegram account to your Masjidul-Fatwa member account.`
 }
 
 /* =========================================================
+   MY CONTRIBUTIONS
+========================================================= */
+
+async function sendMyContributions(chatId) {
+
+    const member =
+        await findMemberByTelegramChatId(chatId);
+
+    if (!member) {
+
+        await sendTelegramMessage(
+            chatId,
+            `❌ Your Telegram account is not registered.
+
+Please use /register first.`
+        );
+
+        return;
+    }
+
+    const [rows] = await db.query(
+        `
+        SELECT
+            amount,
+            contribution_date
+        FROM contributions
+        WHERE member_id = ?
+        ORDER BY
+            contribution_date DESC,
+            id DESC
+        LIMIT 10
+        `,
+        [member.id]
+    );
+
+    if (rows.length === 0) {
+
+        await sendTelegramMessage(
+            chatId,
+            `💰 MY CONTRIBUTIONS
+
+👤 ${member.full_name}
+
+You do not have any contribution records yet.
+
+Once a contribution is recorded, it will appear here.`,
+            {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "🔙 Main Menu",
+                                callback_data: "main_menu"
+                            }
+                        ]
+                    ]
+                }
+            }
+        );
+
+        return;
+    }
+
+    const total = rows.reduce(
+        (sum, row) =>
+            sum + Number(row.amount),
+        0
+    );
+
+    let message = `
+💰 MY CONTRIBUTIONS
+
+👤 ${member.full_name}
+
+━━━━━━━━━━━━━━━━━━
+
+📊 Total of displayed records: ${total.toFixed(2)} Birr
+
+📋 Recent contributions:
+
+`;
+
+    rows.forEach((row, index) => {
+
+        const date =
+            new Date(row.contribution_date)
+                .toISOString()
+                .split("T")[0];
+
+        message +=
+            `${index + 1}. 📅 ${date} — 💵 ${Number(row.amount).toFixed(2)} Birr\n`;
+    });
+
+    message += `
+━━━━━━━━━━━━━━━━━━
+
+Showing the latest ${rows.length} contribution record(s).
+`;
+
+    await sendTelegramMessage(
+        chatId,
+        message,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "📅 Full History",
+                            callback_data:
+                                "contribution_history"
+                        }
+                    ],
+                    [
+                        {
+                            text: "🔙 Main Menu",
+                            callback_data: "main_menu"
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+
+/* =========================================================
+   CONTRIBUTION STATUS
+========================================================= */
+
+async function sendContributionStatus(chatId) {
+
+    const member =
+        await findMemberByTelegramChatId(chatId);
+
+    if (!member) {
+
+        await sendTelegramMessage(
+            chatId,
+            `❌ Your Telegram account is not registered.
+
+Please use /register first.`
+        );
+
+        return;
+    }
+
+    const [rows] = await db.query(
+        `
+        SELECT
+            amount,
+            contribution_date
+        FROM contributions
+        WHERE member_id = ?
+        ORDER BY contribution_date DESC
+        `,
+        [member.id]
+    );
+
+    const totalContribution =
+        rows.reduce(
+            (sum, row) =>
+                sum + Number(row.amount),
+            0
+        );
+
+    const contributionCount =
+        rows.length;
+
+    /* =====================================================
+       CURRENT WEEK
+       Monday -> Sunday
+    ===================================================== */
+
+    const [weekRows] = await db.query(
+        `
+        SELECT
+            amount,
+            contribution_date
+        FROM contributions
+        WHERE member_id = ?
+        AND YEARWEEK(
+            contribution_date,
+            1
+        ) = YEARWEEK(
+            CURDATE(),
+            1
+        )
+        LIMIT 1
+        `,
+        [member.id]
+    );
+
+    let weeklyStatus;
+
+    if (weekRows.length > 0) {
+
+        weeklyStatus =
+            `✅ PAID THIS WEEK
+
+💵 Amount: ${Number(
+    weekRows[0].amount
+).toFixed(2)} Birr
+
+📅 Date: ${new Date(
+    weekRows[0].contribution_date
+)
+    .toISOString()
+    .split("T")[0]}`;
+
+    } else {
+
+        weeklyStatus =
+            `⏳ NOT YET PAID THIS WEEK
+
+No contribution has been recorded for the current week.`;
+    }
+
+    const statusMessage = `
+📊 CONTRIBUTION STATUS
+
+👤 ${member.full_name}
+
+━━━━━━━━━━━━━━━━━━
+
+${weeklyStatus}
+
+━━━━━━━━━━━━━━━━━━
+
+📈 OVERALL
+
+💰 Total contributed:
+${totalContribution.toFixed(2)} Birr
+
+🧾 Number of contributions:
+${contributionCount}
+
+━━━━━━━━━━━━━━━━━━
+`;
+
+    await sendTelegramMessage(
+        chatId,
+        statusMessage,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "💰 My Contributions",
+                            callback_data:
+                                "my_contributions"
+                        }
+                    ],
+                    [
+                        {
+                            text: "📅 Contribution History",
+                            callback_data:
+                                "contribution_history"
+                        }
+                    ],
+                    [
+                        {
+                            text: "🔙 Main Menu",
+                            callback_data:
+                                "main_menu"
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+
+/* =========================================================
+   CONTRIBUTION HISTORY
+========================================================= */
+
+async function sendContributionHistory(chatId) {
+
+    const member =
+        await findMemberByTelegramChatId(chatId);
+
+    if (!member) {
+
+        await sendTelegramMessage(
+            chatId,
+            `❌ Your Telegram account is not registered.
+
+Please use /register first.`
+        );
+
+        return;
+    }
+
+    const [rows] = await db.query(
+        `
+        SELECT
+            amount,
+            contribution_date
+        FROM contributions
+        WHERE member_id = ?
+        ORDER BY
+            contribution_date DESC,
+            id DESC
+        `,
+        [member.id]
+    );
+
+    if (rows.length === 0) {
+
+        await sendTelegramMessage(
+            chatId,
+            `📅 CONTRIBUTION HISTORY
+
+👤 ${member.full_name}
+
+No contribution records found yet.`,
+            {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "🔙 Main Menu",
+                                callback_data: "main_menu"
+                            }
+                        ]
+                    ]
+                }
+            }
+        );
+
+        return;
+    }
+
+    const total =
+        rows.reduce(
+            (sum, row) =>
+                sum + Number(row.amount),
+            0
+        );
+
+    let message = `
+📅 CONTRIBUTION HISTORY
+
+👤 ${member.full_name}
+
+━━━━━━━━━━━━━━━━━━
+
+`;
+
+    rows.forEach((row, index) => {
+
+        const date =
+            new Date(row.contribution_date)
+                .toISOString()
+                .split("T")[0];
+
+        message +=
+            `${index + 1}. 📅 ${date} — 💵 ${Number(row.amount).toFixed(2)} Birr\n`;
+    });
+
+    message += `
+━━━━━━━━━━━━━━━━━━
+
+🧾 Total records: ${rows.length}
+
+💰 Total contributed: ${total.toFixed(2)} Birr
+`;
+
+    /*
+       Telegram messages have a maximum size.
+       If the member has a very large history,
+       only the first part is sent.
+    */
+
+    if (message.length > 3900) {
+
+        message =
+            message.substring(0, 3850) +
+            "\n\n...History is too long to display completely here.";
+    }
+
+    await sendTelegramMessage(
+        chatId,
+        message,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "📊 Contribution Status",
+                            callback_data:
+                                "contribution_status"
+                        }
+                    ],
+                    [
+                        {
+                            text: "🔙 Main Menu",
+                            callback_data:
+                                "main_menu"
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+
+/* =========================================================
    PROCESS CALLBACK QUERY
 ========================================================= */
 
@@ -304,11 +713,6 @@ async function processCallbackQuery(callbackQuery) {
         return;
     }
 
-    /*
-     * Tell Telegram that the button press
-     * has been received.
-     */
-
     try {
 
         await telegramRequest(
@@ -326,10 +730,6 @@ async function processCallbackQuery(callbackQuery) {
         );
     }
 
-    /* =====================================================
-       MAIN MENU
-    ===================================================== */
-
     if (data === "main_menu") {
 
         try {
@@ -346,10 +746,6 @@ async function processCallbackQuery(callbackQuery) {
 
         return;
     }
-
-    /* =====================================================
-       MY PROFILE
-    ===================================================== */
 
     if (data === "my_profile") {
 
@@ -373,92 +769,74 @@ async function processCallbackQuery(callbackQuery) {
         return;
     }
 
-    /* =====================================================
-       MY CONTRIBUTIONS
-    ===================================================== */
-
     if (data === "my_contributions") {
 
-        await sendTelegramMessage(
-            chatId,
-            `💰 MY CONTRIBUTIONS
+        try {
 
-This feature will show your weekly contribution records.
+            await sendMyContributions(
+                chatId
+            );
 
-🔧 Contribution records are being connected to the Telegram bot.`,
-            {
-                reply_markup: {
-                    inline_keyboard: [
-                        [
-                            {
-                                text: "🔙 Main Menu",
-                                callback_data: "main_menu"
-                            }
-                        ]
-                    ]
-                }
-            }
-        );
+        } catch (error) {
+
+            console.error(
+                "❌ My contributions error:",
+                error.message
+            );
+
+            await sendTelegramMessage(
+                chatId,
+                "❌ Could not load your contributions. Please try again later."
+            );
+        }
 
         return;
     }
-
-    /* =====================================================
-       CONTRIBUTION STATUS
-    ===================================================== */
 
     if (data === "contribution_status") {
 
-        await sendTelegramMessage(
-            chatId,
-            `📊 CONTRIBUTION STATUS
+        try {
 
-This feature will show your current contribution status.
+            await sendContributionStatus(
+                chatId
+            );
 
-🔧 Contribution status is being connected to the Telegram bot.`,
-            {
-                reply_markup: {
-                    inline_keyboard: [
-                        [
-                            {
-                                text: "🔙 Main Menu",
-                                callback_data: "main_menu"
-                            }
-                        ]
-                    ]
-                }
-            }
-        );
+        } catch (error) {
+
+            console.error(
+                "❌ Contribution status error:",
+                error.message
+            );
+
+            await sendTelegramMessage(
+                chatId,
+                "❌ Could not load your contribution status. Please try again later."
+            );
+        }
 
         return;
     }
 
-    /* =====================================================
-       CONTRIBUTION HISTORY
-    ===================================================== */
-
     if (data === "contribution_history") {
 
-        await sendTelegramMessage(
-            chatId,
-            `📅 CONTRIBUTION HISTORY
+        try {
 
-This feature will show your complete contribution history.
+            await sendContributionHistory(
+                chatId
+            );
 
-🔧 Contribution history is being connected to the Telegram bot.`,
-            {
-                reply_markup: {
-                    inline_keyboard: [
-                        [
-                            {
-                                text: "🔙 Main Menu",
-                                callback_data: "main_menu"
-                            }
-                        ]
-                    ]
-                }
-            }
-        );
+        } catch (error) {
+
+            console.error(
+                "❌ Contribution history error:",
+                error.message
+            );
+
+            await sendTelegramMessage(
+                chatId,
+                "❌ Could not load your contribution history. Please try again later."
+            );
+        }
 
         return;
     }
@@ -474,10 +852,6 @@ async function processTelegramUpdate(update) {
         return;
     }
 
-    /* =====================================================
-       CALLBACK QUERY
-    ===================================================== */
-
     if (update.callback_query) {
 
         await processCallbackQuery(
@@ -487,15 +861,12 @@ async function processTelegramUpdate(update) {
         return;
     }
 
-    /* =====================================================
-       NORMAL MESSAGE
-    ===================================================== */
-
     if (!update.message) {
         return;
     }
 
-    const message = update.message;
+    const message =
+        update.message;
 
     const chatId =
         message.chat?.id;
@@ -572,7 +943,8 @@ Transparency • Responsibility • Unity
                             [
                                 {
                                     text: "📋 Open Member Menu",
-                                    callback_data: "main_menu"
+                                    callback_data:
+                                        "main_menu"
                                 }
                             ]
                         ]
@@ -604,7 +976,9 @@ Transparency • Responsibility • Unity
         try {
 
             const member =
-                await findMemberByTelegramChatId(chatId);
+                await findMemberByTelegramChatId(
+                    chatId
+                );
 
             if (!member) {
 
@@ -692,17 +1066,18 @@ to register first.`
 
         try {
 
-            const [existing] = await db.query(
-                `
-                SELECT
-                    id,
-                    full_name
-                FROM members
-                WHERE telegram_chat_id = ?
-                LIMIT 1
-                `,
-                [String(chatId)]
-            );
+            const [existing] =
+                await db.query(
+                    `
+                    SELECT
+                        id,
+                        full_name
+                    FROM members
+                    WHERE telegram_chat_id = ?
+                    LIMIT 1
+                    `,
+                    [String(chatId)]
+                );
 
             if (existing.length > 0) {
 
@@ -762,7 +1137,7 @@ Tap the button below to share your phone number.`,
     }
 
     /* =====================================================
-       HANDLE SHARED PHONE NUMBER
+       CONTACT / PHONE REGISTRATION
     ===================================================== */
 
     if (message.contact) {
@@ -809,7 +1184,9 @@ Tap the button below to share your phone number.`,
             );
 
             const member =
-                await findMemberByPhone(phoneNumber);
+                await findMemberByPhone(
+                    phoneNumber
+                );
 
             if (!member) {
 
@@ -948,7 +1325,7 @@ Use /menu to open your member dashboard.
     }
 
     /* =====================================================
-       UNKNOWN MESSAGE
+       UNKNOWN COMMAND
     ===================================================== */
 
     if (text.trim()) {
@@ -1020,4 +1397,3 @@ module.exports = {
     processTelegramUpdate,
     setTelegramWebhook
 };
-
