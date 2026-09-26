@@ -65,21 +65,7 @@ function normalizeEthiopianPhone(phone) {
         return null;
     }
 
-    // Keep digits only
     let digits = String(phone).replace(/\D/g, "");
-
-    /*
-     * Ethiopian formats:
-     *
-     * 0911121314
-     * 251911121314
-     * +251911121314
-     * 911121314
-     *
-     * Convert all of them to:
-     *
-     * 251911121314
-     */
 
     if (digits.startsWith("00")) {
         digits = digits.substring(2);
@@ -105,6 +91,7 @@ function normalizeEthiopianPhone(phone) {
 ========================================================= */
 
 async function findMemberByPhone(phoneNumber) {
+
     const normalizedPhone =
         normalizeEthiopianPhone(phoneNumber);
 
@@ -125,17 +112,6 @@ async function findMemberByPhone(phoneNumber) {
         `
     );
 
-    /*
-     * Compare normalized versions in JavaScript.
-     *
-     * This handles:
-     *
-     * 0911121314
-     * +251911121314
-     * 251911121314
-     * 911121314
-     */
-
     for (const member of members) {
 
         const memberPhone =
@@ -153,24 +129,383 @@ async function findMemberByPhone(phoneNumber) {
 }
 
 /* =========================================================
+   FIND REGISTERED MEMBER BY TELEGRAM CHAT ID
+========================================================= */
+
+async function findMemberByTelegramChatId(chatId) {
+
+    const [members] = await db.query(
+        `
+        SELECT
+            id,
+            full_name,
+            phone,
+            status,
+            telegram_chat_id,
+            telegram_username,
+            created_at
+        FROM members
+        WHERE telegram_chat_id = ?
+        LIMIT 1
+        `,
+        [String(chatId)]
+    );
+
+    if (members.length === 0) {
+        return null;
+    }
+
+    return members[0];
+}
+
+/* =========================================================
+   MAIN MENU
+========================================================= */
+
+async function sendMainMenu(chatId) {
+
+    await sendTelegramMessage(
+        chatId,
+        `🌙 MASJIDUL-FATWA SHABAB
+
+Welcome to your member dashboard. 🤝
+
+Please choose an option:`,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "👤 My Profile",
+                            callback_data: "my_profile"
+                        }
+                    ],
+                    [
+                        {
+                            text: "💰 My Contributions",
+                            callback_data: "my_contributions"
+                        },
+                        {
+                            text: "📊 Contribution Status",
+                            callback_data: "contribution_status"
+                        }
+                    ],
+                    [
+                        {
+                            text: "📅 Contribution History",
+                            callback_data: "contribution_history"
+                        }
+                    ],
+                    [
+                        {
+                            text: "🌐 Open Website",
+                            url: "https://masjidul-fatwa-frontend.vercel.app/"
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+
+/* =========================================================
+   MY PROFILE
+========================================================= */
+
+async function sendMyProfile(chatId) {
+
+    const member =
+        await findMemberByTelegramChatId(chatId);
+
+    if (!member) {
+
+        await sendTelegramMessage(
+            chatId,
+            `❌ Your Telegram account is not registered.
+
+Please use:
+
+/register
+
+to connect your Telegram account to your Masjidul-Fatwa member account.`
+        );
+
+        return;
+    }
+
+    const status =
+        member.status === "active"
+            ? "🟢 Active"
+            : "🔴 Inactive";
+
+    const username =
+        member.telegram_username
+            ? `@${member.telegram_username}`
+            : "Not set";
+
+    const profileMessage = `
+👤 MY PROFILE
+
+━━━━━━━━━━━━━━━━━━
+
+🆔 Member ID: ${member.id}
+
+👤 Name: ${member.full_name}
+
+📱 Phone: ${member.phone || "Not registered"}
+
+📊 Status: ${status}
+
+💬 Telegram: ${username}
+
+━━━━━━━━━━━━━━━━━━
+
+🤝 MASJIDUL-FATWA SHABAB
+`;
+
+    await sendTelegramMessage(
+        chatId,
+        profileMessage,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "🔙 Main Menu",
+                            callback_data: "main_menu"
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+
+/* =========================================================
+   PROCESS CALLBACK QUERY
+========================================================= */
+
+async function processCallbackQuery(callbackQuery) {
+
+    if (!callbackQuery) {
+        return;
+    }
+
+    const callbackId =
+        callbackQuery.id;
+
+    const chatId =
+        callbackQuery.message?.chat?.id;
+
+    const data =
+        callbackQuery.data;
+
+    if (!chatId || !data) {
+        return;
+    }
+
+    /*
+     * Tell Telegram that the button press
+     * has been received.
+     */
+
+    try {
+
+        await telegramRequest(
+            "answerCallbackQuery",
+            {
+                callback_query_id: callbackId
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Callback answer error:",
+            error.message
+        );
+    }
+
+    /* =====================================================
+       MAIN MENU
+    ===================================================== */
+
+    if (data === "main_menu") {
+
+        try {
+
+            await sendMainMenu(chatId);
+
+        } catch (error) {
+
+            console.error(
+                "❌ Main menu error:",
+                error.message
+            );
+        }
+
+        return;
+    }
+
+    /* =====================================================
+       MY PROFILE
+    ===================================================== */
+
+    if (data === "my_profile") {
+
+        try {
+
+            await sendMyProfile(chatId);
+
+        } catch (error) {
+
+            console.error(
+                "❌ My profile error:",
+                error.message
+            );
+
+            await sendTelegramMessage(
+                chatId,
+                "❌ Could not load your profile. Please try again later."
+            );
+        }
+
+        return;
+    }
+
+    /* =====================================================
+       MY CONTRIBUTIONS
+    ===================================================== */
+
+    if (data === "my_contributions") {
+
+        await sendTelegramMessage(
+            chatId,
+            `💰 MY CONTRIBUTIONS
+
+This feature will show your weekly contribution records.
+
+🔧 Contribution records are being connected to the Telegram bot.`,
+            {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "🔙 Main Menu",
+                                callback_data: "main_menu"
+                            }
+                        ]
+                    ]
+                }
+            }
+        );
+
+        return;
+    }
+
+    /* =====================================================
+       CONTRIBUTION STATUS
+    ===================================================== */
+
+    if (data === "contribution_status") {
+
+        await sendTelegramMessage(
+            chatId,
+            `📊 CONTRIBUTION STATUS
+
+This feature will show your current contribution status.
+
+🔧 Contribution status is being connected to the Telegram bot.`,
+            {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "🔙 Main Menu",
+                                callback_data: "main_menu"
+                            }
+                        ]
+                    ]
+                }
+            }
+        );
+
+        return;
+    }
+
+    /* =====================================================
+       CONTRIBUTION HISTORY
+    ===================================================== */
+
+    if (data === "contribution_history") {
+
+        await sendTelegramMessage(
+            chatId,
+            `📅 CONTRIBUTION HISTORY
+
+This feature will show your complete contribution history.
+
+🔧 Contribution history is being connected to the Telegram bot.`,
+            {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "🔙 Main Menu",
+                                callback_data: "main_menu"
+                            }
+                        ]
+                    ]
+                }
+            }
+        );
+
+        return;
+    }
+}
+
+/* =========================================================
    PROCESS TELEGRAM UPDATE
 ========================================================= */
 
 async function processTelegramUpdate(update) {
 
-    if (!update || !update.message) {
+    if (!update) {
+        return;
+    }
+
+    /* =====================================================
+       CALLBACK QUERY
+    ===================================================== */
+
+    if (update.callback_query) {
+
+        await processCallbackQuery(
+            update.callback_query
+        );
+
+        return;
+    }
+
+    /* =====================================================
+       NORMAL MESSAGE
+    ===================================================== */
+
+    if (!update.message) {
         return;
     }
 
     const message = update.message;
 
-    const chatId = message.chat?.id;
+    const chatId =
+        message.chat?.id;
 
     if (!chatId) {
         return;
     }
 
-    const text = message.text || "";
+    const text =
+        message.text || "";
 
     /* =====================================================
        /START
@@ -233,6 +568,12 @@ Transparency • Responsibility • Unity
                                     text: "🌐 Open Masjidul-Fatwa Website",
                                     url: "https://masjidul-fatwa-frontend.vercel.app/"
                                 }
+                            ],
+                            [
+                                {
+                                    text: "📋 Open Member Menu",
+                                    callback_data: "main_menu"
+                                }
                             ]
                         ]
                     }
@@ -248,6 +589,55 @@ Transparency • Responsibility • Unity
             console.error(
                 "❌ Telegram /start error:",
                 error.message
+            );
+        }
+
+        return;
+    }
+
+    /* =====================================================
+       /MENU
+    ===================================================== */
+
+    if (/^\/menu(?:@\w+)?$/i.test(text)) {
+
+        try {
+
+            const member =
+                await findMemberByTelegramChatId(chatId);
+
+            if (!member) {
+
+                await sendTelegramMessage(
+                    chatId,
+                    `❌ Your Telegram account is not registered yet.
+
+Please use:
+
+/register
+
+to register first.`
+                );
+
+                return;
+            }
+
+            await sendMainMenu(chatId);
+
+            console.log(
+                `✅ Member menu sent to chat ${chatId}`
+            );
+
+        } catch (error) {
+
+            console.error(
+                "❌ Telegram /menu error:",
+                error.message
+            );
+
+            await sendTelegramMessage(
+                chatId,
+                "❌ Could not open the member menu. Please try again later."
             );
         }
 
@@ -302,11 +692,6 @@ Transparency • Responsibility • Unity
 
         try {
 
-            /*
-             * Check whether this Telegram account
-             * is already registered.
-             */
-
             const [existing] = await db.query(
                 `
                 SELECT
@@ -327,15 +712,11 @@ Transparency • Responsibility • Unity
 
 👤 Name: ${existing[0].full_name}
 
-You can now use the Telegram bot to access your contribution information.`
+Use /menu to open your member dashboard.`
                 );
 
                 return;
             }
-
-            /*
-             * Ask the user to share their phone number.
-             */
 
             await sendTelegramMessage(
                 chatId,
@@ -382,20 +763,18 @@ Tap the button below to share your phone number.`,
 
     /* =====================================================
        HANDLE SHARED PHONE NUMBER
-========================================================= */
+    ===================================================== */
 
     if (message.contact) {
 
-        const contact = message.contact;
-
-        /*
-         * Only accept a contact shared by the user themselves.
-         */
+        const contact =
+            message.contact;
 
         if (
             contact.user_id &&
             message.from?.id &&
-            String(contact.user_id) !== String(message.from.id)
+            String(contact.user_id) !==
+                String(message.from.id)
         ) {
 
             await sendTelegramMessage(
@@ -406,7 +785,8 @@ Tap the button below to share your phone number.`,
             return;
         }
 
-        const phoneNumber = contact.phone_number;
+        const phoneNumber =
+            contact.phone_number;
 
         if (!phoneNumber) {
 
@@ -428,10 +808,6 @@ Tap the button below to share your phone number.`,
                 `📱 Normalized phone: ${normalizeEthiopianPhone(phoneNumber)}`
             );
 
-            /*
-             * Find member using normalized Ethiopian phone number.
-             */
-
             const member =
                 await findMemberByPhone(phoneNumber);
 
@@ -449,10 +825,6 @@ Please contact an administrator to make sure your phone number is registered cor
                 return;
             }
 
-            /*
-             * Do not allow inactive members to register.
-             */
-
             if (member.status === "inactive") {
 
                 await sendTelegramMessage(
@@ -467,14 +839,10 @@ Please contact an administrator.`
                 return;
             }
 
-            /*
-             * Check whether another Telegram account
-             * is already connected to this member.
-             */
-
             if (
                 member.telegram_chat_id &&
-                String(member.telegram_chat_id) !== String(chatId)
+                String(member.telegram_chat_id) !==
+                    String(chatId)
             ) {
 
                 await sendTelegramMessage(
@@ -487,26 +855,22 @@ Please contact an administrator if this is incorrect.`
                 return;
             }
 
-            /*
-             * Check whether this Telegram account
-             * is connected to another member.
-             */
-
-            const [alreadyConnected] = await db.query(
-                `
-                SELECT
-                    id,
-                    full_name
-                FROM members
-                WHERE telegram_chat_id = ?
-                AND id <> ?
-                LIMIT 1
-                `,
-                [
-                    String(chatId),
-                    member.id
-                ]
-            );
+            const [alreadyConnected] =
+                await db.query(
+                    `
+                    SELECT
+                        id,
+                        full_name
+                    FROM members
+                    WHERE telegram_chat_id = ?
+                    AND id <> ?
+                    LIMIT 1
+                    `,
+                    [
+                        String(chatId),
+                        member.id
+                    ]
+                );
 
             if (alreadyConnected.length > 0) {
 
@@ -522,18 +886,10 @@ Please contact an administrator if this is incorrect.`
                 return;
             }
 
-            /*
-             * Get Telegram username.
-             */
-
             const telegramUsername =
                 message.from?.username
                     ? message.from.username
                     : null;
-
-            /*
-             * Save Telegram information.
-             */
 
             await db.query(
                 `
@@ -550,10 +906,6 @@ Please contact an administrator if this is incorrect.`
                 ]
             );
 
-            /*
-             * Remove phone-sharing keyboard.
-             */
-
             await sendTelegramMessage(
                 chatId,
                 `✅ REGISTRATION SUCCESSFUL!
@@ -565,7 +917,7 @@ Your Telegram account is now connected to your Masjidul-Fatwa member account.
 👤 Name: ${member.full_name}
 📱 Phone: ${member.phone}
 
-You can now use the Telegram bot for your contribution information.
+Use /menu to open your member dashboard.
 
 🤝 MASJIDUL-FATWA SHABAB`,
                 {
@@ -597,7 +949,7 @@ You can now use the Telegram bot for your contribution information.
 
     /* =====================================================
        UNKNOWN MESSAGE
-========================================================= */
+    ===================================================== */
 
     if (text.trim()) {
 
@@ -609,6 +961,7 @@ Available commands:
 
 /start - Start the bot
 /register - Register your Telegram account
+/menu - Open your member menu
 /website - Open the website`
         );
     }
@@ -631,12 +984,13 @@ async function setTelegramWebhook(webhookUrl) {
 
     try {
 
-        const result = await telegramRequest(
-            "setWebhook",
-            {
-                url: webhookUrl
-            }
-        );
+        const result =
+            await telegramRequest(
+                "setWebhook",
+                {
+                    url: webhookUrl
+                }
+            );
 
         if (result.ok) {
 
