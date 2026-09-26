@@ -929,6 +929,23 @@ app.get(
                        )`
                 );
 
+                const [recentContributionRows] =
+    await db.query(
+        `SELECT
+            contributions.id,
+            members.full_name,
+            contributions.amount,
+            contributions.contribution_date
+         FROM contributions
+         INNER JOIN members
+            ON contributions.member_id =
+               members.id
+         ORDER BY
+            contributions.contribution_date DESC,
+            contributions.id DESC
+         LIMIT 5`
+    );
+
             res.json({
                 success: true,
                 data: {
@@ -967,8 +984,11 @@ app.get(
                             .paid_members_this_week,
 
                     unpaid_members_this_week:
-                        unpaidRows[0]
-                            .unpaid_members_this_week
+    unpaidRows[0]
+        .unpaid_members_this_week,
+
+recent_contributions:
+    recentContributionRows
                 }
             });
 

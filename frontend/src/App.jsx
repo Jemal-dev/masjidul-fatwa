@@ -1962,7 +1962,7 @@ function AdminDashboard({
           DASHBOARD GRID
       ================================================= */}
 
-      <div className="dashboard-grid">
+            <div className="dashboard-grid">
         {/* WEEKLY PAYMENT STATUS */}
 
         <div className="section-card">
@@ -2037,9 +2037,7 @@ function AdminDashboard({
           </div>
 
           <button
-            onClick={
-              onContributions
-            }
+            onClick={onContributions}
           >
             💰 Record Contribution
             <span>→</span>
@@ -2059,6 +2057,79 @@ function AdminDashboard({
             <span>→</span>
           </button>
         </div>
+      </div>
+
+      {/* =================================================
+          RECENT CONTRIBUTIONS
+      ================================================= */}
+
+      <div className="section-card recent-contributions-card">
+        <div className="section-header">
+          <div>
+            <h2>
+              Recent Contributions
+            </h2>
+
+            <p>
+              The latest contribution records.
+            </p>
+          </div>
+
+          <button
+            className="view-all-button"
+            onClick={onContributions}
+          >
+            View All →
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="recent-loading">
+            Loading contributions...
+          </div>
+        ) : dashboard?.recent_contributions?.length > 0 ? (
+          <div className="recent-contributions-list">
+            {dashboard.recent_contributions.map(
+              (contribution) => (
+                <div
+                  className="recent-contribution-row"
+                  key={contribution.id}
+                >
+                  <div className="recent-member">
+                    <div className="recent-member-avatar">
+                      {contribution.full_name
+                        ?.charAt(0)
+                        ?.toUpperCase() || "?"}
+                    </div>
+
+                    <div>
+                      <strong>
+                        {contribution.full_name}
+                      </strong>
+
+                      <span>
+                        {contribution.contribution_date}
+                      </span>
+                    </div>
+                  </div>
+
+                  <strong className="recent-amount">
+                    {Number(
+                      contribution.amount || 0
+                    ).toLocaleString("en-US", {
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    ETB
+                  </strong>
+                </div>
+              )
+            )}
+          </div>
+        ) : (
+          <div className="recent-empty">
+            No contributions recorded yet.
+          </div>
+        )}
       </div>
     </>
   );
