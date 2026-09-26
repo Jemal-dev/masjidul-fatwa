@@ -9,7 +9,8 @@ const db = require("./config/db");
 
 const {
     processTelegramUpdate,
-    setTelegramWebhook
+    setTelegramWebhook,
+    sendContributionNotification
 } = require("./telegram");
 
 const app = express();
@@ -504,6 +505,12 @@ app.post(
                     contribution_date
                 ]
             );
+
+            await sendContributionNotification(
+    member_id,
+    amount,
+    contribution_date
+);
 
             res.status(201).json({
                 success: true,

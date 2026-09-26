@@ -1390,10 +1390,125 @@ async function setTelegramWebhook(webhookUrl) {
 }
 
 /* =========================================================
+   SEND CONTRIBUTION NOTIFICATION
+========================================================= */
+
+async function sendContributionNotification(
+    memberId,
+    amount,
+    contributionDate
+) {
+    try {
+
+        const [members] = await db.query(
+            `
+            SELECT
+                id,
+                full_name,
+                telegram_chat_id
+            FROM members
+            WHERE id = ?
+            LIMIT 1
+            `,
+            [memberId]
+        );
+
+        if (members.length === 0) {
+            console.log(
+                `⚠️ Member ${memberId} not found for Telegram notification.`
+            );
+
+            return;
+        }
+
+        const member = members[0];
+
+        if (!member.telegram_chat_id) {
+            console.log(
+                `ℹ️ ${member.full_name} has no Telegram account connected.`
+            );
+
+            return;
+        }
+
+        const date =
+            new Date(contributionDate)
+                .toISOString()
+                .split("T")[0];
+
+        const message = `
+✅ CONTRIBUTION RECORDED
+
+Assalaamu 'Alaikum ${member.full_name}! 🤍
+
+Your contribution has been successfully recorded.
+
+━━━━━━━━━━━━━━━━━━
+
+👤 Member: ${member.full_name}
+
+💰 Amount: ${Number(amount).toFixed(2)} Birr
+
+📅 Date: ${date}
+
+━━━━━━━━━━━━━━━━━━
+
+جزاك الله خيرًا 🤲
+
+Thank you for your contribution! 🤝
+
+🌙 MASJIDUL-FATWA SHABAB
+`;
+
+        await sendTelegramMessage(
+            member.telegram_chat_id,
+            message,
+            {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "💰 My Contributions",
+                                callback_data:
+                                    "my_contributions"
+                            }
+                        ],
+                        [
+                            {
+                                text: "📊 Contribution Status",
+                                callback_data:
+                                    "contribution_status"
+                            }
+                        ]
+                    ]
+                }
+            }
+        );
+
+        console.log(
+            `✅ Contribution notification sent to ${member.full_name}`
+        );
+
+    } catch (error) {
+
+        console.error(
+            "⚠️ Contribution notification failed:",
+            error.message
+        );
+
+        /*
+           Telegram notification failure must NOT
+           cancel or undo the contribution.
+        */
+    }
+}
+
+/* =========================================================
    EXPORT
 ========================================================= */
 
 module.exports = {
     processTelegramUpdate,
-    setTelegramWebhook
+    setTelegramWebhook,
+    sendContributionNotification
 };
