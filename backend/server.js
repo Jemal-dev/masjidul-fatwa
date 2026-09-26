@@ -929,22 +929,62 @@ app.get(
                        )`
                 );
 
-                const [recentContributionRows] =
-    await db.query(
-        `SELECT
-            contributions.id,
-            members.full_name,
-            contributions.amount,
-            contributions.contribution_date
-         FROM contributions
-         INNER JOIN members
-            ON contributions.member_id =
-               members.id
-         ORDER BY
-            contributions.contribution_date DESC,
-            contributions.id DESC
-         LIMIT 5`
-    );
+            const [recentContributionRows] =
+                await db.query(
+                    `SELECT
+                        contributions.id,
+                        members.full_name,
+                        contributions.amount,
+                        contributions.contribution_date
+                     FROM contributions
+                     INNER JOIN members
+                        ON contributions.member_id =
+                           members.id
+                     ORDER BY
+                        contributions.contribution_date DESC,
+                        contributions.id DESC
+                     LIMIT 5`
+                );
+
+            const [collectionTrendRows] =
+                await db.query(
+                    `SELECT
+                        YEARWEEK(
+                            contribution_date,
+                            1
+                        ) AS week_number,
+                        MIN(
+                            contribution_date
+                        ) AS week_start,
+                        COALESCE(
+                            SUM(amount),
+                            0
+                        ) AS total_collection
+                     FROM contributions
+                     WHERE contribution_date >=
+                           DATE_SUB(
+                               CURDATE(),
+                               INTERVAL 5 WEEK
+                           )
+                     GROUP BY
+                        YEARWEEK(
+                            contribution_date,
+                            1
+                        )
+                     ORDER BY
+                        week_start ASC`
+                );
+
+                console.log(
+    "DASHBOARD DEBUG:",
+    {
+        recentCount:
+            recentContributionRows.length,
+
+        trendCount:
+            collectionTrendRows.length
+    }
+);
 
             res.json({
                 success: true,
@@ -984,11 +1024,24 @@ app.get(
                             .paid_members_this_week,
 
                     unpaid_members_this_week:
-    unpaidRows[0]
-        .unpaid_members_this_week,
+                        unpaidRows[0]
+                            .unpaid_members_this_week,
 
-recent_contributions:
-    recentContributionRows
+                    recent_contributions:
+                        recentContributionRows,
+
+                    collection_trend:
+                        collectionTrendRows.map(
+                            (row) => ({
+                                week_start:
+                                    row.week_start,
+
+                                total_collection:
+                                    Number(
+                                        row.total_collection
+                                    )
+                            })
+                        )
                 }
             });
 
@@ -1006,7 +1059,6 @@ recent_contributions:
         }
     }
 );
-
 /* =========================================================
    SETTINGS
 ========================================================= */

@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
 import "./App.css";
 
 import Login from "./Login";
@@ -18,7 +27,7 @@ import AdminManagement from "./AdminManagement";
 axios.defaults.baseURL =
   import.meta.env.PROD
     ? "https://masjidul-fatwa-l6ao.vercel.app"
-    : "";
+    : "http://localhost:5000";
 
 /* =========================================================
    AXIOS REQUEST INTERCEPTOR
@@ -1810,6 +1819,14 @@ function AdminDashboard({
   onMembers,
   onReports,
 }) {
+  const trendData =
+    dashboard?.collection_trend?.map(
+      (item, index) => ({
+        ...item,
+        label: `Week ${index + 1}`,
+      })
+    ) || [];
+
   return (
     <>
       <div className="page-header">
@@ -1959,10 +1976,99 @@ function AdminDashboard({
       </div>
 
       {/* =================================================
+          COLLECTION TREND
+      ================================================= */}
+
+      <div className="section-card collection-trend-card">
+        <div className="section-header">
+          <div>
+            <h2>
+              Collection Trend
+            </h2>
+
+            <p>
+              Weekly contribution collection
+              for the last 6 weeks.
+            </p>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="recent-loading">
+            Loading collection trend...
+          </div>
+        ) : trendData.length > 0 ? (
+          <div
+            className="collection-trend-chart"
+            style={{
+              width: "100%",
+              height: 320,
+            }}
+          >
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+              <LineChart
+                data={trendData}
+                margin={{
+                  top: 10,
+                  right: 20,
+                  left: 10,
+                  bottom: 10,
+                }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                />
+
+                <XAxis
+                  dataKey="label"
+                />
+
+                <YAxis
+                  tickFormatter={(value) =>
+                    `${Number(
+                      value
+                    ).toLocaleString()}`
+                  }
+                />
+
+                <Tooltip
+                  formatter={(value) => [
+                    `${Number(
+                      value
+                    ).toLocaleString()} ETB`,
+                    "Collection",
+                  ]}
+                />
+
+                <Line
+                  type="monotone"
+                  dataKey="total_collection"
+                  strokeWidth={3}
+                  dot={{
+                    r: 5,
+                  }}
+                  activeDot={{
+                    r: 7,
+                  }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="recent-empty">
+            No collection data available yet.
+          </div>
+        )}
+      </div>
+
+      {/* =================================================
           DASHBOARD GRID
       ================================================= */}
 
-            <div className="dashboard-grid">
+      <div className="dashboard-grid">
         {/* WEEKLY PAYMENT STATUS */}
 
         <div className="section-card">
