@@ -8,6 +8,11 @@ function Members() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Search
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [sortOption, setSortOption] = useState("name-asc");
+
   // Add/Edit form visibility
   const [showForm, setShowForm] = useState(false);
 
@@ -32,7 +37,6 @@ function Members() {
       const response = await axios.get("/api/members");
 
       setMembers(response.data.data || response.data);
-
     } catch (err) {
       console.error("Members error:", err);
 
@@ -45,7 +49,6 @@ function Members() {
       } else {
         setError(`Error: ${err.message}`);
       }
-
     } finally {
       setLoading(false);
     }
@@ -113,23 +116,17 @@ function Members() {
 
       // EDIT MEMBER
       if (editingMember) {
-
-        await axios.put(
-          `/api/members/${editingMember.id}`,
-          {
-            full_name: formData.full_name.trim(),
-            phone: formData.phone.trim(),
-            telegram_username: formData.telegram_username.trim(),
-          }
-        );
+        await axios.put(`/api/members/${editingMember.id}`, {
+          full_name: formData.full_name.trim(),
+          phone: formData.phone.trim(),
+          telegram_username: formData.telegram_username.trim(),
+        });
 
         setSuccess("Member updated successfully.");
-
       }
 
       // ADD MEMBER
       else {
-
         await axios.post("/api/members", {
           full_name: formData.full_name.trim(),
           phone: formData.phone.trim(),
@@ -151,21 +148,19 @@ function Members() {
 
       // Reload members
       await getMembers();
-
     } catch (err) {
       console.error("Save member error:", err);
 
       if (err.response) {
         setError(
           err.response.data?.message ||
-          `Server error: ${err.response.status}`
+            `Server error: ${err.response.status}`
         );
       } else if (err.request) {
         setError("Cannot connect to the backend server.");
       } else {
         setError(`Error: ${err.message}`);
       }
-
     } finally {
       setSaving(false);
     }
@@ -186,51 +181,103 @@ function Members() {
   };
 
   // Change member status
-const toggleMemberStatus = async (member) => {
-  const newStatus =
-    member.status === "active" ? "inactive" : "active";
+  const toggleMemberStatus = async (member) => {
+    const newStatus =
+      member.status === "active" ? "inactive" : "active";
 
-  const action =
-    newStatus === "active" ? "activate" : "deactivate";
+    const action =
+      newStatus === "active" ? "activate" : "deactivate";
 
-  const confirmed = window.confirm(
-    `Are you sure you want to ${action} ${member.full_name}?`
-  );
-
-  if (!confirmed) {
-    return;
-  }
-
-  try {
-    setError("");
-    setSuccess("");
-
-    await axios.patch(`/api/members/${member.id}/status`, {
-      status: newStatus,
-    });
-
-    setSuccess(
-      `${member.full_name} has been ${newStatus}.`
+    const confirmed = window.confirm(
+      `Are you sure you want to ${action} ${member.full_name}?`
     );
 
-    // Reload members
-    await getMembers();
-
-  } catch (err) {
-    console.error("Status update error:", err);
-
-    if (err.response) {
-      setError(
-        err.response.data?.message ||
-        `Server error: ${err.response.status}`
-      );
-    } else if (err.request) {
-      setError("Cannot connect to the backend server.");
-    } else {
-      setError(`Error: ${err.message}`);
+    if (!confirmed) {
+      return;
     }
+
+    try {
+      setError("");
+      setSuccess("");
+
+      await axios.patch(`/api/members/${member.id}/status`, {
+        status: newStatus,
+      });
+
+      setSuccess(
+        `${member.full_name} has been ${newStatus}.`
+      );
+
+      // Reload members
+      await getMembers();
+    } catch (err) {
+      console.error("Status update error:", err);
+
+      if (err.response) {
+        setError(
+          err.response.data?.message ||
+            `Server error: ${err.response.status}`
+        );
+      } else if (err.request) {
+        setError("Cannot connect to the backend server.");
+      } else {
+        setError(`Error: ${err.message}`);
+      }
+    }
+  };
+
+  // Member statistics
+const totalMembers = members.length;
+
+const activeMembers = members.filter(
+  (member) => member.status === "active"
+).length;
+
+const inactiveMembers = members.filter(
+  (member) => member.status !== "active"
+).length;
+
+  // Filter members based on search
+  const filteredMembers = members.filter((member) => {
+    const search = searchTerm.toLowerCase().trim();
+
+    if (!search) {
+      return true;
+    }
+
+    return (
+      (member.full_name || "").toLowerCase().includes(search) ||
+      (member.phone || "").toLowerCase().includes(search) ||
+      (member.telegram_username || "")
+        .toLowerCase()
+        .includes(search)
+    );
+  });
+
+  const sortedMembers = [...filteredMembers].sort((a, b) => {
+  if (sortOption === "name-asc") {
+    return (a.full_name || "").localeCompare(
+      b.full_name || ""
+    );
   }
-};
+
+  if (sortOption === "name-desc") {
+    return (b.full_name || "").localeCompare(
+      a.full_name || ""
+    );
+  }
+
+  if (sortOption === "newest") {
+    return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+  }
+
+  if (sortOption === "oldest") {
+    return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+  }
+
+  return 0;
+});
+
   return (
     <div className="members-page">
 
@@ -377,16 +424,100 @@ const toggleMemberStatus = async (member) => {
         </div>
       )}
 
+      {/* Member Statistics */}
+<div className="member-stats-grid">
+
+  <div className="member-stat-card">
+    <div className="member-stat-icon total">
+      👥
+    </div>
+
+    <div className="member-stat-content">
+      <span>Total Members</span>
+      <strong>{totalMembers}</strong>
+    </div>
+  </div>
+
+  <div className="member-stat-card">
+    <div className="member-stat-icon active">
+      ✓
+    </div>
+
+    <div className="member-stat-content">
+      <span>Active Members</span>
+      <strong>{activeMembers}</strong>
+    </div>
+  </div>
+
+  <div className="member-stat-card">
+    <div className="member-stat-icon inactive">
+      ○
+    </div>
+
+    <div className="member-stat-content">
+      <span>Inactive Members</span>
+      <strong>{inactiveMembers}</strong>
+    </div>
+  </div>
+
+</div>
+
       {/* Members Card */}
       <div className="members-card">
 
         <div className="members-card-header">
 
-          <h2>All Members</h2>
+          <div>
+            <h2>All Members</h2>
 
-          <span>
-            {members.length} members
-          </span>
+            <span>
+              {filteredMembers.length} of {members.length} members
+            </span>
+          </div>
+
+          {/* Search */}
+          <div className="member-sort">
+  <label htmlFor="member-sort-select">Sort</label>
+
+  <select
+    id="member-sort-select"
+    value={sortOption}
+    onChange={(event) => setSortOption(event.target.value)}
+  >
+    <option value="name-asc">Name A → Z</option>
+    <option value="name-desc">Name Z → A</option>
+    <option value="newest">Newest</option>
+    <option value="oldest">Oldest</option>
+  </select>
+</div>
+          <div className="member-search">
+
+            <span className="search-icon">
+              🔎
+            </span>
+
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(event) =>
+                setSearchTerm(event.target.value)
+              }
+              placeholder="Search members..."
+              aria-label="Search members"
+            />
+
+            {searchTerm && (
+              <button
+                type="button"
+                className="clear-search"
+                onClick={() => setSearchTerm("")}
+                aria-label="Clear search"
+              >
+                ×
+              </button>
+            )}
+
+          </div>
 
         </div>
 
@@ -397,6 +528,10 @@ const toggleMemberStatus = async (member) => {
         ) : members.length === 0 ? (
           <div className="empty">
             No members found.
+          </div>
+        ) : filteredMembers.length === 0 ? (
+          <div className="empty">
+            No members match your search.
           </div>
         ) : (
 
@@ -419,7 +554,7 @@ const toggleMemberStatus = async (member) => {
 
               <tbody>
 
-                {members.map((member, index) => (
+                {sortedMembers.map((member, index) => (
 
                   <tr key={member.id}>
 
@@ -459,27 +594,31 @@ const toggleMemberStatus = async (member) => {
 
                       <div className="member-actions">
 
-  <button
-    className="edit-button"
-    onClick={() => openEditForm(member)}
-  >
-    Edit
-  </button>
+                        <button
+                          className="edit-button"
+                          onClick={() =>
+                            openEditForm(member)
+                          }
+                        >
+                          Edit
+                        </button>
 
-  <button
-    className={
-      member.status === "active"
-        ? "deactivate-button"
-        : "activate-button"
-    }
-    onClick={() => toggleMemberStatus(member)}
-  >
-    {member.status === "active"
-      ? "Deactivate"
-      : "Activate"}
-  </button>
+                        <button
+                          className={
+                            member.status === "active"
+                              ? "deactivate-button"
+                              : "activate-button"
+                          }
+                          onClick={() =>
+                            toggleMemberStatus(member)
+                          }
+                        >
+                          {member.status === "active"
+                            ? "Deactivate"
+                            : "Activate"}
+                        </button>
 
-</div>
+                      </div>
 
                     </td>
 

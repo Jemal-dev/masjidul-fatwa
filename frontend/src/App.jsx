@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -20,14 +21,11 @@ import AdminManagement from "./AdminManagement";
 
 /* =========================================================
    AXIOS BASE URL
-   Local: uses Vite proxy → http://localhost:5000
-   Production: uses deployed backend
 ========================================================= */
 
-axios.defaults.baseURL =
-  import.meta.env.PROD
-    ? "https://masjidul-fatwa-l6ao.vercel.app"
-    : "http://localhost:5000";
+axios.defaults.baseURL = import.meta.env.PROD
+  ? "https://masjidul-fatwa-l6ao.vercel.app"
+  : "http://localhost:5000";
 
 /* =========================================================
    AXIOS REQUEST INTERCEPTOR
@@ -43,9 +41,7 @@ axios.interceptors.request.use(
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 /* =========================================================
@@ -53,17 +49,11 @@ axios.interceptors.request.use(
 ========================================================= */
 
 axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     const status = error.response?.status;
     const requestUrl = error.config?.url || "";
 
-    /*
-      Do NOT automatically logout when the login request
-      itself fails. Login.jsx will display the error message.
-    */
     const isLoginRequest =
       requestUrl.includes("/api/auth/login");
 
@@ -89,32 +79,32 @@ const navItems = [
   {
     id: "dashboard",
     label: "Dashboard",
-    icon: "▣",
+    icon: "\u{25A3}",
   },
   {
     id: "members",
     label: "Members",
-    icon: "👥",
+    icon: "\u{1F465}",
   },
   {
     id: "contributions",
     label: "Contributions",
-    icon: "💰",
+    icon: "\u{1F4B0}",
   },
   {
     id: "reports",
     label: "Reports",
-    icon: "📊",
+    icon: "\u{1F4CA}",
   },
   {
     id: "admins",
     label: "Admins",
-    icon: "🛡️",
+    icon: "\u{1F6E1}",
   },
   {
     id: "settings",
     label: "Settings",
-    icon: "⚙️",
+    icon: "\u{2699}",
   },
 ];
 
@@ -126,8 +116,7 @@ function AnimatedNumber({
   value,
   suffix = "",
 }) {
-  const [displayValue, setDisplayValue] =
-    useState(0);
+  const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
     const target = Number(value) || 0;
@@ -141,8 +130,7 @@ function AnimatedNumber({
 
     const animate = (currentTime) => {
       const progress = Math.min(
-        (currentTime - startTime) /
-          duration,
+        (currentTime - startTime) / duration,
         1
       );
 
@@ -150,16 +138,12 @@ function AnimatedNumber({
         1 - Math.pow(1 - progress, 3);
 
       setDisplayValue(
-        Math.floor(
-          target * easedProgress
-        )
+        Math.floor(target * easedProgress)
       );
 
       if (progress < 1) {
         animationFrame =
-          requestAnimationFrame(
-            animate
-          );
+          requestAnimationFrame(animate);
       } else {
         setDisplayValue(target);
       }
@@ -169,9 +153,7 @@ function AnimatedNumber({
       requestAnimationFrame(animate);
 
     return () => {
-      cancelAnimationFrame(
-        animationFrame
-      );
+      cancelAnimationFrame(animationFrame);
     };
   }, [value]);
 
@@ -188,29 +170,14 @@ function AnimatedNumber({
 ========================================================= */
 
 function App() {
-  const [dashboard, setDashboard] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-  const [currentPage, setCurrentPage] =
-    useState("home");
-
-  const [mobileOpen, setMobileOpen] =
-    useState(false);
-
-  const [isLoggedIn, setIsLoggedIn] =
-    useState(false);
-
-  const [adminUser, setAdminUser] =
-    useState(null);
-
-  const [authChecking, setAuthChecking] =
-    useState(true);
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState("home");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
+  const [authChecking, setAuthChecking] = useState(true);
 
   /* =====================================================
      CHECK SAVED LOGIN
@@ -225,8 +192,7 @@ function App() {
 
     if (token && savedUser) {
       try {
-        const user =
-          JSON.parse(savedUser);
+        const user = JSON.parse(savedUser);
 
         setAdminUser(user);
         setIsLoggedIn(true);
@@ -236,13 +202,8 @@ function App() {
           error
         );
 
-        localStorage.removeItem(
-          "adminToken"
-        );
-
-        localStorage.removeItem(
-          "adminUser"
-        );
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
       }
     }
 
@@ -259,9 +220,7 @@ function App() {
       setError("");
 
       const response =
-        await axios.get(
-          "/api/dashboard"
-        );
+        await axios.get("/api/dashboard");
 
       setDashboard(
         response.data?.data ||
@@ -303,31 +262,20 @@ function App() {
       "login",
     ];
 
-    /*
-      If the user is logged out but somehow
-      tries to open an admin page, return to home.
-    */
     if (
       !isLoggedIn &&
-      !publicPages.includes(
-        currentPage
-      )
+      !publicPages.includes(currentPage)
     ) {
       setCurrentPage("home");
       setMobileOpen(false);
       return;
     }
 
-    /*
-      Only Super Admin can access
-      Admin Management and Settings.
-    */
     if (
       isLoggedIn &&
       (currentPage === "settings" ||
         currentPage === "admins") &&
-      adminUser?.role !==
-        "super_admin"
+      adminUser?.role !== "super_admin"
     ) {
       setCurrentPage("dashboard");
       setMobileOpen(false);
@@ -358,13 +306,8 @@ function App() {
   ===================================================== */
 
   const handleLogout = () => {
-    localStorage.removeItem(
-      "adminToken"
-    );
-
-    localStorage.removeItem(
-      "adminUser"
-    );
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminUser");
 
     setIsLoggedIn(false);
     setAdminUser(null);
@@ -395,10 +338,6 @@ function App() {
       "settings",
     ];
 
-    /*
-      Not logged in?
-      Send the user to login.
-    */
     if (
       protectedPages.includes(page) &&
       !isLoggedIn
@@ -408,15 +347,10 @@ function App() {
       return;
     }
 
-    /*
-      Only Super Admin can access
-      Admin Management and Settings.
-    */
     if (
       (page === "settings" ||
         page === "admins") &&
-      adminUser?.role !==
-        "super_admin"
+      adminUser?.role !== "super_admin"
     ) {
       setCurrentPage("dashboard");
       setMobileOpen(false);
@@ -499,16 +433,12 @@ function App() {
         <AdminLayout
           currentPage={currentPage}
           mobileOpen={mobileOpen}
-          setMobileOpen={
-            setMobileOpen
-          }
+          setMobileOpen={setMobileOpen}
           goTo={goTo}
           dashboard={dashboard}
           loading={loading}
           error={error}
-          reloadDashboard={
-            loadDashboard
-          }
+          reloadDashboard={loadDashboard}
           adminUser={adminUser}
           onLogout={handleLogout}
         />
@@ -529,8 +459,7 @@ function PublicHome({
   onNavigate,
 }) {
   const activeMembers =
-    dashboard?.total_active_members ??
-    0;
+    dashboard?.total_active_members ?? 0;
 
   const totalCollection =
     dashboard?.total_collection ?? 0;
@@ -550,11 +479,12 @@ function PublicHome({
       : `${value ?? 0}${suffix}`;
 
   const formatMoney = (value) =>
-    Number(
-      value || 0
-    ).toLocaleString("en-US", {
-      maximumFractionDigits: 2,
-    });
+    Number(value || 0).toLocaleString(
+      "en-US",
+      {
+        maximumFractionDigits: 2,
+      }
+    );
 
   return (
     <div className="public-site">
@@ -667,9 +597,7 @@ function PublicHome({
               <button
                 className="primary-btn"
                 onClick={() =>
-                  onNavigate(
-                    "services"
-                  )
+                  onNavigate("services")
                 }
               >
                 Explore Our Services{" "}
@@ -1550,35 +1478,22 @@ function AdminLayout({
     adminUser?.full_name || "Admin";
 
   const adminInitial =
-    adminName
-      .charAt(0)
-      .toUpperCase();
+    adminName.charAt(0).toUpperCase();
 
   const adminRole =
-    adminUser?.role ===
-    "super_admin"
+    adminUser?.role === "super_admin"
       ? "Super Administrator"
       : "Administrator";
 
-  /*
-    Only Super Admin can see
-    Admin Management and Settings.
-  */
   const visibleNavItems =
-    adminUser?.role ===
-    "super_admin"
+    adminUser?.role === "super_admin"
       ? navItems
       : navItems.filter(
           (item) =>
-            item.id !==
-              "settings" &&
+            item.id !== "settings" &&
             item.id !== "admins"
         );
 
-  /*
-    This makes the topbar title also use
-    only the pages the current admin can access.
-  */
   const currentNavItem =
     visibleNavItems.find(
       (item) =>
@@ -1757,19 +1672,11 @@ function AdminLayout({
             <Reports />
           )}
 
-          {/* =================================================
-              ADMIN MANAGEMENT
-          ================================================= */}
-
           {currentPage === "admins" &&
             adminUser?.role ===
               "super_admin" && (
               <AdminManagement />
             )}
-
-          {/* =================================================
-              SETTINGS
-          ================================================= */}
 
           {currentPage ===
             "settings" &&
@@ -1778,10 +1685,6 @@ function AdminLayout({
               <Settings />
             )}
 
-          {/* =================================================
-              DASHBOARD
-          ================================================= */}
-
           {currentPage ===
             "dashboard" && (
             <AdminDashboard
@@ -1789,9 +1692,7 @@ function AdminLayout({
               loading={loading}
               error={error}
               onContributions={() =>
-                goTo(
-                  "contributions"
-                )
+                goTo("contributions")
               }
               onMembers={() =>
                 goTo("members")
@@ -1820,17 +1721,20 @@ function AdminDashboard({
   onReports,
 }) {
   const trendData =
-  dashboard?.collection_trend?.map(
-    (item) => ({
-      ...item,
-      label: new Date(
-        item.week_start
-      ).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-    })
-  ) || [];
+    dashboard?.collection_trend?.map(
+      (item) => ({
+        ...item,
+        label: new Date(
+          item.week_start
+        ).toLocaleDateString(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+          }
+        ),
+      })
+    ) || [];
 
   return (
     <>
@@ -1867,8 +1771,6 @@ function AdminDashboard({
       ================================================= */}
 
       <div className="stats-grid">
-        {/* ACTIVE MEMBERS */}
-
         <div className="stat-card">
           <div className="stat-icon">
             👥
@@ -1894,8 +1796,6 @@ function AdminDashboard({
             </h2>
           </div>
         </div>
-
-        {/* TOTAL COLLECTION */}
 
         <div className="stat-card">
           <div className="stat-icon">
@@ -1923,8 +1823,6 @@ function AdminDashboard({
           </div>
         </div>
 
-        {/* THIS WEEK */}
-
         <div className="stat-card">
           <div className="stat-icon">
             📅
@@ -1950,8 +1848,6 @@ function AdminDashboard({
             </h2>
           </div>
         </div>
-
-        {/* THIS MONTH */}
 
         <div className="stat-card">
           <div className="stat-icon">
@@ -2007,7 +1903,7 @@ function AdminDashboard({
             className="collection-trend-chart"
             style={{
               width: "100%",
-              height: 320,
+              height: 380,
             }}
           >
             <ResponsiveContainer
@@ -2017,10 +1913,10 @@ function AdminDashboard({
               <LineChart
                 data={trendData}
                 margin={{
-                  top: 10,
-                  right: 20,
-                  left: 10,
-                  bottom: 10,
+                  top: 20,
+                  right: 30,
+                  left: 30,
+                  bottom: 55,
                 }}
               >
                 <CartesianGrid
@@ -2029,13 +1925,26 @@ function AdminDashboard({
 
                 <XAxis
                   dataKey="label"
+                  interval={0}
+                  tick={{
+                    fontSize: 12,
+                  }}
+                  tickMargin={10}
+                  angle={-25}
+                  textAnchor="end"
+                  height={70}
                 />
 
                 <YAxis
+                  tick={{
+                    fontSize: 12,
+                  }}
                   tickFormatter={(value) =>
-                    `${Number(
+                    Number(
                       value
-                    ).toLocaleString()}`
+                    ).toLocaleString(
+                      "en-US"
+                    )
                   }
                 />
 
@@ -2043,9 +1952,14 @@ function AdminDashboard({
                   formatter={(value) => [
                     `${Number(
                       value
-                    ).toLocaleString()} ETB`,
+                    ).toLocaleString(
+                      "en-US"
+                    )} ETB`,
                     "Collection",
                   ]}
+                  labelFormatter={(label) =>
+                    `Week of ${label}`
+                  }
                 />
 
                 <Line
@@ -2058,6 +1972,7 @@ function AdminDashboard({
                   activeDot={{
                     r: 7,
                   }}
+                  connectNulls
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -2070,12 +1985,10 @@ function AdminDashboard({
       </div>
 
       {/* =================================================
-          DASHBOARD GRID
+          WEEKLY STATUS + QUICK ACTIONS
       ================================================= */}
 
       <div className="dashboard-grid">
-        {/* WEEKLY PAYMENT STATUS */}
-
         <div className="section-card">
           <div className="section-header">
             <div>
@@ -2091,8 +2004,6 @@ function AdminDashboard({
           </div>
 
           <div className="payment-status">
-            {/* PAID */}
-
             <div className="status-box paid">
               <span>✓</span>
 
@@ -2109,8 +2020,6 @@ function AdminDashboard({
                 </p>
               </div>
             </div>
-
-            {/* UNPAID */}
 
             <div className="status-box unpaid">
               <span>!</span>
@@ -2130,8 +2039,6 @@ function AdminDashboard({
             </div>
           </div>
         </div>
-
-        {/* QUICK ACTIONS */}
 
         <div className="section-card quick-actions">
           <div className="section-header">
@@ -2186,11 +2093,20 @@ function AdminDashboard({
             </p>
           </div>
 
+          {/* FIXED VIEW ALL BUTTON */}
+
           <button
-            className="view-all-button"
+            type="button"
+            className="view-all-button ui-action-link"
             onClick={onContributions}
           >
-            View All →
+            <span>
+              View All
+            </span>
+
+            <span className="ui-action-arrow">
+              →
+            </span>
           </button>
         </div>
 
@@ -2210,26 +2126,35 @@ function AdminDashboard({
                     <div className="recent-member-avatar">
                       {contribution.full_name
                         ?.charAt(0)
-                        ?.toUpperCase() || "?"}
+                        ?.toUpperCase() ||
+                        "?"}
                     </div>
 
                     <div>
                       <strong>
-                        {contribution.full_name}
+                        {
+                          contribution.full_name
+                        }
                       </strong>
 
                       <span>
-                        {contribution.contribution_date}
+                        {
+                          contribution.contribution_date
+                        }
                       </span>
                     </div>
                   </div>
 
                   <strong className="recent-amount">
                     {Number(
-                      contribution.amount || 0
-                    ).toLocaleString("en-US", {
-                      maximumFractionDigits: 2,
-                    })}{" "}
+                      contribution.amount ||
+                        0
+                    ).toLocaleString(
+                      "en-US",
+                      {
+                        maximumFractionDigits: 2,
+                      }
+                    )}{" "}
                     ETB
                   </strong>
                 </div>
@@ -2247,3 +2172,4 @@ function AdminDashboard({
 }
 
 export default App;
+

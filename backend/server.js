@@ -947,34 +947,53 @@ app.get(
                 );
 
             const [collectionTrendRows] =
-                await db.query(
-                    `SELECT
-                        YEARWEEK(
-                            contribution_date,
-                            1
-                        ) AS week_number,
-                        MIN(
-                            contribution_date
-                        ) AS week_start,
-                        COALESCE(
-                            SUM(amount),
-                            0
-                        ) AS total_collection
-                     FROM contributions
-                     WHERE contribution_date >=
-                           DATE_SUB(
-                               CURDATE(),
-                               INTERVAL 5 WEEK
-                           )
-                     GROUP BY
-                        YEARWEEK(
-                            contribution_date,
-                            1
-                        )
-                     ORDER BY
-                        week_start ASC`
-                );
+    await db.query(
+        `WITH RECURSIVE weeks AS (
+            SELECT
+                DATE_SUB(
+                    CURDATE(),
+                    INTERVAL WEEKDAY(CURDATE()) DAY
+                ) - INTERVAL 5 WEEK AS week_start
 
+            UNION ALL
+
+            SELECT
+                DATE_ADD(
+                    week_start,
+                    INTERVAL 1 WEEK
+                )
+            FROM weeks
+            WHERE week_start <
+                DATE_SUB(
+                    CURDATE(),
+                    INTERVAL WEEKDAY(CURDATE()) DAY
+                )
+        )
+
+        SELECT
+            weeks.week_start,
+            COALESCE(
+                SUM(contributions.amount),
+                0
+            ) AS total_collection
+
+        FROM weeks
+
+        LEFT JOIN contributions
+            ON contributions.contribution_date >=
+                weeks.week_start
+            AND contributions.contribution_date <
+                DATE_ADD(
+                    weeks.week_start,
+                    INTERVAL 1 WEEK
+                )
+
+        GROUP BY
+            weeks.week_start
+
+        ORDER BY
+            weeks.week_start ASC`
+    );
                 console.log(
     "DASHBOARD DEBUG:",
     {
