@@ -1820,12 +1820,17 @@ function AdminDashboard({
   onReports,
 }) {
   const trendData =
-    dashboard?.collection_trend?.map(
-      (item, index) => ({
-        ...item,
-        label: `Week ${index + 1}`,
-      })
-    ) || [];
+  dashboard?.collection_trend?.map(
+    (item) => ({
+      ...item,
+      label: new Date(
+        item.week_start
+      ).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+    })
+  ) || [];
 
   return (
     <>
