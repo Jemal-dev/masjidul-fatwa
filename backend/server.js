@@ -190,17 +190,25 @@ app.get("/", (req, res) => {
 
 app.get("/api/test-db", async (req, res) => {
     try {
-        const [databaseRows] = await db.query(
-            "SELECT DATABASE() AS database_name"
-        );
+        const [rows] = await db.query(`
+            SELECT
+                DATABASE() AS database_name,
+                USER() AS mysql_user,
+                @@hostname AS mysql_host,
+                @@port AS mysql_port
+        `);
 
-        const [countRows] = await db.query(
-            "SELECT COUNT(*) AS contribution_count FROM contributions"
-        );
+        const [countRows] = await db.query(`
+            SELECT COUNT(*) AS contribution_count
+            FROM contributions
+        `);
 
         res.json({
             success: true,
-            database: databaseRows[0].database_name,
+            database: rows[0].database_name,
+            mysql_user: rows[0].mysql_user,
+            mysql_host: rows[0].mysql_host,
+            mysql_port: rows[0].mysql_port,
             contribution_count: countRows[0].contribution_count
         });
 
