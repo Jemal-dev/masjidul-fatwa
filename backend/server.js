@@ -190,30 +190,30 @@ app.get("/", (req, res) => {
 
 app.get("/api/test-db", async (req, res) => {
     try {
-        const [rows] = await db.query(
-            "SELECT 1 AS result"
+        const [databaseRows] = await db.query(
+            "SELECT DATABASE() AS database_name"
+        );
+
+        const [countRows] = await db.query(
+            "SELECT COUNT(*) AS contribution_count FROM contributions"
         );
 
         res.json({
             success: true,
-            message: "MySQL connected successfully",
-            data: rows
+            database: databaseRows[0].database_name,
+            contribution_count: countRows[0].contribution_count
         });
 
     } catch (error) {
-        console.error(
-            "Database error:",
-            error.message
-        );
+        console.error("Database test error:", error);
 
         res.status(500).json({
             success: false,
-            message: "Database connection failed",
+            message: "Database test failed",
             error: error.message
         });
     }
 });
-
 /* =========================================================
    MEMBERS
 ========================================================= */
@@ -1631,6 +1631,79 @@ app.patch(
                 success: false,
                 message:
                     "Failed to update administrator status."
+            });
+        }
+    }
+);
+
+// ADD NEW ADMIN
+app.post(
+    "/api/admins",
+    authenticateToken,
+    requireSuperAdmin,
+    async (req, res) => {
+        try {
+            const { username, password, role } = req.body;
+
+            // Validate input
+            if (!username || !password) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Username and password are required."
+                });
+            }
+
+            // Validate role
+            const adminRole = role || "admin";
+
+            if (!["admin", "super_admin"].includes(adminRole)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid administrator role."
+                });
+            }
+
+            // Check if username already exists
+            const [existing] = await db.query(
+                "SELECT id FROM admins WHERE username = ?",
+                [username]
+            );
+
+            if (existing.length > 0) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Username already exists."
+                });
+            }
+
+            // Hash password
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Insert new admin
+            const [result] = await db.query(
+                `INSERT INTO admins
+                    (username, password, role, active)
+                 VALUES (?, ?, ?, 1)`,
+                [username, hashedPassword, adminRole]
+            );
+
+            res.status(201).json({
+                success: true,
+                message: "Administrator added successfully.",
+                admin: {
+                    id: result.insertId,
+                    username,
+                    role: adminRole,
+                    active: 1
+                }
+            });
+
+        } catch (error) {
+            console.error("Add admin error:", error);
+
+            res.status(500).json({
+                success: false,
+                message: "Failed to add administrator."
             });
         }
     }
