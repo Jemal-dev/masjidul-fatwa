@@ -551,6 +551,34 @@ app.post(
     }
 );
 
+/* =========================================================
+   CLEAR ALL CONTRIBUTIONS - SUPER ADMIN ONLY
+========================================================= */
+
+app.delete(
+    "/api/contributions/clear",
+    authenticateToken,
+    requireSuperAdmin,
+    async (req, res) => {
+        try {
+            await db.query("DELETE FROM contributions");
+
+            res.json({
+                success: true,
+                message: "All old contributions cleared successfully."
+            });
+
+        } catch (error) {
+            console.error("Clear contributions error:", error);
+
+            res.status(500).json({
+                success: false,
+                message: "Failed to clear contributions."
+            });
+        }
+    }
+);
+
 // Get contributions
 app.get(
     "/api/contributions",
