@@ -520,7 +520,7 @@ onNavigate("home")
 > <span className="brand-mark">
 {"\u{262A}"} </span>
 
-```
+
       <span>
         <strong>
           MASJIDUL-FATWA
