@@ -18,6 +18,7 @@ import Contributions from "./Contributions";
 import Settings from "./Settings";
 import Reports from "./Reports";
 import AdminManagement from "./AdminManagement";
+import Gallery from "./Gallery";
 
 /* =========================================================
    AXIOS BASE URL
@@ -399,7 +400,7 @@ function App() {
       <div className="auth-loading">
         <div className="auth-loading-card">
           <div className="login-logo">
-            ☪
+            â˜ª
           </div>
 
           <p>Loading...</p>
@@ -496,7 +497,7 @@ function PublicHome({
           }
         >
           <span className="brand-mark">
-            ☪
+            â˜ª
           </span>
 
           <span>
@@ -539,7 +540,14 @@ function PublicHome({
             }
           >
             Activities
+          </button>          <button
+            onClick={() =>
+              onNavigate("gallery")
+            }
+          >
+            Gallery
           </button>
+
 
           <button
             onClick={() =>
@@ -571,7 +579,7 @@ function PublicHome({
 
           <div className="hero-content">
             <div className="eyebrow">
-              <span>✦</span>{" "}
+              <span>âœ¦</span>{" "}
               Youth Contribution &
               Management
             </div>
@@ -601,7 +609,7 @@ function PublicHome({
                 }
               >
                 Explore Our Services{" "}
-                <span>→</span>
+                <span>â†’</span>
               </button>
 
               <button
@@ -613,13 +621,13 @@ function PublicHome({
             </div>
 
             <div className="hero-note">
-              <span>✓</span>{" "}
+              <span>âœ“</span>{" "}
               Organized records
-              &nbsp;•&nbsp;
-              <span>✓</span>{" "}
+              &nbsp;â€¢&nbsp;
+              <span>âœ“</span>{" "}
               Transparent contributions
-              &nbsp;•&nbsp;
-              <span>✓</span>{" "}
+              &nbsp;â€¢&nbsp;
+              <span>âœ“</span>{" "}
               Community focused
             </div>
           </div>
@@ -630,7 +638,7 @@ function PublicHome({
 
             <div className="community-card main-community-card">
               <div className="community-icon">
-                🕌
+                ðŸ•Œ
               </div>
 
               <div>
@@ -650,7 +658,7 @@ function PublicHome({
             </div>
 
             <div className="floating-card card-members">
-              <span>👥</span>
+              <span>ðŸ‘¥</span>
 
               <div>
                 <small>
@@ -666,7 +674,7 @@ function PublicHome({
             </div>
 
             <div className="floating-card card-money">
-              <span>💰</span>
+              <span>ðŸ’°</span>
 
               <div>
                 <small>
@@ -798,11 +806,11 @@ function PublicHome({
           <div className="about-grid">
             <div className="about-visual">
               <div className="about-emblem">
-                ☪
+                â˜ª
               </div>
 
               <div className="about-label">
-                Community • Contribution •
+                Community â€¢ Contribution â€¢
                 Impact
               </div>
             </div>
@@ -892,32 +900,32 @@ function PublicHome({
           <div className="service-grid">
             {[
               [
-                "👥",
+                "ðŸ‘¥",
                 "Member Management",
                 "Add, edit, activate and manage Shabab member information.",
               ],
               [
-                "💰",
+                "ðŸ’°",
                 "Contribution Recording",
                 "Record weekly contributions and prevent duplicate records.",
               ],
               [
-                "📊",
+                "ðŸ“Š",
                 "Weekly Reports",
                 "See paid members, unpaid members and weekly collection totals.",
               ],
               [
-                "📅",
+                "ðŸ“…",
                 "Monthly Reports",
                 "Review monthly contribution records and member totals.",
               ],
               [
-                "🤖",
+                "ðŸ¤–",
                 "Telegram Bot",
                 "Manage contribution tasks and reports through the Shabab Telegram bot.",
               ],
               [
-                "🖨️",
+                "ðŸ–¨ï¸",
                 "Printable Reports",
                 "Create clean reports suitable for saving and printing.",
               ],
@@ -939,7 +947,7 @@ function PublicHome({
                     onClick={onAdmin}
                   >
                     Explore{" "}
-                    <span>→</span>
+                    <span>â†’</span>
                   </button>
                 </article>
               )
@@ -1040,22 +1048,22 @@ function PublicHome({
           <div className="why-list">
             {[
               [
-                "✓",
+                "âœ“",
                 "Simple record keeping",
                 "Move weekly records from paper into a structured digital database.",
               ],
               [
-                "◈",
+                "â—ˆ",
                 "Better accountability",
                 "Reports make contribution activity easier for administrators to review.",
               ],
               [
-                "✦",
+                "âœ¦",
                 "Fewer duplicate records",
                 "The contribution workflow checks for duplicate entries for the same date.",
               ],
               [
-                "↗",
+                "â†—",
                 "Accessible information",
                 "Authorized administrators can use the website or Telegram bot.",
               ],
@@ -1118,7 +1126,7 @@ function PublicHome({
                 <button
                   onClick={onAdmin}
                 >
-                  Manage Contributions →
+                  Manage Contributions â†’
                 </button>
               </div>
             </article>
@@ -1146,7 +1154,7 @@ function PublicHome({
                 <button
                   onClick={onAdmin}
                 >
-                  View Reports →
+                  View Reports â†’
                 </button>
               </div>
             </article>
@@ -1174,12 +1182,22 @@ function PublicHome({
                 <button
                   onClick={onAdmin}
                 >
-                  Open System →
+                  Open System â†’
+                </button>
+
+                <button
+                  onClick={() =>
+                    onNavigate("gallery")
+                  }
+                >
+                  View Gallery â†’
                 </button>
               </div>
             </article>
           </div>
         </section>
+
+        <Gallery />
 
         {/* =================================================
             MEMBERSHIP
@@ -1199,7 +1217,7 @@ function PublicHome({
 
           <div className="membership-grid">
             <article>
-              <span>👤</span>
+              <span>ðŸ‘¤</span>
 
               <h3>
                 Shabab Members
@@ -1213,7 +1231,7 @@ function PublicHome({
             </article>
 
             <article>
-              <span>🤝</span>
+              <span>ðŸ¤</span>
 
               <h3>
                 Community Volunteers
@@ -1227,7 +1245,7 @@ function PublicHome({
             </article>
 
             <article>
-              <span>📋</span>
+              <span>ðŸ“‹</span>
 
               <h3>
                 Administrators
@@ -1241,7 +1259,7 @@ function PublicHome({
             </article>
 
             <article>
-              <span>🌙</span>
+              <span>ðŸŒ™</span>
 
               <h3>
                 Community Supporters
@@ -1283,12 +1301,12 @@ function PublicHome({
               className="light-btn"
               onClick={onAdmin}
             >
-              Enter Management System →
+              Enter Management System â†’
             </button>
           </div>
 
           <div className="commitment-mark">
-            ☪
+            â˜ª
           </div>
         </section>
 
@@ -1320,7 +1338,7 @@ function PublicHome({
 
           <div className="contact-grid">
             <div className="contact-card">
-              <span>📍</span>
+              <span>ðŸ“</span>
 
               <h3>Location</h3>
 
@@ -1330,7 +1348,7 @@ function PublicHome({
             </div>
 
             <div className="contact-card">
-              <span>📱</span>
+              <span>ðŸ“±</span>
 
               <h3>Telegram</h3>
 
@@ -1341,7 +1359,7 @@ function PublicHome({
             </div>
 
             <div className="contact-card">
-              <span>✉️</span>
+              <span>âœ‰ï¸</span>
 
               <h3>Email</h3>
 
@@ -1363,7 +1381,7 @@ function PublicHome({
           <div>
             <div className="footer-brand">
               <span className="brand-mark">
-                ☪
+                â˜ª
               </span>
 
               <div>
@@ -1411,7 +1429,14 @@ function PublicHome({
               }
             >
               Services
+            </button>            <button
+              onClick={() =>
+                onNavigate("gallery")
+              }
+            >
+              Gallery
             </button>
+
 
             <button
               onClick={() =>
@@ -1445,13 +1470,20 @@ function PublicHome({
 
         <div className="footer-bottom">
           <span>
-            © {new Date().getFullYear()}{" "}
+            Â© {new Date().getFullYear()}{" "}
             Masjidul-Fatwa Shabab. All rights
             reserved.
           </span>
 
           <span>
-            Built by Jemal Seid
+            <a
+  href="https://jemal-dev.github.io/jemal-portfolio/"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="footer-credit-link"
+>
+  Built by Jemal Seid
+</a>
           </span>
         </div>
       </footer>
@@ -1519,7 +1551,7 @@ function AdminLayout({
       >
         <div className="logo">
           <div className="logo-icon">
-            ☪
+            â˜ª
           </div>
 
           <div>
@@ -1571,7 +1603,7 @@ function AdminLayout({
               goTo("home")
             }
           >
-            <span>🌐</span>
+            <span>ðŸŒ</span>
 
             Public Website
           </button>
@@ -1598,7 +1630,7 @@ function AdminLayout({
             className="logout-button"
             onClick={onLogout}
           >
-            🚪 Logout
+            ðŸšª Logout
           </button>
         </div>
       </aside>
@@ -1614,7 +1646,7 @@ function AdminLayout({
             }
             aria-label="Open navigation"
           >
-            ☰
+            â˜°
           </button>
 
           <div className="topbar-title">
@@ -1635,7 +1667,7 @@ function AdminLayout({
                 goTo("home")
               }
             >
-              🌐 Website
+              ðŸŒ Website
             </button>
 
             <div className="profile">
@@ -1773,7 +1805,7 @@ function AdminDashboard({
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">
-            👥
+            ðŸ‘¥
           </div>
 
           <div>
@@ -1799,7 +1831,7 @@ function AdminDashboard({
 
         <div className="stat-card">
           <div className="stat-icon">
-            💰
+            ðŸ’°
           </div>
 
           <div>
@@ -1825,7 +1857,7 @@ function AdminDashboard({
 
         <div className="stat-card">
           <div className="stat-icon">
-            📅
+            ðŸ“…
           </div>
 
           <div>
@@ -1851,7 +1883,7 @@ function AdminDashboard({
 
         <div className="stat-card">
           <div className="stat-icon">
-            📈
+            ðŸ“ˆ
           </div>
 
           <div>
@@ -2005,7 +2037,7 @@ function AdminDashboard({
 
           <div className="payment-status">
             <div className="status-box paid">
-              <span>✓</span>
+              <span>âœ“</span>
 
               <div>
                 <strong>
@@ -2057,22 +2089,22 @@ function AdminDashboard({
           <button
             onClick={onContributions}
           >
-            💰 Record Contribution
-            <span>→</span>
+            ðŸ’° Record Contribution
+            <span>â†’</span>
           </button>
 
           <button
             onClick={onMembers}
           >
-            👥 Manage Members
-            <span>→</span>
+            ðŸ‘¥ Manage Members
+            <span>â†’</span>
           </button>
 
           <button
             onClick={onReports}
           >
-            📊 Generate Reports
-            <span>→</span>
+            ðŸ“Š Generate Reports
+            <span>â†’</span>
           </button>
         </div>
       </div>
@@ -2105,7 +2137,7 @@ function AdminDashboard({
             </span>
 
             <span className="ui-action-arrow">
-              →
+              â†’
             </span>
           </button>
         </div>
