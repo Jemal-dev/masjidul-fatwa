@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -31,6 +32,9 @@ function Settings() {
   // =====================================================
 
   const [clearingContributions, setClearingContributions] =
+    useState(false);
+
+  const [showClearModal, setShowClearModal] =
     useState(false);
 
   // =====================================================
@@ -140,18 +144,32 @@ function Settings() {
   };
 
   // =====================================================
+  // OPEN CLEAR CONTRIBUTIONS MODAL
+  // =====================================================
+
+  const openClearModal = () => {
+    setError("");
+    setSuccess("");
+    setShowClearModal(true);
+  };
+
+  // =====================================================
+  // CLOSE CLEAR CONTRIBUTIONS MODAL
+  // =====================================================
+
+  const closeClearModal = () => {
+    if (clearingContributions) {
+      return;
+    }
+
+    setShowClearModal(false);
+  };
+
+  // =====================================================
   // CLEAR ALL CONTRIBUTIONS
   // =====================================================
 
   const clearContributions = async () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to clear ALL old contributions? This cannot be undone."
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
     try {
       setClearingContributions(true);
       setError("");
@@ -161,6 +179,8 @@ function Settings() {
         "/api/contributions/clear",
         axiosConfig
       );
+
+      setShowClearModal(false);
 
       setSuccess(
         response.data.message ||
@@ -286,6 +306,37 @@ function Settings() {
   useEffect(() => {
     getSettings();
   }, []);
+
+  // =====================================================
+  // CLOSE MODAL WITH ESC KEY
+  // =====================================================
+
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (
+        event.key === "Escape" &&
+        showClearModal &&
+        !clearingContributions
+      ) {
+        setShowClearModal(false);
+      }
+    };
+
+    document.addEventListener(
+      "keydown",
+      handleEscape
+    );
+
+    return () => {
+      document.removeEventListener(
+        "keydown",
+        handleEscape
+      );
+    };
+  }, [
+    showClearModal,
+    clearingContributions,
+  ]);
 
   // =====================================================
   // LOADING
@@ -592,44 +643,179 @@ function Settings() {
       ================================================== */}
 
       {storedUser.role === "super_admin" && (
-        <div className="section-card settings-card">
+        <div className="danger-zone-card">
 
-          <div className="section-header settings-section-header">
+          {/* HEADER */}
 
-            <div>
-              <div className="settings-title-row">
+          <div className="danger-zone-header">
 
-                <span className="settings-icon">
-                  🗑️
-                </span>
+            <div className="danger-zone-icon">
+              🗑️
+            </div>
+
+            <div className="danger-zone-heading">
+
+              <div className="danger-zone-title-row">
 
                 <h2>
                   Contribution Management
                 </h2>
 
+                <span className="danger-zone-badge">
+                  Super Admin
+                </span>
+
               </div>
 
               <p>
-                Clear old contribution records before
-                starting a new contribution period.
+                Manage contribution records and
+                prepare the system for a new
+                contribution period.
               </p>
+
             </div>
 
           </div>
 
-          <div className="settings-form">
+          {/* CONTENT */}
 
-            <div className="settings-actions">
+          <div className="danger-zone-content">
+
+            <div className="danger-zone-warning">
+
+              <div className="warning-icon">
+                ⚠️
+              </div>
+
+              <div className="warning-text">
+
+                <strong>
+                  Clear old contributions
+                </strong>
+
+                <p>
+                  This will permanently remove all
+                  existing contribution records
+                  from the system.
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="danger-zone-action">
+
+              <div className="danger-zone-info">
+
+                <span className="danger-zone-dot"></span>
+
+                <span>
+                  This action cannot be undone
+                </span>
+
+              </div>
 
               <button
                 type="button"
+                onClick={openClearModal}
                 className="danger-button"
+                disabled={clearingContributions}
+              >
+                <span className="danger-button-icon">
+                  🗑️
+                </span>
+
+                <span>
+                  Clear Old Contributions
+                </span>
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* =================================================
+          CLEAR CONTRIBUTIONS MODAL
+      ================================================== */}
+
+      {showClearModal && (
+        <div
+          className="clear-modal-overlay"
+          onMouseDown={(e) => {
+            if (
+              e.target === e.currentTarget &&
+              !clearingContributions
+            ) {
+              closeClearModal();
+            }
+          }}
+        >
+
+          <div
+            className="clear-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="clear-modal-title"
+          >
+
+            <div className="clear-modal-icon">
+              🗑️
+            </div>
+
+            <h2 id="clear-modal-title">
+              Clear all contributions?
+            </h2>
+
+            <p className="clear-modal-description">
+              You are about to permanently delete
+              all contribution records from the
+              system.
+            </p>
+
+            <div className="clear-modal-warning">
+              <span>⚠️</span>
+
+              <div>
+                <strong>
+                  This action cannot be undone.
+                </strong>
+
+                <p>
+                  Make sure you have completed any
+                  reports or records you need before
+                  continuing.
+                </p>
+              </div>
+            </div>
+
+            <div className="clear-modal-actions">
+
+              <button
+                type="button"
+                className="modal-cancel-button"
+                onClick={closeClearModal}
+                disabled={clearingContributions}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="modal-danger-button"
                 onClick={clearContributions}
                 disabled={clearingContributions}
               >
-                {clearingContributions
-                  ? "Clearing..."
-                  : "Clear Old Contributions"}
+
+                <span>
+                  {clearingContributions
+                    ? "Clearing..."
+                    : "🗑️ Clear Records"}
+                </span>
+
               </button>
 
             </div>
@@ -644,3 +830,4 @@ function Settings() {
 }
 
 export default Settings;
+
