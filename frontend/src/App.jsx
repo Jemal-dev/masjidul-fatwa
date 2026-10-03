@@ -1,14 +1,13 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
+ResponsiveContainer,
+LineChart,
+Line,
+XAxis,
+YAxis,
+CartesianGrid,
+Tooltip,
 } from "recharts";
 import "./App.css";
 
@@ -21,2187 +20,2254 @@ import AdminManagement from "./AdminManagement";
 import Gallery from "./Gallery";
 
 /* =========================================================
-   AXIOS BASE URL
+AXIOS BASE URL
 ========================================================= */
 
 axios.defaults.baseURL = import.meta.env.PROD
-  ? "https://masjidul-fatwa-l6ao.vercel.app"
-  : "http://localhost:5000";
+? "https://masjidul-fatwa-l6ao.vercel.app"
+: "http://localhost:5000";
 
 /* =========================================================
-   AXIOS REQUEST INTERCEPTOR
+AXIOS REQUEST INTERCEPTOR
 ========================================================= */
 
 axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("adminToken");
+(config) => {
+const token = localStorage.getItem("adminToken");
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
 
-    return config;
-  },
-  (error) => Promise.reject(error)
+if (token) {
+  config.headers.Authorization = `Bearer ${token}`;
+}
+
+return config;
+
+
+},
+(error) => Promise.reject(error)
 );
 
 /* =========================================================
-   AXIOS RESPONSE INTERCEPTOR
+AXIOS RESPONSE INTERCEPTOR
 ========================================================= */
 
 axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const status = error.response?.status;
-    const requestUrl = error.config?.url || "";
+(response) => response,
+(error) => {
+const status = error.response?.status;
+const requestUrl = error.config?.url || "";
 
-    const isLoginRequest =
-      requestUrl.includes("/api/auth/login");
 
-    if (
-      (status === 401 || status === 403) &&
-      !isLoginRequest
-    ) {
-      localStorage.removeItem("adminToken");
-      localStorage.removeItem("adminUser");
+const isLoginRequest =
+  requestUrl.includes("/api/auth/login");
 
-      window.location.reload();
-    }
+if (
+  (status === 401 || status === 403) &&
+  !isLoginRequest
+) {
+  localStorage.removeItem("adminToken");
+  localStorage.removeItem("adminUser");
 
-    return Promise.reject(error);
-  }
+  window.location.reload();
+}
+
+return Promise.reject(error);
+
+
+}
 );
 
 /* =========================================================
-   NAVIGATION ITEMS
+NAVIGATION ITEMS
 ========================================================= */
 
 const navItems = [
-  {
-    id: "dashboard",
-    label: "Dashboard",
-    icon: "\u{25A3}",
-  },
-  {
-    id: "members",
-    label: "Members",
-    icon: "\u{1F465}",
-  },
-  {
-    id: "contributions",
-    label: "Contributions",
-    icon: "\u{1F4B0}",
-  },
-  {
-    id: "reports",
-    label: "Reports",
-    icon: "\u{1F4CA}",
-  },
-  {
-    id: "admins",
-    label: "Admins",
-    icon: "\u{1F6E1}",
-  },
-  {
-    id: "settings",
-    label: "Settings",
-    icon: "\u{2699}",
-  },
+{
+id: "dashboard",
+label: "Dashboard",
+icon: "\u{25A3}",
+},
+{
+id: "members",
+label: "Members",
+icon: "\u{1F465}",
+},
+{
+id: "contributions",
+label: "Contributions",
+icon: "\u{1F4B0}",
+},
+{
+id: "reports",
+label: "Reports",
+icon: "\u{1F4CA}",
+},
+{
+id: "admins",
+label: "Admins",
+icon: "\u{1F6E1}",
+},
+{
+id: "settings",
+label: "Settings",
+icon: "\u{2699}",
+},
 ];
 
 /* =========================================================
-   ANIMATED NUMBER
+ANIMATED NUMBER
 ========================================================= */
 
 function AnimatedNumber({
-  value,
-  suffix = "",
+value,
+suffix = "",
 }) {
-  const [displayValue, setDisplayValue] = useState(0);
+const [displayValue, setDisplayValue] = useState(0);
 
-  useEffect(() => {
-    const target = Number(value) || 0;
+useEffect(() => {
+const target = Number(value) || 0;
 
-    setDisplayValue(0);
 
-    const duration = 1200;
-    const startTime = performance.now();
+setDisplayValue(0);
 
-    let animationFrame;
+const duration = 1200;
+const startTime = performance.now();
 
-    const animate = (currentTime) => {
-      const progress = Math.min(
-        (currentTime - startTime) / duration,
-        1
-      );
+let animationFrame;
 
-      const easedProgress =
-        1 - Math.pow(1 - progress, 3);
+const animate = (currentTime) => {
+  const progress = Math.min(
+    (currentTime - startTime) / duration,
+    1
+  );
 
-      setDisplayValue(
-        Math.floor(target * easedProgress)
-      );
+  const easedProgress =
+    1 - Math.pow(1 - progress, 3);
 
-      if (progress < 1) {
-        animationFrame =
-          requestAnimationFrame(animate);
-      } else {
-        setDisplayValue(target);
-      }
-    };
+  setDisplayValue(
+    Math.floor(target * easedProgress)
+  );
 
+  if (progress < 1) {
     animationFrame =
       requestAnimationFrame(animate);
+  } else {
+    setDisplayValue(target);
+  }
+};
 
-    return () => {
-      cancelAnimationFrame(animationFrame);
-    };
-  }, [value]);
+animationFrame =
+  requestAnimationFrame(animate);
 
-  return (
-    <>
-      {displayValue.toLocaleString()}
-      {suffix}
-    </>
-  );
+return () => {
+  cancelAnimationFrame(animationFrame);
+};
+
+
+}, [value]);
+
+return (
+<>
+{displayValue.toLocaleString()}
+{suffix}
+</>
+);
 }
 
 /* =========================================================
-   APP
+APP
 ========================================================= */
 
 function App() {
-  const [dashboard, setDashboard] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [currentPage, setCurrentPage] = useState("home");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [adminUser, setAdminUser] = useState(null);
-  const [authChecking, setAuthChecking] = useState(true);
+const [dashboard, setDashboard] = useState(null);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState("");
+const [currentPage, setCurrentPage] = useState("home");
+const [mobileOpen, setMobileOpen] = useState(false);
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [adminUser, setAdminUser] = useState(null);
+const [authChecking, setAuthChecking] = useState(true);
 
-  /* =====================================================
-     CHECK SAVED LOGIN
-  ===================================================== */
+/* =====================================================
+CHECK SAVED LOGIN
+===================================================== */
 
-  useEffect(() => {
-    const token =
-      localStorage.getItem("adminToken");
+useEffect(() => {
+const token =
+localStorage.getItem("adminToken");
 
-    const savedUser =
-      localStorage.getItem("adminUser");
 
-    if (token && savedUser) {
-      try {
-        const user = JSON.parse(savedUser);
+const savedUser =
+  localStorage.getItem("adminUser");
 
-        setAdminUser(user);
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error(
-          "Invalid saved user:",
-          error
-        );
+if (token && savedUser) {
+  try {
+    const user = JSON.parse(savedUser);
 
-        localStorage.removeItem("adminToken");
-        localStorage.removeItem("adminUser");
-      }
-    }
-
-    setAuthChecking(false);
-  }, []);
-
-  /* =====================================================
-     LOAD DASHBOARD
-  ===================================================== */
-
-  const loadDashboard = async () => {
-    try {
-      setLoading(true);
-      setError("");
-
-      const response =
-        await axios.get("/api/dashboard");
-
-      setDashboard(
-        response.data?.data ||
-          response.data
-      );
-    } catch (err) {
-      console.error(
-        "Dashboard error:",
-        err
-      );
-
-      setError(
-        err.response
-          ? `Server error: ${err.response.status}`
-          : "Cannot connect to the backend server."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* =====================================================
-     LOAD DASHBOARD AFTER LOGIN
-  ===================================================== */
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      loadDashboard();
-    }
-  }, [isLoggedIn]);
-
-  /* =====================================================
-     PROTECT ADMIN PAGES
-  ===================================================== */
-
-  useEffect(() => {
-    const publicPages = [
-      "home",
-      "login",
-    ];
-
-    if (
-      !isLoggedIn &&
-      !publicPages.includes(currentPage)
-    ) {
-      setCurrentPage("home");
-      setMobileOpen(false);
-      return;
-    }
-
-    if (
-      isLoggedIn &&
-      (currentPage === "settings" ||
-        currentPage === "admins") &&
-      adminUser?.role !== "super_admin"
-    ) {
-      setCurrentPage("dashboard");
-      setMobileOpen(false);
-    }
-  }, [
-    isLoggedIn,
-    currentPage,
-    adminUser,
-  ]);
-
-  /* =====================================================
-     LOGIN
-  ===================================================== */
-
-  const handleLogin = (user) => {
     setAdminUser(user);
     setIsLoggedIn(true);
-    setCurrentPage("dashboard");
+  } catch (error) {
+    console.error(
+      "Invalid saved user:",
+      error
+    );
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  /* =====================================================
-     LOGOUT
-  ===================================================== */
-
-  const handleLogout = () => {
     localStorage.removeItem("adminToken");
     localStorage.removeItem("adminUser");
+  }
+}
 
-    setIsLoggedIn(false);
-    setAdminUser(null);
-    setCurrentPage("home");
-    setDashboard(null);
-    setMobileOpen(false);
-  };
+setAuthChecking(false);
 
-  /* =====================================================
-     OPEN ADMIN LOGIN
-  ===================================================== */
 
-  const openAdminLogin = () => {
-    setCurrentPage("login");
-  };
+}, []);
 
-  /* =====================================================
-     ADMIN NAVIGATION
-  ===================================================== */
+/* =====================================================
+LOAD DASHBOARD
+===================================================== */
 
-  const goTo = (page) => {
-    const protectedPages = [
-      "dashboard",
-      "members",
-      "contributions",
-      "reports",
-      "admins",
-      "settings",
-    ];
+const loadDashboard = async () => {
+try {
+setLoading(true);
+setError("");
 
-    if (
-      protectedPages.includes(page) &&
-      !isLoggedIn
-    ) {
-      setCurrentPage("login");
-      setMobileOpen(false);
-      return;
-    }
 
-    if (
-      (page === "settings" ||
-        page === "admins") &&
-      adminUser?.role !== "super_admin"
-    ) {
-      setCurrentPage("dashboard");
-      setMobileOpen(false);
-      return;
-    }
+  const response =
+    await axios.get("/api/dashboard");
 
-    setCurrentPage(page);
-    setMobileOpen(false);
+  setDashboard(
+    response.data?.data ||
+      response.data
+  );
+} catch (err) {
+  console.error(
+    "Dashboard error:",
+    err
+  );
 
-    window.scrollTo({
-      top: 0,
+  setError(
+    err.response
+      ? `Server error: ${err.response.status}`
+      : "Cannot connect to the backend server."
+  );
+} finally {
+  setLoading(false);
+}
+
+
+};
+
+/* =====================================================
+LOAD DASHBOARD AFTER LOGIN
+===================================================== */
+
+useEffect(() => {
+if (isLoggedIn) {
+loadDashboard();
+}
+}, [isLoggedIn]);
+
+/* =====================================================
+PROTECT ADMIN PAGES
+===================================================== */
+
+useEffect(() => {
+const publicPages = [
+"home",
+"login",
+];
+
+
+if (
+  !isLoggedIn &&
+  !publicPages.includes(currentPage)
+) {
+  setCurrentPage("home");
+  setMobileOpen(false);
+  return;
+}
+
+if (
+  isLoggedIn &&
+  (currentPage === "settings" ||
+    currentPage === "admins") &&
+  adminUser?.role !== "super_admin"
+) {
+  setCurrentPage("dashboard");
+  setMobileOpen(false);
+}
+
+
+}, [
+isLoggedIn,
+currentPage,
+adminUser,
+]);
+
+/* =====================================================
+LOGIN
+===================================================== */
+
+const handleLogin = (user) => {
+setAdminUser(user);
+setIsLoggedIn(true);
+setCurrentPage("dashboard");
+
+
+window.scrollTo({
+  top: 0,
+  behavior: "smooth",
+});
+
+
+};
+
+/* =====================================================
+LOGOUT
+===================================================== */
+
+const handleLogout = () => {
+localStorage.removeItem("adminToken");
+localStorage.removeItem("adminUser");
+
+
+setIsLoggedIn(false);
+setAdminUser(null);
+setCurrentPage("home");
+setDashboard(null);
+setMobileOpen(false);
+
+
+};
+
+/* =====================================================
+OPEN ADMIN LOGIN
+===================================================== */
+
+const openAdminLogin = () => {
+setCurrentPage("login");
+};
+
+/* =====================================================
+ADMIN NAVIGATION
+===================================================== */
+
+const goTo = (page) => {
+const protectedPages = [
+"dashboard",
+"members",
+"contributions",
+"reports",
+"admins",
+"settings",
+];
+
+
+if (
+  protectedPages.includes(page) &&
+  !isLoggedIn
+) {
+  setCurrentPage("login");
+  setMobileOpen(false);
+  return;
+}
+
+if (
+  (page === "settings" ||
+    page === "admins") &&
+  adminUser?.role !== "super_admin"
+) {
+  setCurrentPage("dashboard");
+  setMobileOpen(false);
+  return;
+}
+
+setCurrentPage(page);
+setMobileOpen(false);
+
+window.scrollTo({
+  top: 0,
+  behavior: "smooth",
+});
+
+
+};
+
+/* =====================================================
+PUBLIC WEBSITE NAVIGATION
+===================================================== */
+
+const scrollToSection = (id) => {
+if (currentPage !== "home") {
+setCurrentPage("home");
+
+
+  setTimeout(() => {
+    document
+      .getElementById(id)
+      ?.scrollIntoView({
+        behavior: "smooth",
+      });
+  }, 50);
+} else {
+  document
+    .getElementById(id)
+    ?.scrollIntoView({
       behavior: "smooth",
     });
-  };
+}
 
-  /* =====================================================
-     PUBLIC WEBSITE NAVIGATION
-  ===================================================== */
 
-  const scrollToSection = (id) => {
-    if (currentPage !== "home") {
-      setCurrentPage("home");
+};
 
-      setTimeout(() => {
-        document
-          .getElementById(id)
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }, 50);
-    } else {
-      document
-        .getElementById(id)
-        ?.scrollIntoView({
-          behavior: "smooth",
-        });
-    }
-  };
+/* =====================================================
+AUTH LOADING
+===================================================== */
 
-  /* =====================================================
-     AUTH LOADING
-  ===================================================== */
+if (authChecking) {
+return ( <div className="auth-loading"> <div className="auth-loading-card"> <div className="login-logo">
+{"\u{262A}"} </div>
 
-  if (authChecking) {
-    return (
-      <div className="auth-loading">
-        <div className="auth-loading-card">
-          <div className="login-logo">
-            â˜ª
-          </div>
 
-          <p>Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  /* =====================================================
-     MAIN APP
-  ===================================================== */
-
-  return (
-    <div className="app-shell">
-      {currentPage === "login" ? (
-        <Login
-          onLogin={handleLogin}
-          onBack={() =>
-            setCurrentPage("home")
-          }
-        />
-      ) : currentPage === "home" ? (
-        <PublicHome
-          dashboard={dashboard}
-          loading={loading}
-          error={error}
-          onAdmin={openAdminLogin}
-          onNavigate={scrollToSection}
-        />
-      ) : (
-        <AdminLayout
-          currentPage={currentPage}
-          mobileOpen={mobileOpen}
-          setMobileOpen={setMobileOpen}
-          goTo={goTo}
-          dashboard={dashboard}
-          loading={loading}
-          error={error}
-          reloadDashboard={loadDashboard}
-          adminUser={adminUser}
-          onLogout={handleLogout}
-        />
-      )}
+      <p>Loading...</p>
     </div>
-  );
+  </div>
+);
+
+
+}
+
+/* =====================================================
+MAIN APP
+===================================================== */
+
+return ( <div className="app-shell">
+{currentPage === "login" ? (
+<Login
+onLogin={handleLogin}
+onBack={() =>
+setCurrentPage("home")
+}
+/>
+) : currentPage === "home" ? ( <PublicHome
+       dashboard={dashboard}
+       loading={loading}
+       error={error}
+       onAdmin={openAdminLogin}
+       onNavigate={scrollToSection}
+     />
+) : ( <AdminLayout
+       currentPage={currentPage}
+       mobileOpen={mobileOpen}
+       setMobileOpen={setMobileOpen}
+       goTo={goTo}
+       dashboard={dashboard}
+       loading={loading}
+       error={error}
+       reloadDashboard={loadDashboard}
+       adminUser={adminUser}
+       onLogout={handleLogout}
+     />
+)} </div>
+);
 }
 
 /* =========================================================
-   PUBLIC HOME
+PUBLIC HOME
 ========================================================= */
 
 function PublicHome({
-  dashboard,
-  loading,
-  error,
-  onAdmin,
-  onNavigate,
+dashboard,
+loading,
+error,
+onAdmin,
+onNavigate,
 }) {
-  const activeMembers =
-    dashboard?.total_active_members ?? 0;
+const activeMembers =
+dashboard?.total_active_members ?? 0;
 
-  const totalCollection =
-    dashboard?.total_collection ?? 0;
+const totalCollection =
+dashboard?.total_collection ?? 0;
 
-  const weeklyCollection =
-    dashboard?.weekly_collection ?? 0;
+const weeklyCollection =
+dashboard?.weekly_collection ?? 0;
 
-  const monthlyCollection =
-    dashboard?.monthly_collection ?? 0;
+const monthlyCollection =
+dashboard?.monthly_collection ?? 0;
 
-  const statValue = (
-    value,
-    suffix = ""
-  ) =>
-    loading
-      ? "..."
-      : `${value ?? 0}${suffix}`;
+const statValue = (
+value,
+suffix = ""
+) =>
+loading
+? "..."
+: `${value ?? 0}${suffix}`;
 
-  const formatMoney = (value) =>
-    Number(value || 0).toLocaleString(
-      "en-US",
-      {
-        maximumFractionDigits: 2,
-      }
-    );
+const formatMoney = (value) =>
+Number(value || 0).toLocaleString(
+"en-US",
+{
+maximumFractionDigits: 2,
+}
+);
 
-  return (
-    <div className="public-site">
-      <header className="public-header">
-        <button
-          className="brand"
-          onClick={() =>
-            onNavigate("home")
-          }
-        >
-          <span className="brand-mark">
-            â˜ª
-          </span>
+return ( <div className="public-site"> <header className="public-header">
+<button
+className="brand"
+onClick={() =>
+onNavigate("home")
+}
+> <span className="brand-mark">
+{"\u{262A}"} </span>
 
+```
+      <span>
+        <strong>
+          MASJIDUL-FATWA
+        </strong>
+
+        <small>SHABAB</small>
+      </span>
+    </button>
+
+    <nav className="public-nav">
+      <button
+        onClick={() =>
+          onNavigate("home")
+        }
+      >
+        Home
+      </button>
+
+      <button
+        onClick={() =>
+          onNavigate("about")
+        }
+      >
+        About
+      </button>
+
+      <button
+        onClick={() =>
+          onNavigate("services")
+        }
+      >
+        Services
+      </button>
+
+      <button
+        onClick={() =>
+          onNavigate("events")
+        }
+      >
+        Activities
+      </button>
+
+      <button
+        onClick={() =>
+          onNavigate("gallery")
+        }
+      >
+        Gallery
+      </button>
+
+      <button
+        onClick={() =>
+          onNavigate("contact")
+        }
+      >
+        Contact
+      </button>
+    </nav>
+
+    <button
+      className="header-admin-btn"
+      onClick={onAdmin}
+    >
+      Admin Login
+    </button>
+  </header>
+
+  <main>
+    {/* =================================================
+        HERO
+    ================================================= */}
+
+    <section
+      className="hero-section"
+      id="home"
+    >
+      <div className="hero-pattern" />
+
+      <div className="hero-content">
+        <div className="eyebrow">
           <span>
-            <strong>
-              MASJIDUL-FATWA
-            </strong>
+            {"\u{2726}"}
+          </span>{" "}
+          Youth Contribution &
+          Management
+        </div>
 
-            <small>SHABAB</small>
+        <h1>
+          Building Community
+          <span>
+            {" "}
+            Through Contribution &
+            Impact
           </span>
-        </button>
+        </h1>
 
-        <nav className="public-nav">
-          <button
-            onClick={() =>
-              onNavigate("home")
-            }
-          >
-            Home
-          </button>
+        <p>
+          A transparent digital platform
+          for Masjidul-Fatwa Shabab to
+          manage members, record weekly
+          contributions, and keep clear
+          community records.
+        </p>
 
+        <div className="hero-actions">
           <button
-            onClick={() =>
-              onNavigate("about")
-            }
-          >
-            About
-          </button>
-
-          <button
+            className="primary-btn"
             onClick={() =>
               onNavigate("services")
             }
           >
-            Services
+            Explore Our Services{" "}
+            <span>
+              {"\u{2192}"}
+            </span>
           </button>
 
           <button
-            onClick={() =>
-              onNavigate("events")
-            }
+            className="secondary-btn"
+            onClick={onAdmin}
           >
-            Activities
-          </button>          <button
-            onClick={() =>
-              onNavigate("gallery")
-            }
-          >
-            Gallery
+            Admin Login
           </button>
+        </div>
 
+        <div className="hero-note">
+          <span>
+            {"\u{2713}"}
+          </span>{" "}
+          Organized records
+          &nbsp;{"\u{2022}"}&nbsp;
+          <span>
+            {"\u{2713}"}
+          </span>{" "}
+          Transparent contributions
+          &nbsp;{"\u{2022}"}&nbsp;
+          <span>
+            {"\u{2713}"}
+          </span>{" "}
+          Community focused
+        </div>
+      </div>
 
-          <button
-            onClick={() =>
-              onNavigate("contact")
-            }
-          >
-            Contact
-          </button>
-        </nav>
+      <div className="hero-visual">
+        <div className="glow glow-one" />
+        <div className="glow glow-two" />
 
-        <button
-          className="header-admin-btn"
-          onClick={onAdmin}
-        >
-          Admin Login
-        </button>
-      </header>
+        <div className="community-card main-community-card">
+          <div className="community-icon">
+            {"\u{1F54C}"}
+          </div>
 
-      <main>
-        {/* =================================================
-            HERO
-        ================================================= */}
+          <div>
+            <span>
+              MASJIDUL-FATWA
+            </span>
 
-        <section
-          className="hero-section"
-          id="home"
-        >
-          <div className="hero-pattern" />
+            <strong>
+              SHABAB
+            </strong>
 
-          <div className="hero-content">
-            <div className="eyebrow">
-              <span>âœ¦</span>{" "}
+            <small>
               Youth Contribution &
-              Management
+              Management System
+            </small>
+          </div>
+        </div>
+
+        <div className="floating-card card-members">
+          <span>
+            {"\u{1F465}"}
+          </span>
+
+          <div>
+            <small>
+              Active Members
+            </small>
+
+            <strong>
+              {statValue(
+                activeMembers
+              )}
+            </strong>
+          </div>
+        </div>
+
+        <div className="floating-card card-money">
+          <span>
+            {"\u{1F4B0}"}
+          </span>
+
+          <div>
+            <small>
+              Total Collection
+            </small>
+
+            <strong>
+              {loading
+                ? "..."
+                : `${formatMoney(
+                    totalCollection
+                  )} ETB`}
+            </strong>
+          </div>
+        </div>
+
+        <div className="hero-ring ring-one" />
+        <div className="hero-ring ring-two" />
+      </div>
+    </section>
+
+    {error && (
+      <div className="public-error">
+        {error}
+      </div>
+    )}
+
+    {/* =================================================
+        IMPACT
+    ================================================= */}
+
+    <section className="impact-strip">
+      <div className="section-kicker">
+        Our Collective Impact
+      </div>
+
+      <h2>
+        Real numbers from our
+        contribution system
+      </h2>
+
+      <div className="impact-stats">
+        <div>
+          <strong>
+            {statValue(
+              activeMembers,
+              "+"
+            )}
+          </strong>
+
+          <span>
+            Active Members
+          </span>
+        </div>
+
+        <div>
+          <strong>
+            {loading
+              ? "..."
+              : `${formatMoney(
+                  weeklyCollection
+                )} ETB`}
+          </strong>
+
+          <span>
+            This Week
+          </span>
+        </div>
+
+        <div>
+          <strong>
+            {loading
+              ? "..."
+              : `${formatMoney(
+                  monthlyCollection
+                )} ETB`}
+          </strong>
+
+          <span>
+            This Month
+          </span>
+        </div>
+
+        <div>
+          <strong>
+            {loading
+              ? "..."
+              : `${formatMoney(
+                  totalCollection
+                )} ETB`}
+          </strong>
+
+          <span>
+            Total Collection
+          </span>
+        </div>
+      </div>
+    </section>
+
+    {/* =================================================
+        ABOUT
+    ================================================= */}
+
+    <section
+      className="public-section about-section"
+      id="about"
+    >
+      <div className="section-heading">
+        <span className="section-kicker">
+          Who We Are
+        </span>
+
+        <h2>
+          A community built on trust,
+          responsibility and service.
+        </h2>
+
+        <p>
+          Masjidul-Fatwa Shabab is a
+          youth community that values
+          organized contribution,
+          cooperation and accountability.
+          This platform helps turn
+          paper-based records into a clear
+          digital system.
+        </p>
+      </div>
+
+      <div className="about-grid">
+        <div className="about-visual">
+          <div className="about-emblem">
+            {"\u{262A}"}
+          </div>
+
+          <div className="about-label">
+            Community {"\u{2022}"} Contribution {"\u{2022}"}
+            Impact
+          </div>
+        </div>
+
+        <div className="about-points">
+          <article>
+            <span>01</span>
+
+            <div>
+              <h3>
+                Transparent Records
+              </h3>
+
+              <p>
+                Contributions are stored
+                digitally so administrators
+                can review records without
+                depending on paper
+                notebooks.
+              </p>
             </div>
+          </article>
 
-            <h1>
-              Building Community
-              <span>
-                {" "}
-                Through Contribution &
-                Impact
-              </span>
-            </h1>
+          <article>
+            <span>02</span>
 
-            <p>
-              A transparent digital platform
-              for Masjidul-Fatwa Shabab to
-              manage members, record weekly
-              contributions, and keep clear
-              community records.
-            </p>
+            <div>
+              <h3>
+                Responsible Management
+              </h3>
 
-            <div className="hero-actions">
+              <p>
+                Members, payments and
+                reports are organized in
+                one management system.
+              </p>
+            </div>
+          </article>
+
+          <article>
+            <span>03</span>
+
+            <div>
+              <h3>
+                Community Impact
+              </h3>
+
+              <p>
+                Clear records make it
+                easier to understand
+                participation and the
+                resources collected by
+                the Shabab.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    {/* =================================================
+        SERVICES
+    ================================================= */}
+
+    <section
+      className="public-section soft-section"
+      id="services"
+    >
+      <div className="section-heading center">
+        <span className="section-kicker">
+          Our Services
+        </span>
+
+        <h2>
+          Everything the Shabab team
+          needs in one place.
+        </h2>
+
+        <p>
+          The public website and
+          management system work together
+          to keep community administration
+          simple.
+        </p>
+      </div>
+
+      <div className="service-grid">
+        {[
+          [
+            "\u{1F465}",
+            "Member Management",
+            "Add, edit, activate and manage Shabab member information.",
+          ],
+          [
+            "\u{1F4B0}",
+            "Contribution Recording",
+            "Record weekly contributions and prevent duplicate records.",
+          ],
+          [
+            "\u{1F4CA}",
+            "Weekly Reports",
+            "See paid members, unpaid members and weekly collection totals.",
+          ],
+          [
+            "\u{1F4C5}",
+            "Monthly Reports",
+            "Review monthly contribution records and member totals.",
+          ],
+          [
+            "\u{1F916}",
+            "Telegram Bot",
+            "Manage contribution tasks and reports through the Shabab Telegram bot.",
+          ],
+          [
+            "\u{1F5A8}\u{FE0F}",
+            "Printable Reports",
+            "Create clean reports suitable for saving and printing.",
+          ],
+        ].map(
+          ([icon, title, text]) => (
+            <article
+              className="service-card"
+              key={title}
+            >
+              <div className="service-icon">
+                {icon}
+              </div>
+
+              <h3>{title}</h3>
+
+              <p>{text}</p>
+
               <button
-                className="primary-btn"
-                onClick={() =>
-                  onNavigate("services")
-                }
-              >
-                Explore Our Services{" "}
-                <span>â†’</span>
-              </button>
-
-              <button
-                className="secondary-btn"
                 onClick={onAdmin}
               >
-                Admin Login
-              </button>
-            </div>
-
-            <div className="hero-note">
-              <span>âœ“</span>{" "}
-              Organized records
-              &nbsp;â€¢&nbsp;
-              <span>âœ“</span>{" "}
-              Transparent contributions
-              &nbsp;â€¢&nbsp;
-              <span>âœ“</span>{" "}
-              Community focused
-            </div>
-          </div>
-
-          <div className="hero-visual">
-            <div className="glow glow-one" />
-            <div className="glow glow-two" />
-
-            <div className="community-card main-community-card">
-              <div className="community-icon">
-                ðŸ•Œ
-              </div>
-
-              <div>
+                Explore{" "}
                 <span>
-                  MASJIDUL-FATWA
+                  {"\u{2192}"}
                 </span>
-
-                <strong>
-                  SHABAB
-                </strong>
-
-                <small>
-                  Youth Contribution &
-                  Management System
-                </small>
-              </div>
-            </div>
-
-            <div className="floating-card card-members">
-              <span>ðŸ‘¥</span>
-
-              <div>
-                <small>
-                  Active Members
-                </small>
-
-                <strong>
-                  {statValue(
-                    activeMembers
-                  )}
-                </strong>
-              </div>
-            </div>
-
-            <div className="floating-card card-money">
-              <span>ðŸ’°</span>
-
-              <div>
-                <small>
-                  Total Collection
-                </small>
-
-                <strong>
-                  {loading
-                    ? "..."
-                    : `${formatMoney(
-                        totalCollection
-                      )} ETB`}
-                </strong>
-              </div>
-            </div>
-
-            <div className="hero-ring ring-one" />
-            <div className="hero-ring ring-two" />
-          </div>
-        </section>
-
-        {error && (
-          <div className="public-error">
-            {error}
-          </div>
+              </button>
+            </article>
+          )
         )}
+      </div>
+    </section>
 
-        {/* =================================================
-            IMPACT
-        ================================================= */}
+    {/* =================================================
+        ACHIEVEMENTS
+    ================================================= */}
 
-        <section className="impact-strip">
-          <div className="section-kicker">
-            Our Collective Impact
-          </div>
+    <section className="public-section achievements-section">
+      <div className="section-heading center">
+        <span className="section-kicker">
+          Our Achievements
+        </span>
 
-          <h2>
-            Real numbers from our
-            contribution system
-          </h2>
+        <h2>
+          The system reflects the work
+          of our community.
+        </h2>
+      </div>
 
-          <div className="impact-stats">
-            <div>
-              <strong>
-                {statValue(
-                  activeMembers,
-                  "+"
-                )}
-              </strong>
-
-              <span>
-                Active Members
-              </span>
-            </div>
-
-            <div>
-              <strong>
-                {loading
-                  ? "..."
-                  : `${formatMoney(
-                      weeklyCollection
-                    )} ETB`}
-              </strong>
-
-              <span>
-                This Week
-              </span>
-            </div>
-
-            <div>
-              <strong>
-                {loading
-                  ? "..."
-                  : `${formatMoney(
-                      monthlyCollection
-                    )} ETB`}
-              </strong>
-
-              <span>
-                This Month
-              </span>
-            </div>
-
-            <div>
-              <strong>
-                {loading
-                  ? "..."
-                  : `${formatMoney(
-                      totalCollection
-                    )} ETB`}
-              </strong>
-
-              <span>
-                Total Collection
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* =================================================
-            ABOUT
-        ================================================= */}
-
-        <section
-          className="public-section about-section"
-          id="about"
-        >
-          <div className="section-heading">
-            <span className="section-kicker">
-              Who We Are
-            </span>
-
-            <h2>
-              A community built on trust,
-              responsibility and service.
-            </h2>
-
-            <p>
-              Masjidul-Fatwa Shabab is a
-              youth community that values
-              organized contribution,
-              cooperation and accountability.
-              This platform helps turn
-              paper-based records into a clear
-              digital system.
-            </p>
-          </div>
-
-          <div className="about-grid">
-            <div className="about-visual">
-              <div className="about-emblem">
-                â˜ª
-              </div>
-
-              <div className="about-label">
-                Community â€¢ Contribution â€¢
-                Impact
-              </div>
-            </div>
-
-            <div className="about-points">
-              <article>
-                <span>01</span>
-
-                <div>
-                  <h3>
-                    Transparent Records
-                  </h3>
-
-                  <p>
-                    Contributions are stored
-                    digitally so administrators
-                    can review records without
-                    depending on paper
-                    notebooks.
-                  </p>
-                </div>
-              </article>
-
-              <article>
-                <span>02</span>
-
-                <div>
-                  <h3>
-                    Responsible Management
-                  </h3>
-
-                  <p>
-                    Members, payments and
-                    reports are organized in
-                    one management system.
-                  </p>
-                </div>
-              </article>
-
-              <article>
-                <span>03</span>
-
-                <div>
-                  <h3>
-                    Community Impact
-                  </h3>
-
-                  <p>
-                    Clear records make it
-                    easier to understand
-                    participation and the
-                    resources collected by
-                    the Shabab.
-                  </p>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        {/* =================================================
-            SERVICES
-        ================================================= */}
-
-        <section
-          className="public-section soft-section"
-          id="services"
-        >
-          <div className="section-heading center">
-            <span className="section-kicker">
-              Our Services
-            </span>
-
-            <h2>
-              Everything the Shabab team
-              needs in one place.
-            </h2>
-
-            <p>
-              The public website and
-              management system work together
-              to keep community administration
-              simple.
-            </p>
-          </div>
-
-          <div className="service-grid">
-            {[
-              [
-                "ðŸ‘¥",
-                "Member Management",
-                "Add, edit, activate and manage Shabab member information.",
-              ],
-              [
-                "ðŸ’°",
-                "Contribution Recording",
-                "Record weekly contributions and prevent duplicate records.",
-              ],
-              [
-                "ðŸ“Š",
-                "Weekly Reports",
-                "See paid members, unpaid members and weekly collection totals.",
-              ],
-              [
-                "ðŸ“…",
-                "Monthly Reports",
-                "Review monthly contribution records and member totals.",
-              ],
-              [
-                "ðŸ¤–",
-                "Telegram Bot",
-                "Manage contribution tasks and reports through the Shabab Telegram bot.",
-              ],
-              [
-                "ðŸ–¨ï¸",
-                "Printable Reports",
-                "Create clean reports suitable for saving and printing.",
-              ],
-            ].map(
-              ([icon, title, text]) => (
-                <article
-                  className="service-card"
-                  key={title}
-                >
-                  <div className="service-icon">
-                    {icon}
-                  </div>
-
-                  <h3>{title}</h3>
-
-                  <p>{text}</p>
-
-                  <button
-                    onClick={onAdmin}
-                  >
-                    Explore{" "}
-                    <span>â†’</span>
-                  </button>
-                </article>
-              )
+      <div className="achievement-grid">
+        <div className="achievement-card">
+          <strong>
+            {statValue(
+              activeMembers,
+              "+"
             )}
+          </strong>
+
+          <span>
+            Active Shabab Members
+          </span>
+        </div>
+
+        <div className="achievement-card">
+          <strong>
+            {loading
+              ? "..."
+              : `${formatMoney(
+                  totalCollection
+                )} ETB`}
+          </strong>
+
+          <span>
+            Total Recorded Collection
+          </span>
+        </div>
+
+        <div className="achievement-card">
+          <strong>
+            {loading
+              ? "..."
+              : `${formatMoney(
+                  weeklyCollection
+                )} ETB`}
+          </strong>
+
+          <span>
+            Current Weekly Collection
+          </span>
+        </div>
+
+        <div className="achievement-card">
+          <strong>
+            {loading
+              ? "..."
+              : `${formatMoney(
+                  monthlyCollection
+                )} ETB`}
+          </strong>
+
+          <span>
+            Current Monthly Collection
+          </span>
+        </div>
+      </div>
+    </section>
+
+    {/* =================================================
+        WHY
+    ================================================= */}
+
+    <section className="public-section why-section">
+      <div className="section-heading">
+        <span className="section-kicker">
+          Why This Platform
+        </span>
+
+        <h2>
+          Designed to make contribution
+          management clearer.
+        </h2>
+      </div>
+
+      <div className="why-list">
+        {[
+          [
+            "\u{2713}",
+            "Simple record keeping",
+            "Move weekly records from paper into a structured digital database.",
+          ],
+          [
+            "\u{25C8}",
+            "Better accountability",
+            "Reports make contribution activity easier for administrators to review.",
+          ],
+          [
+            "\u{2726}",
+            "Fewer duplicate records",
+            "The contribution workflow checks for duplicate entries for the same date.",
+          ],
+          [
+            "\u{2197}",
+            "Accessible information",
+            "Authorized administrators can use the website or Telegram bot.",
+          ],
+        ].map(
+          ([icon, title, text]) => (
+            <article key={title}>
+              <span>{icon}</span>
+
+              <div>
+                <h3>{title}</h3>
+
+                <p>{text}</p>
+              </div>
+            </article>
+          )
+        )}
+      </div>
+    </section>
+
+    {/* =================================================
+        EVENTS
+    ================================================= */}
+
+    <section
+      className="public-section events-section"
+      id="events"
+    >
+      <div className="section-heading center">
+        <span className="section-kicker">
+          Community Activities
+        </span>
+
+        <h2>
+          Keeping the Shabab connected
+          and organized.
+        </h2>
+      </div>
+
+      <div className="event-grid">
+        <article className="event-card featured">
+          <div className="event-art green-art">
+            FRIDAY
           </div>
-        </section>
 
-        {/* =================================================
-            ACHIEVEMENTS
-        ================================================= */}
-
-        <section className="public-section achievements-section">
-          <div className="section-heading center">
-            <span className="section-kicker">
-              Our Achievements
+          <div className="event-body">
+            <span className="event-tag">
+              Weekly
             </span>
 
-            <h2>
-              The system reflects the work
-              of our community.
-            </h2>
-          </div>
-
-          <div className="achievement-grid">
-            <div className="achievement-card">
-              <strong>
-                {statValue(
-                  activeMembers,
-                  "+"
-                )}
-              </strong>
-
-              <span>
-                Active Shabab Members
-              </span>
-            </div>
-
-            <div className="achievement-card">
-              <strong>
-                {loading
-                  ? "..."
-                  : `${formatMoney(
-                      totalCollection
-                    )} ETB`}
-              </strong>
-
-              <span>
-                Total Recorded Collection
-              </span>
-            </div>
-
-            <div className="achievement-card">
-              <strong>
-                {loading
-                  ? "..."
-                  : `${formatMoney(
-                      weeklyCollection
-                    )} ETB`}
-              </strong>
-
-              <span>
-                Current Weekly Collection
-              </span>
-            </div>
-
-            <div className="achievement-card">
-              <strong>
-                {loading
-                  ? "..."
-                  : `${formatMoney(
-                      monthlyCollection
-                    )} ETB`}
-              </strong>
-
-              <span>
-                Current Monthly Collection
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* =================================================
-            WHY
-        ================================================= */}
-
-        <section className="public-section why-section">
-          <div className="section-heading">
-            <span className="section-kicker">
-              Why This Platform
-            </span>
-
-            <h2>
-              Designed to make contribution
-              management clearer.
-            </h2>
-          </div>
-
-          <div className="why-list">
-            {[
-              [
-                "âœ“",
-                "Simple record keeping",
-                "Move weekly records from paper into a structured digital database.",
-              ],
-              [
-                "â—ˆ",
-                "Better accountability",
-                "Reports make contribution activity easier for administrators to review.",
-              ],
-              [
-                "âœ¦",
-                "Fewer duplicate records",
-                "The contribution workflow checks for duplicate entries for the same date.",
-              ],
-              [
-                "â†—",
-                "Accessible information",
-                "Authorized administrators can use the website or Telegram bot.",
-              ],
-            ].map(
-              ([icon, title, text]) => (
-                <article key={title}>
-                  <span>{icon}</span>
-
-                  <div>
-                    <h3>{title}</h3>
-
-                    <p>{text}</p>
-                  </div>
-                </article>
-              )
-            )}
-          </div>
-        </section>
-
-        {/* =================================================
-            EVENTS
-        ================================================= */}
-
-        <section
-          className="public-section events-section"
-          id="events"
-        >
-          <div className="section-heading center">
-            <span className="section-kicker">
-              Community Activities
-            </span>
-
-            <h2>
-              Keeping the Shabab connected
-              and organized.
-            </h2>
-          </div>
-
-          <div className="event-grid">
-            <article className="event-card featured">
-              <div className="event-art green-art">
-                FRIDAY
-              </div>
-
-              <div className="event-body">
-                <span className="event-tag">
-                  Weekly
-                </span>
-
-                <h3>
-                  Friday Contribution
-                </h3>
-
-                <p>
-                  Weekly contribution activity
-                  and payment recording for
-                  Shabab members.
-                </p>
-
-                <button
-                  onClick={onAdmin}
-                >
-                  Manage Contributions â†’
-                </button>
-              </div>
-            </article>
-
-            <article className="event-card">
-              <div className="event-art gold-art">
-                REPORT
-              </div>
-
-              <div className="event-body">
-                <span className="event-tag">
-                  Monthly
-                </span>
-
-                <h3>
-                  Monthly Review
-                </h3>
-
-                <p>
-                  Review monthly contribution
-                  records and understand the
-                  collected amount.
-                </p>
-
-                <button
-                  onClick={onAdmin}
-                >
-                  View Reports â†’
-                </button>
-              </div>
-            </article>
-
-            <article className="event-card">
-              <div className="event-art navy-art">
-                SHABAB
-              </div>
-
-              <div className="event-body">
-                <span className="event-tag">
-                  Community
-                </span>
-
-                <h3>
-                  Shabab Activities
-                </h3>
-
-                <p>
-                  Use the platform as a
-                  foundation for organized youth
-                  community activities.
-                </p>
-
-                <button
-                  onClick={onAdmin}
-                >
-                  Open System â†’
-                </button>
-
-                <button
-                  onClick={() =>
-                    onNavigate("gallery")
-                  }
-                >
-                  View Gallery â†’
-                </button>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <Gallery />
-
-        {/* =================================================
-            MEMBERSHIP
-        ================================================= */}
-
-        <section className="public-section membership-section">
-          <div className="section-heading center">
-            <span className="section-kicker">
-              Who Can Be Our Member?
-            </span>
-
-            <h2>
-              A place for Shabab who want to
-              contribute and serve.
-            </h2>
-          </div>
-
-          <div className="membership-grid">
-            <article>
-              <span>ðŸ‘¤</span>
-
-              <h3>
-                Shabab Members
-              </h3>
-
-              <p>
-                Members participating in the
-                community and weekly
-                contribution activities.
-              </p>
-            </article>
-
-            <article>
-              <span>ðŸ¤</span>
-
-              <h3>
-                Community Volunteers
-              </h3>
-
-              <p>
-                People supporting community
-                programs and organized
-                activities.
-              </p>
-            </article>
-
-            <article>
-              <span>ðŸ“‹</span>
-
-              <h3>
-                Administrators
-              </h3>
-
-              <p>
-                Authorized people responsible
-                for managing records and
-                reports.
-              </p>
-            </article>
-
-            <article>
-              <span>ðŸŒ™</span>
-
-              <h3>
-                Community Supporters
-              </h3>
-
-              <p>
-                Supporters who want to
-                strengthen positive community
-                initiatives.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        {/* =================================================
-            COMMITMENT
-        ================================================= */}
-
-        <section className="commitment-section">
-          <div>
-            <span className="section-kicker light">
-              Our Commitment
-            </span>
-
-            <h2>
-              Growing together through
-              organized contribution.
-            </h2>
+            <h3>
+              Friday Contribution
+            </h3>
 
             <p>
-              Every contribution matters. The
-              purpose of this system is to make
-              the process easier to record,
-              review and manage while keeping
-              the community at the center.
+              Weekly contribution activity
+              and payment recording for
+              Shabab members.
             </p>
 
             <button
-              className="light-btn"
               onClick={onAdmin}
             >
-              Enter Management System â†’
+              Manage Contributions{" "}
+              {"\u{2192}"}
             </button>
           </div>
+        </article>
 
-          <div className="commitment-mark">
-            â˜ª
+        <article className="event-card">
+          <div className="event-art gold-art">
+            REPORT
           </div>
-        </section>
 
-        {/* =================================================
-            CONTACT
-        ================================================= */}
-
-        <section
-          className="public-section contact-section"
-          id="contact"
-        >
-          <div className="section-heading center">
-            <span className="section-kicker">
-              Get In Touch
+          <div className="event-body">
+            <span className="event-tag">
+              Monthly
             </span>
 
-            <h2>
-              Connect with Masjidul-Fatwa
-              Shabab.
-            </h2>
+            <h3>
+              Monthly Review
+            </h3>
 
             <p>
-              Contact information can be added
-              here when the official Shabab
-              phone, email, Telegram channel
-              and location details are ready.
+              Review monthly contribution
+              records and understand the
+              collected amount.
             </p>
-          </div>
-
-          <div className="contact-grid">
-            <div className="contact-card">
-              <span>ðŸ“</span>
-
-              <h3>Location</h3>
-
-              <p>
-                Masjidul-Fatwa community
-              </p>
-            </div>
-
-            <div className="contact-card">
-              <span>ðŸ“±</span>
-
-              <h3>Telegram</h3>
-
-              <p>
-                Official Shabab Telegram
-                communication
-              </p>
-            </div>
-
-            <div className="contact-card">
-              <span>âœ‰ï¸</span>
-
-              <h3>Email</h3>
-
-              <p>
-                Official contact details can
-                be added here
-              </p>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* =================================================
-          FOOTER
-      ================================================= */}
-
-      <footer className="public-footer">
-        <div className="footer-main">
-          <div>
-            <div className="footer-brand">
-              <span className="brand-mark">
-                â˜ª
-              </span>
-
-              <div>
-                <strong>
-                  MASJIDUL-FATWA SHABAB
-                </strong>
-
-                <small>
-                  Youth Contribution &
-                  Management System
-                </small>
-              </div>
-            </div>
-
-            <p>
-              Building a stronger community
-              through organization,
-              contribution and responsible
-              service.
-            </p>
-          </div>
-
-          <div>
-            <h4>Quick Links</h4>
 
             <button
-              onClick={() =>
-                onNavigate("home")
-              }
+              onClick={onAdmin}
             >
-              Home
+              View Reports{" "}
+              {"\u{2192}"}
+            </button>
+          </div>
+        </article>
+
+        <article className="event-card">
+          <div className="event-art navy-art">
+            SHABAB
+          </div>
+
+          <div className="event-body">
+            <span className="event-tag">
+              Community
+            </span>
+
+            <h3>
+              Shabab Activities
+            </h3>
+
+            <p>
+              Use the platform as a
+              foundation for organized youth
+              community activities.
+            </p>
+
+            <button
+              onClick={onAdmin}
+            >
+              Open System{" "}
+              {"\u{2192}"}
             </button>
 
             <button
-              onClick={() =>
-                onNavigate("about")
-              }
-            >
-              About
-            </button>
-
-            <button
-              onClick={() =>
-                onNavigate("services")
-              }
-            >
-              Services
-            </button>            <button
               onClick={() =>
                 onNavigate("gallery")
               }
             >
-              Gallery
-            </button>
-
-
-            <button
-              onClick={() =>
-                onNavigate("contact")
-              }
-            >
-              Contact
+              View Gallery{" "}
+              {"\u{2192}"}
             </button>
           </div>
+        </article>
+      </div>
+    </section>
 
-          <div>
-            <h4>System</h4>
+    <Gallery />
 
-            <button onClick={onAdmin}>
-              Admin Login
-            </button>
+    {/* =================================================
+        MEMBERSHIP
+    ================================================= */}
 
-            <button onClick={onAdmin}>
-              Members
-            </button>
+    <section className="public-section membership-section">
+      <div className="section-heading center">
+        <span className="section-kicker">
+          Who Can Be Our Member?
+        </span>
 
-            <button onClick={onAdmin}>
-              Reports
-            </button>
+        <h2>
+          A place for Shabab who want to
+          contribute and serve.
+        </h2>
+      </div>
 
-            <button onClick={onAdmin}>
-              Contributions
-            </button>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
+      <div className="membership-grid">
+        <article>
           <span>
-            Â© {new Date().getFullYear()}{" "}
-            Masjidul-Fatwa Shabab. All rights
-            reserved.
+            {"\u{1F464}"}
           </span>
 
-          <span>
-            <a
-  href="https://jemal-dev.github.io/jemal-portfolio/"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="footer-credit-link"
->
-  Built by Jemal Seid
-</a>
-          </span>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-/* =========================================================
-   ADMIN LAYOUT
-========================================================= */
-
-function AdminLayout({
-  currentPage,
-  mobileOpen,
-  setMobileOpen,
-  goTo,
-  dashboard,
-  loading,
-  error,
-  adminUser,
-  onLogout,
-}) {
-  const adminName =
-    adminUser?.full_name || "Admin";
-
-  const adminInitial =
-    adminName.charAt(0).toUpperCase();
-
-  const adminRole =
-    adminUser?.role === "super_admin"
-      ? "Super Administrator"
-      : "Administrator";
-
-  const visibleNavItems =
-    adminUser?.role === "super_admin"
-      ? navItems
-      : navItems.filter(
-          (item) =>
-            item.id !== "settings" &&
-            item.id !== "admins"
-        );
-
-  const currentNavItem =
-    visibleNavItems.find(
-      (item) =>
-        item.id === currentPage
-    );
-
-  return (
-    <div className="admin-app">
-      {mobileOpen && (
-        <button
-          className="sidebar-overlay"
-          aria-label="Close menu"
-          onClick={() =>
-            setMobileOpen(false)
-          }
-        />
-      )}
-
-      <aside
-        className={`sidebar ${
-          mobileOpen ? "open" : ""
-        }`}
-      >
-        <div className="logo">
-          <div className="logo-icon">
-            â˜ª
-          </div>
-
-          <div>
-            <h2>
-              Masjidul-Fatwa
-            </h2>
-
-            <span>
-              Shabab System
-            </span>
-          </div>
-        </div>
-
-        <nav className="navigation">
-          <div className="nav-label">
-            Management
-          </div>
-
-          {visibleNavItems.map(
-            (item) => (
-              <button
-                key={item.id}
-                className={`nav-item ${
-                  currentPage ===
-                  item.id
-                    ? "active"
-                    : ""
-                }`}
-                onClick={() =>
-                  goTo(item.id)
-                }
-              >
-                <span>
-                  {item.icon}
-                </span>
-
-                {item.label}
-              </button>
-            )
-          )}
-
-          <div className="nav-label public-label">
-            Website
-          </div>
-
-          <button
-            className="nav-item"
-            onClick={() =>
-              goTo("home")
-            }
-          >
-            <span>ðŸŒ</span>
-
-            Public Website
-          </button>
-        </nav>
-
-        <div className="sidebar-bottom">
-          <div className="admin-info">
-            <div className="admin-avatar">
-              {adminInitial}
-            </div>
-
-            <div>
-              <strong>
-                {adminName}
-              </strong>
-
-              <span>
-                {adminRole}
-              </span>
-            </div>
-          </div>
-
-          <button
-            className="logout-button"
-            onClick={onLogout}
-          >
-            ðŸšª Logout
-          </button>
-        </div>
-      </aside>
-
-      <main className="main-content">
-        <header className="topbar">
-          <button
-            className="menu-button"
-            onClick={() =>
-              setMobileOpen(
-                (value) => !value
-              )
-            }
-            aria-label="Open navigation"
-          >
-            â˜°
-          </button>
-
-          <div className="topbar-title">
-            <span>
-              MASJIDUL-FATWA SHABAB
-            </span>
-
-            <strong>
-              {currentNavItem?.label ||
-                "Dashboard"}
-            </strong>
-          </div>
-
-          <div className="topbar-right">
-            <button
-              className="website-link"
-              onClick={() =>
-                goTo("home")
-              }
-            >
-              ðŸŒ Website
-            </button>
-
-            <div className="profile">
-              <div className="profile-avatar">
-                {adminInitial}
-              </div>
-
-              <div>
-                <strong>
-                  {adminName}
-                </strong>
-
-                <span>
-                  {adminRole}
-                </span>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <section className="content">
-          {currentPage ===
-            "members" && (
-            <Members />
-          )}
-
-          {currentPage ===
-            "contributions" && (
-            <Contributions />
-          )}
-
-          {currentPage ===
-            "reports" && (
-            <Reports />
-          )}
-
-          {currentPage === "admins" &&
-            adminUser?.role ===
-              "super_admin" && (
-              <AdminManagement />
-            )}
-
-          {currentPage ===
-            "settings" &&
-            adminUser?.role ===
-              "super_admin" && (
-              <Settings />
-            )}
-
-          {currentPage ===
-            "dashboard" && (
-            <AdminDashboard
-              dashboard={dashboard}
-              loading={loading}
-              error={error}
-              onContributions={() =>
-                goTo("contributions")
-              }
-              onMembers={() =>
-                goTo("members")
-              }
-              onReports={() =>
-                goTo("reports")
-              }
-            />
-          )}
-        </section>
-      </main>
-    </div>
-  );
-}
-
-/* =========================================================
-   ADMIN DASHBOARD
-========================================================= */
-
-function AdminDashboard({
-  dashboard,
-  loading,
-  error,
-  onContributions,
-  onMembers,
-  onReports,
-}) {
-  const trendData =
-    dashboard?.collection_trend?.map(
-      (item) => ({
-        ...item,
-        label: new Date(
-          item.week_start
-        ).toLocaleDateString(
-          "en-US",
-          {
-            month: "short",
-            day: "numeric",
-          }
-        ),
-      })
-    ) || [];
-
-  return (
-    <>
-      <div className="page-header">
-        <div>
-          <span className="section-kicker">
-            Management Overview
-          </span>
-
-          <h1>Dashboard</h1>
+          <h3>
+            Shabab Members
+          </h3>
 
           <p>
-            Welcome to the Masjidul-Fatwa
-            Shabab Contribution System.
+            Members participating in the
+            community and weekly
+            contribution activities.
           </p>
-        </div>
+        </article>
+
+        <article>
+          <span>
+            {"\u{1F91D}"}
+          </span>
+
+          <h3>
+            Community Volunteers
+          </h3>
+
+          <p>
+            People supporting community
+            programs and organized
+            activities.
+          </p>
+        </article>
+
+        <article>
+          <span>
+            {"\u{1F4CB}"}
+          </span>
+
+          <h3>
+            Administrators
+          </h3>
+
+          <p>
+            Authorized people responsible
+            for managing records and
+            reports.
+          </p>
+        </article>
+
+        <article>
+          <span>
+            {"\u{1F319}"}
+          </span>
+
+          <h3>
+            Community Supporters
+          </h3>
+
+          <p>
+            Supporters who want to
+            strengthen positive community
+            initiatives.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    {/* =================================================
+        COMMITMENT
+    ================================================= */}
+
+    <section className="commitment-section">
+      <div>
+        <span className="section-kicker light">
+          Our Commitment
+        </span>
+
+        <h2>
+          Growing together through
+          organized contribution.
+        </h2>
+
+        <p>
+          Every contribution matters. The
+          purpose of this system is to make
+          the process easier to record,
+          review and manage while keeping
+          the community at the center.
+        </p>
 
         <button
-          className="add-button"
-          onClick={onContributions}
+          className="light-btn"
+          onClick={onAdmin}
         >
-          + Add Contribution
+          Enter Management System{" "}
+          {"\u{2192}"}
         </button>
       </div>
 
-      {error && (
-        <div className="error-message">
-          {error}
+      <div className="commitment-mark">
+        {"\u{262A}"}
+      </div>
+    </section>
+
+    {/* =================================================
+        CONTACT
+    ================================================= */}
+
+    <section
+      className="public-section contact-section"
+      id="contact"
+    >
+      <div className="section-heading center">
+        <span className="section-kicker">
+          Get In Touch
+        </span>
+
+        <h2>
+          Connect with Masjidul-Fatwa
+          Shabab.
+        </h2>
+
+        <p>
+          Contact information can be added
+          here when the official Shabab
+          phone, email, Telegram channel
+          and location details are ready.
+        </p>
+      </div>
+
+      <div className="contact-grid">
+        <div className="contact-card">
+          <span>
+            {"\u{1F4CD}"}
+          </span>
+
+          <h3>Location</h3>
+
+          <p>
+            Masjidul-Fatwa community
+          </p>
         </div>
+
+        <div className="contact-card">
+          <span>
+            {"\u{1F4F1}"}
+          </span>
+
+          <h3>Telegram</h3>
+
+          <p>
+            Official Shabab Telegram
+            communication
+          </p>
+        </div>
+
+        <div className="contact-card">
+          <span>
+            {"\u{2709}\u{FE0F}"}
+          </span>
+
+          <h3>Email</h3>
+
+          <p>
+            Official contact details can
+            be added here
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {/* =================================================
+      FOOTER
+  ================================================= */}
+
+  <footer className="public-footer">
+    <div className="footer-main">
+      <div>
+        <div className="footer-brand">
+          <span className="brand-mark">
+            {"\u{262A}"}
+          </span>
+
+          <div>
+            <strong>
+              MASJIDUL-FATWA SHABAB
+            </strong>
+
+            <small>
+              Youth Contribution &
+              Management System
+            </small>
+          </div>
+        </div>
+
+        <p>
+          Building a stronger community
+          through organization,
+          contribution and responsible
+          service.
+        </p>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+
+        <button
+          onClick={() =>
+            onNavigate("home")
+          }
+        >
+          Home
+        </button>
+
+        <button
+          onClick={() =>
+            onNavigate("about")
+          }
+        >
+          About
+        </button>
+
+        <button
+          onClick={() =>
+            onNavigate("services")
+          }
+        >
+          Services
+        </button>
+
+        <button
+          onClick={() =>
+            onNavigate("gallery")
+          }
+        >
+          Gallery
+        </button>
+
+        <button
+          onClick={() =>
+            onNavigate("contact")
+          }
+        >
+          Contact
+        </button>
+      </div>
+
+      <div>
+        <h4>System</h4>
+
+        <button onClick={onAdmin}>
+          Admin Login
+        </button>
+
+        <button onClick={onAdmin}>
+          Members
+        </button>
+
+        <button onClick={onAdmin}>
+          Reports
+        </button>
+
+        <button onClick={onAdmin}>
+          Contributions
+        </button>
+      </div>
+    </div>
+
+    <div className="footer-bottom">
+      <span>
+        {"\u{00A9}"}{" "}
+        {new Date().getFullYear()}{" "}
+        Masjidul-Fatwa Shabab. All rights
+        reserved.
+      </span>
+
+      <span>
+        <a
+          href="https://jemal-dev.github.io/jemal-portfolio/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-credit-link"
+        >
+          Built by Jemal Seid
+        </a>
+      </span>
+    </div>
+  </footer>
+</div>
+
+
+);
+}
+
+/* =========================================================
+ADMIN LAYOUT
+========================================================= */
+
+function AdminLayout({
+currentPage,
+mobileOpen,
+setMobileOpen,
+goTo,
+dashboard,
+loading,
+error,
+adminUser,
+onLogout,
+}) {
+const adminName =
+adminUser?.full_name || "Admin";
+
+const adminInitial =
+adminName.charAt(0).toUpperCase();
+
+const adminRole =
+adminUser?.role === "super_admin"
+? "Super Administrator"
+: "Administrator";
+
+const visibleNavItems =
+adminUser?.role === "super_admin"
+? navItems
+: navItems.filter(
+(item) =>
+item.id !== "settings" &&
+item.id !== "admins"
+);
+
+const currentNavItem =
+visibleNavItems.find(
+(item) =>
+item.id === currentPage
+);
+
+return ( <div className="admin-app">
+{mobileOpen && (
+<button
+className="sidebar-overlay"
+aria-label="Close menu"
+onClick={() =>
+setMobileOpen(false)
+}
+/>
+)}
+
+
+  <aside
+    className={`sidebar ${
+      mobileOpen ? "open" : ""
+    }`}
+  >
+    <div className="logo">
+      <div className="logo-icon">
+        {"\u{262A}"}
+      </div>
+
+      <div>
+        <h2>
+          Masjidul-Fatwa
+        </h2>
+
+        <span>
+          Shabab System
+        </span>
+      </div>
+    </div>
+
+    <nav className="navigation">
+      <div className="nav-label">
+        Management
+      </div>
+
+      {visibleNavItems.map(
+        (item) => (
+          <button
+            key={item.id}
+            className={`nav-item ${
+              currentPage === item.id
+                ? "active"
+                : ""
+            }`}
+            onClick={() =>
+              goTo(item.id)
+            }
+          >
+            <span>
+              {item.icon}
+            </span>
+
+            {item.label}
+          </button>
+        )
       )}
 
-      {/* =================================================
-          DASHBOARD STATISTICS
-      ================================================= */}
+      <div className="nav-label public-label">
+        Website
+      </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon">
-            ðŸ‘¥
-          </div>
+      <button
+        className="nav-item"
+        onClick={() =>
+          goTo("home")
+        }
+      >
+        <span>
+          {"\u{1F310}"}
+        </span>
 
-          <div>
-            <span>
-              Active Members
-            </span>
+        Public Website
+      </button>
+    </nav>
 
-            <h2>
-              {loading ? (
-                "..."
-              ) : (
-                <AnimatedNumber
-                  value={
-                    dashboard?.total_active_members ??
-                    0
-                  }
-                  suffix="+"
-                />
-              )}
-            </h2>
-          </div>
+    <div className="sidebar-bottom">
+      <div className="admin-info">
+        <div className="admin-avatar">
+          {adminInitial}
         </div>
 
-        <div className="stat-card">
-          <div className="stat-icon">
-            ðŸ’°
-          </div>
+        <div>
+          <strong>
+            {adminName}
+          </strong>
 
-          <div>
-            <span>
-              Total Collection
-            </span>
-
-            <h2>
-              {loading ? (
-                "..."
-              ) : (
-                <AnimatedNumber
-                  value={
-                    dashboard?.total_collection ??
-                    0
-                  }
-                  suffix=" ETB"
-                />
-              )}
-            </h2>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            ðŸ“…
-          </div>
-
-          <div>
-            <span>
-              This Week
-            </span>
-
-            <h2>
-              {loading ? (
-                "..."
-              ) : (
-                <AnimatedNumber
-                  value={
-                    dashboard?.weekly_collection ??
-                    0
-                  }
-                  suffix=" ETB"
-                />
-              )}
-            </h2>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            ðŸ“ˆ
-          </div>
-
-          <div>
-            <span>
-              This Month
-            </span>
-
-            <h2>
-              {loading ? (
-                "..."
-              ) : (
-                <AnimatedNumber
-                  value={
-                    dashboard?.monthly_collection ??
-                    0
-                  }
-                  suffix=" ETB"
-                />
-              )}
-            </h2>
-          </div>
+          <span>
+            {adminRole}
+          </span>
         </div>
       </div>
 
-      {/* =================================================
-          COLLECTION TREND
-      ================================================= */}
+      <button
+        className="logout-button"
+        onClick={onLogout}
+      >
+        {"\u{1F6AA}"} Logout
+      </button>
+    </div>
+  </aside>
 
-      <div className="section-card collection-trend-card">
-        <div className="section-header">
+  <main className="main-content">
+    <header className="topbar">
+      <button
+        className="menu-button"
+        onClick={() =>
+          setMobileOpen(
+            (value) => !value
+          )
+        }
+        aria-label="Open navigation"
+      >
+        {"\u{2630}"}
+      </button>
+
+      <div className="topbar-title">
+        <span>
+          MASJIDUL-FATWA SHABAB
+        </span>
+
+        <strong>
+          {currentNavItem?.label ||
+            "Dashboard"}
+        </strong>
+      </div>
+
+      <div className="topbar-right">
+        <button
+          className="website-link"
+          onClick={() =>
+            goTo("home")
+          }
+        >
+          {"\u{1F310}"} Website
+        </button>
+
+        <div className="profile">
+          <div className="profile-avatar">
+            {adminInitial}
+          </div>
+
           <div>
-            <h2>
-              Collection Trend
-            </h2>
+            <strong>
+              {adminName}
+            </strong>
 
-            <p>
-              Weekly contribution collection
-              for the last 6 weeks.
-            </p>
+            <span>
+              {adminRole}
+            </span>
           </div>
         </div>
+      </div>
+    </header>
 
-        {loading ? (
-          <div className="recent-loading">
-            Loading collection trend...
-          </div>
-        ) : trendData.length > 0 ? (
-          <div
-            className="collection-trend-chart"
-            style={{
-              width: "100%",
-              height: 380,
+    <section className="content">
+      {currentPage ===
+        "members" && (
+        <Members />
+      )}
+
+      {currentPage ===
+        "contributions" && (
+        <Contributions />
+      )}
+
+      {currentPage ===
+        "reports" && (
+        <Reports />
+      )}
+
+      {currentPage === "admins" &&
+        adminUser?.role ===
+          "super_admin" && (
+          <AdminManagement />
+        )}
+
+      {currentPage ===
+        "settings" &&
+        adminUser?.role ===
+          "super_admin" && (
+          <Settings />
+        )}
+
+      {currentPage ===
+        "dashboard" && (
+        <AdminDashboard
+          dashboard={dashboard}
+          loading={loading}
+          error={error}
+          onContributions={() =>
+            goTo("contributions")
+          }
+          onMembers={() =>
+            goTo("members")
+          }
+          onReports={() =>
+            goTo("reports")
+          }
+        />
+      )}
+    </section>
+  </main>
+</div>
+
+
+);
+}
+
+/* =========================================================
+ADMIN DASHBOARD
+========================================================= */
+
+function AdminDashboard({
+dashboard,
+loading,
+error,
+onContributions,
+onMembers,
+onReports,
+}) {
+const trendData =
+dashboard?.collection_trend?.map(
+(item) => ({
+...item,
+label: new Date(
+item.week_start
+).toLocaleDateString(
+"en-US",
+{
+month: "short",
+day: "numeric",
+}
+),
+})
+) || [];
+
+return (
+<> <div className="page-header"> <div> <span className="section-kicker">
+Management Overview </span>
+
+
+      <h1>Dashboard</h1>
+
+      <p>
+        Welcome to the Masjidul-Fatwa
+        Shabab Contribution System.
+      </p>
+    </div>
+
+    <button
+      className="add-button"
+      onClick={onContributions}
+    >
+      + Add Contribution
+    </button>
+  </div>
+
+  {error && (
+    <div className="error-message">
+      {error}
+    </div>
+  )}
+
+  {/* =================================================
+      DASHBOARD STATISTICS
+  ================================================= */}
+
+  <div className="stats-grid">
+    <div className="stat-card">
+      <div className="stat-icon">
+        {"\u{1F465}"}
+      </div>
+
+      <div>
+        <span>
+          Active Members
+        </span>
+
+        <h2>
+          {loading ? (
+            "..."
+          ) : (
+            <AnimatedNumber
+              value={
+                dashboard?.total_active_members ??
+                0
+              }
+              suffix="+"
+            />
+          )}
+        </h2>
+      </div>
+    </div>
+
+    <div className="stat-card">
+      <div className="stat-icon">
+        {"\u{1F4B0}"}
+      </div>
+
+      <div>
+        <span>
+          Total Collection
+        </span>
+
+        <h2>
+          {loading ? (
+            "..."
+          ) : (
+            <AnimatedNumber
+              value={
+                dashboard?.total_collection ??
+                0
+              }
+              suffix=" ETB"
+            />
+          )}
+        </h2>
+      </div>
+    </div>
+
+    <div className="stat-card">
+      <div className="stat-icon">
+        {"\u{1F4C5}"}
+      </div>
+
+      <div>
+        <span>
+          This Week
+        </span>
+
+        <h2>
+          {loading ? (
+            "..."
+          ) : (
+            <AnimatedNumber
+              value={
+                dashboard?.weekly_collection ??
+                0
+              }
+              suffix=" ETB"
+            />
+          )}
+        </h2>
+      </div>
+    </div>
+
+    <div className="stat-card">
+      <div className="stat-icon">
+        {"\u{1F4C8}"}
+      </div>
+
+      <div>
+        <span>
+          This Month
+        </span>
+
+        <h2>
+          {loading ? (
+            "..."
+          ) : (
+            <AnimatedNumber
+              value={
+                dashboard?.monthly_collection ??
+                0
+              }
+              suffix=" ETB"
+            />
+          )}
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  {/* =================================================
+      COLLECTION TREND
+  ================================================= */}
+
+  <div className="section-card collection-trend-card">
+    <div className="section-header">
+      <div>
+        <h2>
+          Collection Trend
+        </h2>
+
+        <p>
+          Weekly contribution collection
+          for the last 6 weeks.
+        </p>
+      </div>
+    </div>
+
+    {loading ? (
+      <div className="recent-loading">
+        Loading collection trend...
+      </div>
+    ) : trendData.length > 0 ? (
+      <div
+        className="collection-trend-chart"
+        style={{
+          width: "100%",
+          height: 380,
+        }}
+      >
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+        >
+          <LineChart
+            data={trendData}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 30,
+              bottom: 55,
             }}
           >
-            <ResponsiveContainer
-              width="100%"
-              height="100%"
-            >
-              <LineChart
-                data={trendData}
-                margin={{
-                  top: 20,
-                  right: 30,
-                  left: 30,
-                  bottom: 55,
-                }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                />
+            <CartesianGrid
+              strokeDasharray="3 3"
+            />
 
-                <XAxis
-                  dataKey="label"
-                  interval={0}
-                  tick={{
-                    fontSize: 12,
-                  }}
-                  tickMargin={10}
-                  angle={-25}
-                  textAnchor="end"
-                  height={70}
-                />
+            <XAxis
+              dataKey="label"
+              interval={0}
+              tick={{
+                fontSize: 12,
+              }}
+              tickMargin={10}
+              angle={-25}
+              textAnchor="end"
+              height={70}
+            />
 
-                <YAxis
-                  tick={{
-                    fontSize: 12,
-                  }}
-                  tickFormatter={(value) =>
-                    Number(
-                      value
-                    ).toLocaleString(
-                      "en-US"
-                    )
-                  }
-                />
+            <YAxis
+              tick={{
+                fontSize: 12,
+              }}
+              tickFormatter={(value) =>
+                Number(value).toLocaleString(
+                  "en-US"
+                )
+              }
+            />
 
-                <Tooltip
-                  formatter={(value) => [
-                    `${Number(
-                      value
-                    ).toLocaleString(
-                      "en-US"
-                    )} ETB`,
-                    "Collection",
-                  ]}
-                  labelFormatter={(label) =>
-                    `Week of ${label}`
-                  }
-                />
+            <Tooltip
+              formatter={(value) => [
+                `${Number(
+                  value
+                ).toLocaleString(
+                  "en-US"
+                )} ETB`,
+                "Collection",
+              ]}
+              labelFormatter={(label) =>
+                `Week of ${label}`
+              }
+            />
 
-                <Line
-                  type="monotone"
-                  dataKey="total_collection"
-                  strokeWidth={3}
-                  dot={{
-                    r: 5,
-                  }}
-                  activeDot={{
-                    r: 7,
-                  }}
-                  connectNulls
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        ) : (
-          <div className="recent-empty">
-            No collection data available yet.
-          </div>
-        )}
+            <Line
+              type="monotone"
+              dataKey="total_collection"
+              strokeWidth={3}
+              dot={{
+                r: 5,
+              }}
+              activeDot={{
+                r: 7,
+              }}
+              connectNulls
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
+    ) : (
+      <div className="recent-empty">
+        No collection data available yet.
+      </div>
+    )}
+  </div>
 
-      {/* =================================================
-          WEEKLY STATUS + QUICK ACTIONS
-      ================================================= */}
+  {/* =================================================
+      WEEKLY STATUS + QUICK ACTIONS
+  ================================================= */}
 
-      <div className="dashboard-grid">
-        <div className="section-card">
-          <div className="section-header">
-            <div>
-              <h2>
-                Weekly Payment Status
-              </h2>
+  <div className="dashboard-grid">
+    <div className="section-card">
+      <div className="section-header">
+        <div>
+          <h2>
+            Weekly Payment Status
+          </h2>
 
-              <p>
-                Member contribution status
-                for the current week.
-              </p>
-            </div>
-          </div>
-
-          <div className="payment-status">
-            <div className="status-box paid">
-              <span>âœ“</span>
-
-              <div>
-                <strong>
-                  {loading
-                    ? "..."
-                    : dashboard?.paid_members_this_week ??
-                      0}
-                </strong>
-
-                <p>
-                  Paid Members
-                </p>
-              </div>
-            </div>
-
-            <div className="status-box unpaid">
-              <span>!</span>
-
-              <div>
-                <strong>
-                  {loading
-                    ? "..."
-                    : dashboard?.unpaid_members_this_week ??
-                      0}
-                </strong>
-
-                <p>
-                  Unpaid Members
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="section-card quick-actions">
-          <div className="section-header">
-            <div>
-              <h2>
-                Quick Actions
-              </h2>
-
-              <p>
-                Jump directly to common
-                tasks.
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={onContributions}
-          >
-            ðŸ’° Record Contribution
-            <span>â†’</span>
-          </button>
-
-          <button
-            onClick={onMembers}
-          >
-            ðŸ‘¥ Manage Members
-            <span>â†’</span>
-          </button>
-
-          <button
-            onClick={onReports}
-          >
-            ðŸ“Š Generate Reports
-            <span>â†’</span>
-          </button>
+          <p>
+            Member contribution status
+            for the current week.
+          </p>
         </div>
       </div>
 
-      {/* =================================================
-          RECENT CONTRIBUTIONS
-      ================================================= */}
+      <div className="payment-status">
+        <div className="status-box paid">
+          <span>
+            {"\u{2713}"}
+          </span>
 
-      <div className="section-card recent-contributions-card">
-        <div className="section-header">
           <div>
-            <h2>
-              Recent Contributions
-            </h2>
+            <strong>
+              {loading
+                ? "..."
+                : dashboard?.paid_members_this_week ??
+                  0}
+            </strong>
 
             <p>
-              The latest contribution records.
+              Paid Members
             </p>
           </div>
-
-          {/* FIXED VIEW ALL BUTTON */}
-
-          <button
-            type="button"
-            className="view-all-button ui-action-link"
-            onClick={onContributions}
-          >
-            <span>
-              View All
-            </span>
-
-            <span className="ui-action-arrow">
-              â†’
-            </span>
-          </button>
         </div>
 
-        {loading ? (
-          <div className="recent-loading">
-            Loading contributions...
+        <div className="status-box unpaid">
+          <span>!</span>
+
+          <div>
+            <strong>
+              {loading
+                ? "..."
+                : dashboard?.unpaid_members_this_week ??
+                  0}
+            </strong>
+
+            <p>
+              Unpaid Members
+            </p>
           </div>
-        ) : dashboard?.recent_contributions?.length > 0 ? (
-          <div className="recent-contributions-list">
-            {dashboard.recent_contributions.map(
-              (contribution) => (
-                <div
-                  className="recent-contribution-row"
-                  key={contribution.id}
-                >
-                  <div className="recent-member">
-                    <div className="recent-member-avatar">
-                      {contribution.full_name
-                        ?.charAt(0)
-                        ?.toUpperCase() ||
-                        "?"}
-                    </div>
+        </div>
+      </div>
+    </div>
 
-                    <div>
-                      <strong>
-                        {
-                          contribution.full_name
-                        }
-                      </strong>
+    <div className="section-card quick-actions">
+      <div className="section-header">
+        <div>
+          <h2>
+            Quick Actions
+          </h2>
 
-                      <span>
-                        {
-                          contribution.contribution_date
-                        }
-                      </span>
-                    </div>
-                  </div>
+          <p>
+            Jump directly to common
+            tasks.
+          </p>
+        </div>
+      </div>
 
-                  <strong className="recent-amount">
-                    {Number(
-                      contribution.amount ||
-                        0
-                    ).toLocaleString(
-                      "en-US",
-                      {
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
-                    ETB
-                  </strong>
+      <button
+        onClick={onContributions}
+      >
+        {"\u{1F4B0}"} Record Contribution
+        <span>
+          {"\u{2192}"}
+        </span>
+      </button>
+
+      <button
+        onClick={onMembers}
+      >
+        {"\u{1F465}"} Manage Members
+        <span>
+          {"\u{2192}"}
+        </span>
+      </button>
+
+      <button
+        onClick={onReports}
+      >
+        {"\u{1F4CA}"} Generate Reports
+        <span>
+          {"\u{2192}"}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {/* =================================================
+      RECENT CONTRIBUTIONS
+  ================================================= */}
+
+  <div className="section-card recent-contributions-card">
+    <div className="section-header">
+      <div>
+        <h2>
+          Recent Contributions
+        </h2>
+
+        <p>
+          The latest contribution records.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        className="view-all-button ui-action-link"
+        onClick={onContributions}
+      >
+        <span>
+          View All
+        </span>
+
+        <span className="ui-action-arrow">
+          {"\u{2192}"}
+        </span>
+      </button>
+    </div>
+
+    {loading ? (
+      <div className="recent-loading">
+        Loading contributions...
+      </div>
+    ) : dashboard?.recent_contributions?.length > 0 ? (
+      <div className="recent-contributions-list">
+        {dashboard.recent_contributions.map(
+          (contribution) => (
+            <div
+              className="recent-contribution-row"
+              key={contribution.id}
+            >
+              <div className="recent-member">
+                <div className="recent-member-avatar">
+                  {contribution.full_name
+                    ?.charAt(0)
+                    ?.toUpperCase() ||
+                    "?"}
                 </div>
-              )
-            )}
-          </div>
-        ) : (
-          <div className="recent-empty">
-            No contributions recorded yet.
-          </div>
+
+                <div>
+                  <strong>
+                    {
+                      contribution.full_name
+                    }
+                  </strong>
+
+                  <span>
+                    {
+                      contribution.contribution_date
+                    }
+                  </span>
+                </div>
+              </div>
+
+              <strong className="recent-amount">
+                {Number(
+                  contribution.amount ||
+                    0
+                ).toLocaleString(
+                  "en-US",
+                  {
+                    maximumFractionDigits: 2,
+                  }
+                )}{" "}
+                ETB
+              </strong>
+            </div>
+          )
         )}
       </div>
-    </>
-  );
+    ) : (
+      <div className="recent-empty">
+        No contributions recorded yet.
+      </div>
+    )}
+  </div>
+</>
+
+
+);
 }
 
 export default App;
-
