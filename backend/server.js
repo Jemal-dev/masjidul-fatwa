@@ -190,30 +190,25 @@ app.get("/", (req, res) => {
 
 app.get("/api/test-db", async (req, res) => {
     try {
-        const [rows] = await db.query(`
-            SELECT
-                DATABASE() AS database_name,
-                USER() AS mysql_user,
-                @@hostname AS mysql_host,
-                @@port AS mysql_port
-        `);
+        const [databaseRows] = await db.query(
+            "SELECT DATABASE() AS database_name"
+        );
 
-        const [countRows] = await db.query(`
-            SELECT COUNT(*) AS contribution_count
-            FROM contributions
-        `);
+        const [countRows] = await db.query(
+            "SELECT COUNT(*) AS contribution_count FROM contributions"
+        );
 
         res.json({
             success: true,
-            database: rows[0].database_name,
-            mysql_user: rows[0].mysql_user,
-            mysql_host: rows[0].mysql_host,
-            mysql_port: rows[0].mysql_port,
+            database: databaseRows[0].database_name,
             contribution_count: countRows[0].contribution_count
         });
 
     } catch (error) {
-        console.error("Database test error:", error);
+        console.error(
+            "Database test error:",
+            error
+        );
 
         res.status(500).json({
             success: false,
@@ -222,6 +217,7 @@ app.get("/api/test-db", async (req, res) => {
         });
     }
 });
+
 /* =========================================================
    MEMBERS
 ========================================================= */
@@ -515,10 +511,10 @@ app.post(
             );
 
             await sendContributionNotification(
-    member_id,
-    amount,
-    contribution_date
-);
+                member_id,
+                amount,
+                contribution_date
+            );
 
             res.status(201).json({
                 success: true,
@@ -546,34 +542,6 @@ app.post(
                 message:
                     "Failed to add contribution",
                 error: error.message
-            });
-        }
-    }
-);
-
-/* =========================================================
-   CLEAR ALL CONTRIBUTIONS - SUPER ADMIN ONLY
-========================================================= */
-
-app.delete(
-    "/api/contributions/clear",
-    authenticateToken,
-    requireSuperAdmin,
-    async (req, res) => {
-        try {
-            await db.query("DELETE FROM contributions");
-
-            res.json({
-                success: true,
-                message: "All old contributions cleared successfully."
-            });
-
-        } catch (error) {
-            console.error("Clear contributions error:", error);
-
-            res.status(500).json({
-                success: false,
-                message: "Failed to clear contributions."
             });
         }
     }
@@ -983,63 +951,64 @@ app.get(
                 );
 
             const [collectionTrendRows] =
-    await db.query(
-        `WITH RECURSIVE weeks AS (
-            SELECT
-                DATE_SUB(
-                    CURDATE(),
-                    INTERVAL WEEKDAY(CURDATE()) DAY
-                ) - INTERVAL 5 WEEK AS week_start
+                await db.query(
+                    `WITH RECURSIVE weeks AS (
+                        SELECT
+                            DATE_SUB(
+                                CURDATE(),
+                                INTERVAL WEEKDAY(CURDATE()) DAY
+                            ) - INTERVAL 5 WEEK AS week_start
 
-            UNION ALL
+                        UNION ALL
 
-            SELECT
-                DATE_ADD(
-                    week_start,
-                    INTERVAL 1 WEEK
-                )
-            FROM weeks
-            WHERE week_start <
-                DATE_SUB(
-                    CURDATE(),
-                    INTERVAL WEEKDAY(CURDATE()) DAY
-                )
-        )
+                        SELECT
+                            DATE_ADD(
+                                week_start,
+                                INTERVAL 1 WEEK
+                            )
+                        FROM weeks
+                        WHERE week_start <
+                            DATE_SUB(
+                                CURDATE(),
+                                INTERVAL WEEKDAY(CURDATE()) DAY
+                            )
+                    )
 
-        SELECT
-            weeks.week_start,
-            COALESCE(
-                SUM(contributions.amount),
-                0
-            ) AS total_collection
+                    SELECT
+                        weeks.week_start,
+                        COALESCE(
+                            SUM(contributions.amount),
+                            0
+                        ) AS total_collection
 
-        FROM weeks
+                    FROM weeks
 
-        LEFT JOIN contributions
-            ON contributions.contribution_date >=
-                weeks.week_start
-            AND contributions.contribution_date <
-                DATE_ADD(
-                    weeks.week_start,
-                    INTERVAL 1 WEEK
-                )
+                    LEFT JOIN contributions
+                        ON contributions.contribution_date >=
+                            weeks.week_start
+                        AND contributions.contribution_date <
+                            DATE_ADD(
+                                weeks.week_start,
+                                INTERVAL 1 WEEK
+                            )
 
-        GROUP BY
-            weeks.week_start
+                    GROUP BY
+                        weeks.week_start
 
-        ORDER BY
-            weeks.week_start ASC`
-    );
-                console.log(
-    "DASHBOARD DEBUG:",
-    {
-        recentCount:
-            recentContributionRows.length,
+                    ORDER BY
+                        weeks.week_start ASC`
+                );
 
-        trendCount:
-            collectionTrendRows.length
-    }
-);
+            console.log(
+                "DASHBOARD DEBUG:",
+                {
+                    recentCount:
+                        recentContributionRows.length,
+
+                    trendCount:
+                        collectionTrendRows.length
+                }
+            );
 
             res.json({
                 success: true,
@@ -1114,6 +1083,7 @@ app.get(
         }
     }
 );
+
 /* =========================================================
    SETTINGS
 ========================================================= */
@@ -1672,74 +1642,241 @@ app.patch(
     }
 );
 
-// ADD NEW ADMIN
-app.post(
-    "/api/admins",
-    authenticateToken,
-    requireSuperAdmin,
+/* =========================================================
+   GALLERY
+========================================================= */
+
+// Get all gallery images
+// PUBLIC
+app.get(
+    "/api/gallery",
     async (req, res) => {
         try {
-            const { username, password, role } = req.body;
-
-            // Validate input
-            if (!username || !password) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Username and password are required."
-                });
-            }
-
-            // Validate role
-            const adminRole = role || "admin";
-
-            if (!["admin", "super_admin"].includes(adminRole)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid administrator role."
-                });
-            }
-
-            // Check if username already exists
-            const [existing] = await db.query(
-                "SELECT id FROM admins WHERE username = ?",
-                [username]
+            const [rows] = await db.query(
+                `SELECT
+                    id,
+                    title,
+                    description,
+                    image_url,
+                    public_id,
+                    created_at
+                 FROM gallery
+                 ORDER BY created_at DESC, id DESC`
             );
 
-            if (existing.length > 0) {
-                return res.status(409).json({
+            res.json({
+                success: true,
+                data: rows
+            });
+
+        } catch (error) {
+            console.error(
+                "Error getting gallery:",
+                error.message
+            );
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Failed to load gallery"
+            });
+        }
+    }
+);
+
+// Add gallery image
+// ADMIN ONLY
+app.post(
+    "/api/gallery",
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const {
+                title,
+                description,
+                image_url,
+                public_id
+            } = req.body;
+
+            if (!title || !image_url) {
+                return res.status(400).json({
                     success: false,
-                    message: "Username already exists."
+                    message:
+                        "Title and image URL are required"
                 });
             }
 
-            // Hash password
-            const hashedPassword = await bcrypt.hash(password, 10);
-
-            // Insert new admin
             const [result] = await db.query(
-                `INSERT INTO admins
-                    (username, password, role, active)
-                 VALUES (?, ?, ?, 1)`,
-                [username, hashedPassword, adminRole]
+                `INSERT INTO gallery
+                    (
+                        title,
+                        description,
+                        image_url,
+                        public_id
+                    )
+                 VALUES (?, ?, ?, ?)`,
+                [
+                    title.trim(),
+                    description
+                        ? description.trim()
+                        : null,
+                    image_url.trim(),
+                    public_id
+                        ? public_id.trim()
+                        : null
+                ]
             );
 
             res.status(201).json({
                 success: true,
-                message: "Administrator added successfully.",
-                admin: {
-                    id: result.insertId,
-                    username,
-                    role: adminRole,
-                    active: 1
-                }
+                message:
+                    "Gallery image added successfully",
+                gallery_id: result.insertId
             });
 
         } catch (error) {
-            console.error("Add admin error:", error);
+            console.error(
+                "Error adding gallery image:",
+                error.message
+            );
 
             res.status(500).json({
                 success: false,
-                message: "Failed to add administrator."
+                message:
+                    "Failed to add gallery image"
+            });
+        }
+    }
+);
+
+// Update gallery image
+// ADMIN ONLY
+app.put(
+    "/api/gallery/:id",
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const id = Number(req.params.id);
+
+            const {
+                title,
+                description,
+                image_url,
+                public_id
+            } = req.body;
+
+            if (!id) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Invalid gallery ID"
+                });
+            }
+
+            if (!title || !image_url) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Title and image URL are required"
+                });
+            }
+
+            const [result] = await db.query(
+                `UPDATE gallery
+                 SET
+                    title = ?,
+                    description = ?,
+                    image_url = ?,
+                    public_id = ?
+                 WHERE id = ?`,
+                [
+                    title.trim(),
+                    description
+                        ? description.trim()
+                        : null,
+                    image_url.trim(),
+                    public_id
+                        ? public_id.trim()
+                        : null,
+                    id
+                ]
+            );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        "Gallery image not found"
+                });
+            }
+
+            res.json({
+                success: true,
+                message:
+                    "Gallery image updated successfully"
+            });
+
+        } catch (error) {
+            console.error(
+                "Error updating gallery image:",
+                error.message
+            );
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Failed to update gallery image"
+            });
+        }
+    }
+);
+
+// Delete gallery image
+// ADMIN ONLY
+app.delete(
+    "/api/gallery/:id",
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const id = Number(req.params.id);
+
+            if (!id) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Invalid gallery ID"
+                });
+            }
+
+            const [result] = await db.query(
+                "DELETE FROM gallery WHERE id = ?",
+                [id]
+            );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        "Gallery image not found"
+                });
+            }
+
+            res.json({
+                success: true,
+                message:
+                    "Gallery image deleted successfully"
+            });
+
+        } catch (error) {
+            console.error(
+                "Error deleting gallery image:",
+                error.message
+            );
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Failed to delete gallery image"
             });
         }
     }
@@ -1751,12 +1888,14 @@ app.post(
 
 app.get("/api/telegram/status", async (req, res) => {
     try {
-        const token = process.env.TELEGRAM_BOT_TOKEN;
+        const token =
+            process.env.TELEGRAM_BOT_TOKEN;
 
         if (!token) {
             return res.status(500).json({
                 success: false,
-                message: "TELEGRAM_BOT_TOKEN is missing"
+                message:
+                    "TELEGRAM_BOT_TOKEN is missing"
             });
         }
 
@@ -1764,21 +1903,31 @@ app.get("/api/telegram/status", async (req, res) => {
             `https://api.telegram.org/bot${token}/getWebhookInfo`
         );
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
         res.json({
             success: result.ok,
             webhook: result.result
                 ? {
-                      url: result.result.url,
+                      url:
+                          result.result.url,
+
                       has_custom_certificate:
-                          result.result.has_custom_certificate,
+                          result.result
+                              .has_custom_certificate,
+
                       pending_update_count:
-                          result.result.pending_update_count,
+                          result.result
+                              .pending_update_count,
+
                       last_error_date:
-                          result.result.last_error_date,
+                          result.result
+                              .last_error_date,
+
                       last_error_message:
-                          result.result.last_error_message
+                          result.result
+                              .last_error_message
                   }
                 : null
         });
@@ -1800,21 +1949,26 @@ app.get("/api/telegram/status", async (req, res) => {
    TELEGRAM BOT WEBHOOK
 ========================================================= */
 
-app.post("/api/telegram/webhook", async (req, res) => {
-    try {
-        await processTelegramUpdate(req.body);
+app.post(
+    "/api/telegram/webhook",
+    async (req, res) => {
+        try {
+            await processTelegramUpdate(
+                req.body
+            );
 
-        res.sendStatus(200);
+            res.sendStatus(200);
 
-    } catch (error) {
-        console.error(
-            "Telegram webhook error:",
-            error.message
-        );
+        } catch (error) {
+            console.error(
+                "Telegram webhook error:",
+                error.message
+            );
 
-        res.sendStatus(500);
+            res.sendStatus(500);
+        }
     }
-});
+);
 
 /* =========================================================
    SERVER
@@ -1823,7 +1977,7 @@ app.post("/api/telegram/webhook", async (req, res) => {
 const PORT =
     process.env.PORT || 5000;
 
-    /* =========================================================
+/* =========================================================
    TELEGRAM WEBHOOK CONFIGURATION
 ========================================================= */
 
@@ -1854,3 +2008,4 @@ if (require.main === module) {
         }
     );
 }
+

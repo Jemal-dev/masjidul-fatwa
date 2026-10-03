@@ -18,6 +18,7 @@ import Settings from "./Settings";
 import Reports from "./Reports";
 import AdminManagement from "./AdminManagement";
 import Gallery from "./Gallery";
+import AdminGallery from "./AdminGallery";
 
 /* =========================================================
 AXIOS BASE URL
@@ -101,6 +102,12 @@ icon: "\u{1F4B0}",
 id: "reports",
 label: "Reports",
 icon: "\u{1F4CA}",
+},
+
+{
+  id: "gallery",
+  label: "Gallery",
+  icon: "\u{1F5BC}",
 },
 {
 id: "admins",
@@ -354,12 +361,13 @@ ADMIN NAVIGATION
 
 const goTo = (page) => {
 const protectedPages = [
-"dashboard",
-"members",
-"contributions",
-"reports",
-"admins",
-"settings",
+  "dashboard",
+  "members",
+  "contributions",
+  "reports",
+  "gallery",
+  "admins",
+  "settings",
 ];
 
 
@@ -1755,6 +1763,10 @@ setMobileOpen(false)
         "members" && (
         <Members />
       )}
+
+      {currentPage === "gallery" && (
+  <AdminGallery />
+)}
 
       {currentPage ===
         "contributions" && (
