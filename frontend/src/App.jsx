@@ -21,6 +21,7 @@ import Reports from "./Reports";
 import AdminManagement from "./AdminManagement";
 import Gallery from "./Gallery";
 import AdminGallery from "./AdminGallery";
+import Contact from "./Contact";
 
 /* =========================================================
 AXIOS BASE URL
@@ -282,8 +283,9 @@ PROTECT ADMIN PAGES
 
 useEffect(() => {
 const publicPages = [
-"home",
-"login",
+  "home",
+  "contact",
+  "login",
 ];
 
 
@@ -408,26 +410,35 @@ PUBLIC WEBSITE NAVIGATION
 ===================================================== */
 
 const scrollToSection = (id) => {
-if (currentPage !== "home") {
-setCurrentPage("home");
+  if (id === "contact") {
+    setCurrentPage("contact");
+    setMobileOpen(false);
 
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
-  setTimeout(() => {
+    return;
+  }
+
+  if (currentPage !== "home") {
+    setCurrentPage("home");
+
+    setTimeout(() => {
+      document
+        .getElementById(id)
+        ?.scrollIntoView({
+          behavior: "smooth",
+        });
+    }, 50);
+  } else {
     document
       .getElementById(id)
       ?.scrollIntoView({
         behavior: "smooth",
       });
-  }, 50);
-} else {
-  document
-    .getElementById(id)
-    ?.scrollIntoView({
-      behavior: "smooth",
-    });
-}
-
-
+  }
 };
 
 /* =====================================================
@@ -459,14 +470,21 @@ onBack={() =>
 setCurrentPage("home")
 }
 />
-) : currentPage === "home" ? ( <PublicHome
-       dashboard={dashboard}
-       loading={loading}
-       error={error}
-       onAdmin={openAdminLogin}
-       onNavigate={scrollToSection}
-     />
-) : ( <AdminLayout
+) : currentPage === "home" ? (
+  <PublicHome
+    dashboard={dashboard}
+    loading={loading}
+    error={error}
+    onAdmin={openAdminLogin}
+    onNavigate={scrollToSection}
+  />
+) : currentPage === "contact" ? (
+  <Contact
+    onAdmin={openAdminLogin}
+    onNavigate={scrollToSection}
+  />
+) : (
+  <AdminLayout
        currentPage={currentPage}
        mobileOpen={mobileOpen}
        setMobileOpen={setMobileOpen}
@@ -1657,116 +1675,7 @@ function PublicHome({
           </div>
         </section>
 
-        {/* =================================================
-            COMMITMENT
-        ================================================= */}
-
-        <section className="commitment-section">
-          <div>
-            <span className="section-kicker light">
-              {t(
-                "commitment.kicker"
-              )}
-            </span>
-
-            <h2>
-              {t("commitment.title")}
-            </h2>
-
-            <p>
-              {t(
-                "commitment.description"
-              )}
-            </p>
-
-            <button
-              className="light-btn"
-              onClick={onAdmin}
-            >
-              {t("commitment.button")}{" "}
-              {"\u{2192}"}
-            </button>
-          </div>
-
-          <div className="commitment-mark">
-            {"\u{262A}"}
-          </div>
-        </section>
-
-        {/* =================================================
-            CONTACT
-        ================================================= */}
-
-        <section
-          className="public-section contact-section"
-          id="contact"
-        >
-          <div className="section-heading center">
-            <span className="section-kicker">
-              {t("contact.kicker")}
-            </span>
-
-            <h2>
-              {t("contact.title")}
-            </h2>
-
-            <p>
-              {t(
-                "contact.description"
-              )}
-            </p>
-          </div>
-
-          <div className="contact-grid">
-            <div className="contact-card">
-              <span>
-                {"\u{1F4CD}"}
-              </span>
-
-              <h3>
-                {t("contact.location")}
-              </h3>
-
-              <p>
-                {t(
-                  "contact.locationDescription"
-                )}
-              </p>
-            </div>
-
-            <div className="contact-card">
-              <span>
-                {"\u{1F4F1}"}
-              </span>
-
-              <h3>
-                {t("contact.telegram")}
-              </h3>
-
-              <p>
-                {t(
-                  "contact.telegramDescription"
-                )}
-              </p>
-            </div>
-
-            <div className="contact-card">
-              <span>
-                {"\u{2709}\u{FE0F}"}
-              </span>
-
-              <h3>
-                {t("contact.email")}
-              </h3>
-
-              <p>
-                {t(
-                  "contact.emailDescription"
-                )}
-              </p>
-            </div>
-          </div>
-        </section>
+       
       </main>
 
       {/* =================================================
