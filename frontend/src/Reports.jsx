@@ -1,58 +1,148 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 function Reports() {
-  // ==================================================
-  // PRINT INFORMATION
-  // ==================================================
+  const { t, i18n } = useTranslation();
 
-  const generatedDate = new Date().toLocaleDateString("en-GB");
+  // ============================================================
+  // DATE / NUMBER FORMATTING
+  // ============================================================
 
-  // ==================================================
+  const localeMap = {
+    en: "en-US",
+    om: "om-ET",
+    am: "am-ET",
+    ar: "ar",
+  };
+
+  const currentLocale =
+    localeMap[i18n.language] || "en-US";
+
+  const generatedDate = new Date().toLocaleDateString(
+    currentLocale
+  );
+
+  const formatDate = (value) => {
+    if (!value) {
+      return "-";
+    }
+
+    const dateText = String(value).substring(0, 10);
+
+    const parts = dateText.split("-");
+
+    if (parts.length !== 3) {
+      return dateText;
+    }
+
+    const year = Number(parts[0]);
+    const month = Number(parts[1]);
+    const day = Number(parts[2]);
+
+    const date = new Date(year, month - 1, day);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateText;
+    }
+
+    return date.toLocaleDateString(currentLocale);
+  };
+
+  const formatMonth = (value) => {
+    if (!value) {
+      return "-";
+    }
+
+    const parts = String(value).split("-");
+
+    if (parts.length !== 2) {
+      return value;
+    }
+
+    const year = Number(parts[0]);
+    const month = Number(parts[1]);
+
+    const date = new Date(year, month - 1, 1);
+
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return date.toLocaleDateString(currentLocale, {
+      year: "numeric",
+      month: "long",
+    });
+  };
+
+  const formatAmount = (value) => {
+    const amount = Number(value || 0);
+
+    return amount.toLocaleString(currentLocale, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+  };
+
+  // ============================================================
   // WEEKLY REPORT STATES
-  // ==================================================
+  // ============================================================
 
   const [reportDate, setReportDate] = useState(
     new Date().toISOString().split("T")[0]
   );
 
   const [report, setReport] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ==================================================
+  // ============================================================
   // MONTHLY REPORT STATES
-  // ==================================================
+  // ============================================================
 
   const [reportMonth, setReportMonth] = useState(
     new Date().toISOString().slice(0, 7)
   );
 
-  const [monthlyReport, setMonthlyReport] = useState(null);
-  const [monthlyLoading, setMonthlyLoading] = useState(false);
-  const [monthlyError, setMonthlyError] = useState("");
+  const [monthlyReport, setMonthlyReport] =
+    useState(null);
 
-  // ==================================================
+  const [monthlyLoading, setMonthlyLoading] =
+    useState(false);
+
+  const [monthlyError, setMonthlyError] =
+    useState("");
+
+  // ============================================================
   // MEMBER REPORT STATES
-  // ==================================================
+  // ============================================================
 
   const [memberList, setMemberList] = useState([]);
-  const [selectedMemberId, setSelectedMemberId] = useState("");
-  const [memberReport, setMemberReport] = useState(null);
-  const [memberLoading, setMemberLoading] = useState(false);
-  const [memberError, setMemberError] = useState("");
 
-  // ==================================================
+  const [selectedMemberId, setSelectedMemberId] =
+    useState("");
+
+  const [memberReport, setMemberReport] =
+    useState(null);
+
+  const [memberLoading, setMemberLoading] =
+    useState(false);
+
+  const [memberError, setMemberError] =
+    useState("");
+
+  // ============================================================
   // GET MEMBERS
-  // ==================================================
+  // ============================================================
 
   const getMembers = async () => {
     try {
       setMemberError("");
 
-      const response = await axios.get("/api/members");
-
-      console.log("Members API response:", response.data);
+      const response = await axios.get(
+        "/api/members"
+      );
 
       const members =
         response.data.members ||
@@ -63,22 +153,23 @@ function Reports() {
         ? members
         : [];
 
-      console.log("Members loaded:", membersArray);
-
       setMemberList(membersArray);
     } catch (err) {
-      console.error("Failed to load members:", err);
+      console.error(
+        "Get members error:",
+        err
+      );
 
       setMemberError(
         err.response?.data?.message ||
-          "Failed to load members."
+          t("reports.errors.loadMembers")
       );
     }
   };
 
-  // ==================================================
+  // ============================================================
   // GET WEEKLY REPORT
-  // ==================================================
+  // ============================================================
 
   const getWeeklyReport = async () => {
     try {
@@ -90,24 +181,30 @@ function Reports() {
         `/api/reports/weekly?date=${reportDate}`
       );
 
-      console.log("Weekly report:", response.data);
+      console.log(
+        "Weekly report:",
+        response.data
+      );
 
       setReport(response.data);
     } catch (err) {
-      console.error("Weekly report error:", err);
+      console.error(
+        "Weekly report error:",
+        err
+      );
 
       setError(
         err.response?.data?.message ||
-          "Failed to load weekly report."
+          t("reports.errors.weekly")
       );
     } finally {
       setLoading(false);
     }
   };
 
-  // ==================================================
+  // ============================================================
   // GET MONTHLY REPORT
-  // ==================================================
+  // ============================================================
 
   const getMonthlyReport = async () => {
     try {
@@ -115,13 +212,17 @@ function Reports() {
       setMonthlyError("");
       setMonthlyReport(null);
 
-      const [year, month] = reportMonth.split("-");
+      const [year, month] =
+        reportMonth.split("-");
 
       const response = await axios.get(
         `/api/reports/monthly?year=${year}&month=${month}`
       );
 
-      console.log("Monthly report:", response.data);
+      console.log(
+        "Monthly report:",
+        response.data
+      );
 
       setMonthlyReport(response.data);
     } catch (err) {
@@ -132,29 +233,26 @@ function Reports() {
 
       setMonthlyError(
         err.response?.data?.message ||
-          "Failed to load monthly report."
+          t("reports.errors.monthly")
       );
     } finally {
       setMonthlyLoading(false);
     }
   };
 
-  // ==================================================
+  // ============================================================
   // GET MEMBER REPORT
-  // ==================================================
+  // ============================================================
 
   const getMemberReport = async () => {
-    console.log(
-      "Selected member ID:",
-      selectedMemberId
-    );
-
     if (
       selectedMemberId === "" ||
       selectedMemberId === null ||
       selectedMemberId === undefined
     ) {
-      setMemberError("Please select a member.");
+      setMemberError(
+        t("reports.errors.selectMember")
+      );
       return;
     }
 
@@ -162,11 +260,6 @@ function Reports() {
       setMemberLoading(true);
       setMemberError("");
       setMemberReport(null);
-
-      console.log(
-        "Requesting member report for ID:",
-        selectedMemberId
-      );
 
       const response = await axios.get(
         `/api/reports/member/${selectedMemberId}`
@@ -186,78 +279,72 @@ function Reports() {
 
       setMemberError(
         err.response?.data?.message ||
-          "Failed to load member report."
+          t("reports.errors.member")
       );
     } finally {
       setMemberLoading(false);
     }
   };
 
-  // ==================================================
-  // LOAD MEMBERS WHEN PAGE OPENS
-  // ==================================================
+  // ============================================================
+  // LOAD MEMBERS ON PAGE OPEN
+  // ============================================================
 
   useEffect(() => {
     getMembers();
   }, []);
 
-  // ==================================================
+  // ============================================================
   // PAGE
-  // ==================================================
+  // ============================================================
 
   return (
     <div className="reports-page">
-
-      {/* ==================================================
+      {/* ========================================================
           PAGE HEADER
-      ================================================== */}
+      ======================================================== */}
 
       <div className="page-header">
         <div>
-          <h1>Reports</h1>
+          <h1>{t("reports.title")}</h1>
 
           <p>
-            View and manage Shabab contribution
-            reports.
+            {t("reports.description")}
           </p>
         </div>
       </div>
 
-      {/* ==================================================
+      {/* ========================================================
           WEEKLY REPORT GENERATOR
-      ================================================== */}
+      ======================================================== */}
 
       <div className="section-card">
-
         <div className="section-header">
           <div>
             <h2>
-              Weekly Contribution Report
+              {t("reports.weekly.title")}
             </h2>
 
             <p>
-              Select a date to view the payment
-              status.
+              {t("reports.weekly.description")}
             </p>
           </div>
         </div>
 
         <div className="report-filter">
-
           <div className="form-group">
-
-            <label>
-              Report Date
+            <label htmlFor="report-date">
+              {t("reports.weekly.date")}
             </label>
 
             <input
+              id="report-date"
               type="date"
               value={reportDate}
               onChange={(e) =>
                 setReportDate(e.target.value)
               }
             />
-
           </div>
 
           <button
@@ -266,17 +353,15 @@ function Reports() {
             disabled={loading}
           >
             {loading
-              ? "Loading..."
-              : "Generate Report"}
+              ? t("reports.common.loading")
+              : t("reports.weekly.generate")}
           </button>
-
         </div>
-
       </div>
 
-      {/* ==================================================
+      {/* ========================================================
           WEEKLY ERROR
-      ================================================== */}
+      ======================================================== */}
 
       {error && (
         <div className="error-message">
@@ -284,197 +369,190 @@ function Reports() {
         </div>
       )}
 
-      {/* ==================================================
+      {/* ========================================================
           WEEKLY REPORT RESULT
-      ================================================== */}
+      ======================================================== */}
 
       {report && (
-
         <div className="section-card">
-
-          {/* PRINT HEADER */}
-
-          <div className="print-report-header">
-
-            <div className="print-logo">
-              🕌
-            </div>
-
-            <h1>
-              MASJIDUL-FATWA SHABAB
-            </h1>
-
-            <h2>
-              Contribution Management System
-            </h2>
-
-            <div className="print-divider"></div>
-
-            <h3>
-              WEEKLY CONTRIBUTION REPORT
-            </h3>
-
-            <p>
-              Contribution Date:{" "}
-              <strong>
-                {report.date}
-              </strong>
-            </p>
-
-          </div>
-
-          {/* REPORT HEADER */}
-
           <div className="section-header">
-
             <div>
-
               <h2>
-                Weekly Report
+                {t("reports.weekly.resultTitle")}
               </h2>
 
               <p>
-                Date: {report.date}
+                {t("reports.common.date")}:{" "}
+                {formatDate(report.date)}
               </p>
-
             </div>
 
             <button
               className="save-button"
-              onClick={() =>
-                window.print()
-              }
+              onClick={() => window.print()}
             >
-              Print Report
+              {t("reports.common.print")}
             </button>
-
           </div>
 
-          {/* SUMMARY */}
+          {/* ====================================================
+              WEEKLY PRINT HEADER
+          ==================================================== */}
+
+          <div className="print-header">
+            <div className="print-mosque-icon">
+              {"\u{1F54C}"}
+            </div>
+
+            <h2>
+              {t("reports.print.systemName")}
+            </h2>
+
+            <h3>
+              {t("reports.print.weeklyTitle")}
+            </h3>
+
+            <p>
+              {t("reports.common.date")}:{" "}
+              {formatDate(report.date)}
+            </p>
+          </div>
+
+          {/* ====================================================
+              WEEKLY SUMMARY
+          ==================================================== */}
 
           <div className="payment-status">
+            {/* Total Members */}
 
             <div className="status-box">
-
-              <span>👥</span>
+              <span>{"\u{1F465}"}</span>
 
               <div>
-
                 <strong>
-                  {report.total_members}
+                  {report.total_members ?? 0}
                 </strong>
 
                 <p>
-                  Total Members
+                  {t("reports.weekly.totalMembers")}
                 </p>
-
               </div>
-
             </div>
 
-            <div className="status-box paid">
+            {/* Paid */}
 
+            <div className="status-box paid">
               <span>✓</span>
 
               <div>
-
                 <strong>
-                  {report.paid_count}
+                  {report.paid_count ?? 0}
                 </strong>
 
                 <p>
-                  Paid
+                  {t("reports.weekly.paid")}
                 </p>
-
               </div>
-
             </div>
 
-            <div className="status-box unpaid">
+            {/* Unpaid */}
 
+            <div className="status-box unpaid">
               <span>!</span>
 
               <div>
-
                 <strong>
-                  {report.unpaid_count}
+                  {report.unpaid_count ?? 0}
                 </strong>
 
                 <p>
-                  Unpaid
+                  {t("reports.weekly.unpaid")}
                 </p>
-
               </div>
-
             </div>
+
+            {/* Total Collection */}
 
             <div className="status-box">
-
-              <span>💰</span>
+              <span>{"\u{1F4B0}"}</span>
 
               <div>
-
                 <strong>
-                  {report.total_collection} ETB
+                  {formatAmount(
+                    report.total_collection
+                  )}{" "}
+                  ETB
                 </strong>
 
                 <p>
-                  Total Collection
+                  {t(
+                    "reports.weekly.totalCollection"
+                  )}
                 </p>
-
               </div>
-
             </div>
-
           </div>
 
-          {/* PAID MEMBERS */}
+          {/* ====================================================
+              PAID MEMBERS
+          ==================================================== */}
 
           <div className="report-section">
-
             <h3>
-              Paid Members
+              {t("reports.weekly.paidMembers")}
             </h3>
 
-            {report.paid_members &&
+            {Array.isArray(
+              report.paid_members
+            ) &&
             report.paid_members.length > 0 ? (
-
               <div className="table-container">
-
                 <table>
-
                   <thead>
-
                     <tr>
                       <th>#</th>
-                      <th>Member</th>
-                      <th>Phone</th>
-                      <th>Amount</th>
-                      <th>Date</th>
+                      <th>
+                        {t(
+                          "reports.table.member"
+                        )}
+                      </th>
+                      <th>
+                        {t(
+                          "reports.table.phone"
+                        )}
+                      </th>
+                      <th>
+                        {t(
+                          "reports.table.amount"
+                        )}
+                      </th>
+                      <th>
+                        {t(
+                          "reports.table.date"
+                        )}
+                      </th>
                     </tr>
-
                   </thead>
 
                   <tbody>
-
                     {report.paid_members.map(
                       (member, index) => (
-
                         <tr
                           key={
-                            member.member_id ||
-                            member.id ||
+                            member.member_id ??
                             index
                           }
                         >
-
                           <td>
                             {index + 1}
                           </td>
 
                           <td>
                             <strong>
-                              {member.full_name}
+                              {member.full_name ||
+                                t(
+                                  "reports.common.unknownMember"
+                                )}
                             </strong>
                           </td>
 
@@ -483,82 +561,87 @@ function Reports() {
                           </td>
 
                           <td>
-                            {member.amount} ETB
+                            {formatAmount(
+                              member.amount
+                            )}{" "}
+                            ETB
                           </td>
 
                           <td>
-                            {String(
+                            {formatDate(
                               member.contribution_date
-                            ).substring(0, 10)}
+                            )}
                           </td>
-
                         </tr>
-
                       )
                     )}
-
                   </tbody>
-
                 </table>
-
               </div>
-
             ) : (
-
               <div className="empty">
-                No paid members found.
+                {t(
+                  "reports.weekly.noPaidMembers"
+                )}
               </div>
-
             )}
-
           </div>
 
-          {/* UNPAID MEMBERS */}
+          {/* ====================================================
+              UNPAID MEMBERS
+          ==================================================== */}
 
           <div className="report-section">
-
             <h3>
-              Unpaid Members
+              {t("reports.weekly.unpaidMembers")}
             </h3>
 
-            {report.unpaid_members &&
+            {Array.isArray(
+              report.unpaid_members
+            ) &&
             report.unpaid_members.length > 0 ? (
-
               <div className="table-container">
-
                 <table>
-
                   <thead>
-
                     <tr>
                       <th>#</th>
-                      <th>Member</th>
-                      <th>Phone</th>
-                      <th>Status</th>
+                      <th>
+                        {t(
+                          "reports.table.member"
+                        )}
+                      </th>
+                      <th>
+                        {t(
+                          "reports.table.phone"
+                        )}
+                      </th>
+                      <th>
+                        {t(
+                          "reports.table.status"
+                        )}
+                      </th>
                     </tr>
-
                   </thead>
 
                   <tbody>
-
                     {report.unpaid_members.map(
                       (member, index) => (
-
                         <tr
                           key={
-                            member.member_id ||
-                            member.id ||
+                            member.member_id ??
                             index
                           }
                         >
-
                           <td>
                             {index + 1}
                           </td>
 
                           <td>
                             <strong>
-                              {member.full_name}
+                              {member.full_name ||
+                                t(
+                                  "reports.common.unknownMember"
+                                )}
                             </strong>
                           </td>
 
@@ -568,115 +651,107 @@ function Reports() {
 
                           <td>
                             <span className="status-inactive">
-                              ! Unpaid
+                              !{" "}
+                              {t(
+                                "reports.weekly.unpaid"
+                              )}
                             </span>
                           </td>
-
                         </tr>
-
                       )
                     )}
-
                   </tbody>
-
                 </table>
-
               </div>
-
             ) : (
-
               <div className="empty">
-                All members have paid.
+                {t(
+                  "reports.weekly.allPaid"
+                )}
               </div>
-
             )}
-
           </div>
 
-          {/* PRINT FOOTER */}
+          {/* ====================================================
+              WEEKLY PRINT FOOTER
+          ==================================================== */}
 
           <div className="print-footer">
-
-            <p>
-              Generated on:{" "}
+            <div>
               <strong>
-                {generatedDate}
-              </strong>
-            </p>
-
-            <div className="print-signatures">
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Administrator
-                </div>
-
-              </div>
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Treasurer
-                </div>
-
-              </div>
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Shabab Representative
-                </div>
-
-              </div>
-
+                {t(
+                  "reports.print.generatedDate"
+                )}
+                :
+              </strong>{" "}
+              {generatedDate}
             </div>
 
+            <div className="print-signatures">
+              <div>
+                <span>
+                  {t(
+                    "reports.print.administrator"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+
+              <div>
+                <span>
+                  {t(
+                    "reports.print.treasurer"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+
+              <div>
+                <span>
+                  {t(
+                    "reports.print.shababRepresentative"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+            </div>
           </div>
-
         </div>
-
       )}
 
-      {/* ==================================================
-          MONTHLY REPORT
-      ================================================== */}
+      {/* ========================================================
+          MONTHLY REPORT GENERATOR
+      ======================================================== */}
 
       <div className="section-card">
-
         <div className="section-header">
-
           <div>
-
             <h2>
-              Monthly Contribution Report
+              {t("reports.monthly.title")}
             </h2>
 
             <p>
-              View contribution records for a
-              selected month.
+              {t(
+                "reports.monthly.description"
+              )}
             </p>
-
           </div>
-
         </div>
 
         <div className="report-filter">
-
           <div className="form-group">
-
-            <label>
-              Report Month
+            <label htmlFor="report-month">
+              {t("reports.monthly.month")}
             </label>
 
             <input
+              id="report-month"
               type="month"
               value={reportMonth}
               onChange={(e) =>
                 setReportMonth(e.target.value)
               }
             />
-
           </div>
 
           <button
@@ -685,17 +760,15 @@ function Reports() {
             disabled={monthlyLoading}
           >
             {monthlyLoading
-              ? "Loading..."
-              : "Generate Monthly Report"}
+              ? t("reports.common.loading")
+              : t("reports.monthly.generate")}
           </button>
-
         </div>
-
       </div>
 
-      {/* ==================================================
+      {/* ========================================================
           MONTHLY ERROR
-      ================================================== */}
+      ======================================================== */}
 
       {monthlyError && (
         <div className="error-message">
@@ -703,327 +776,294 @@ function Reports() {
         </div>
       )}
 
-      {/* ==================================================
+      {/* ========================================================
           MONTHLY REPORT RESULT
-      ================================================== */}
+      ======================================================== */}
 
       {monthlyReport && (
-
         <div className="section-card">
-
-          {/* PRINT HEADER */}
-
-          <div className="print-report-header">
-
-            <div className="print-logo">
-              🕌
-            </div>
-
-            <h1>
-              MASJIDUL-FATWA SHABAB
-            </h1>
-
-            <h2>
-              Contribution Management System
-            </h2>
-
-            <div className="print-divider"></div>
-
-            <h3>
-              MONTHLY CONTRIBUTION REPORT
-            </h3>
-
-            <p>
-              Report Month:{" "}
-              <strong>
-                {reportMonth}
-              </strong>
-            </p>
-
-          </div>
-
-          {/* REPORT HEADER */}
-
           <div className="section-header">
-
             <div>
-
               <h2>
-                Monthly Report
+                {t(
+                  "reports.monthly.resultTitle"
+                )}
               </h2>
 
               <p>
-                Month: {reportMonth}
+                {t("reports.common.month")}:{" "}
+                {formatMonth(reportMonth)}
               </p>
-
             </div>
 
             <button
               className="save-button"
-              onClick={() =>
-                window.print()
-              }
+              onClick={() => window.print()}
             >
-              Print Report
+              {t("reports.common.print")}
             </button>
-
           </div>
 
-          {/* SUMMARY */}
+          {/* ====================================================
+              MONTHLY PRINT HEADER
+          ==================================================== */}
 
-          <div className="payment-status">
-
-            <div className="status-box">
-
-              <span>📋</span>
-
-              <div>
-
-                <strong>
-                  {
-                    monthlyReport.total_contributions
-                  }
-                </strong>
-
-                <p>
-                  Contributions
-                </p>
-
-              </div>
-
+          <div className="print-header">
+            <div className="print-mosque-icon">
+              {"\u{1F54C}"}
             </div>
 
-            <div className="status-box paid">
-
-              <span>💰</span>
-
-              <div>
-
-                <strong>
-                  {monthlyReport.total_amount} ETB
-                </strong>
-
-                <p>
-                  Total Collection
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* CONTRIBUTION RECORDS */}
-
-          <div className="report-section">
+            <h2>
+              {t("reports.print.systemName")}
+            </h2>
 
             <h3>
-              Contribution Records
+              {t("reports.print.monthlyTitle")}
             </h3>
 
-            {monthlyReport.contributions &&
-            monthlyReport.contributions.length > 0 ? (
+            <p>
+              {t("reports.common.month")}:{" "}
+              {formatMonth(reportMonth)}
+            </p>
+          </div>
 
+          {/* ====================================================
+              MONTHLY SUMMARY
+          ==================================================== */}
+
+          <div className="payment-status">
+            {/* Contribution Count */}
+
+            <div className="status-box">
+              <span>{"\u{1F4CB}"}</span>
+
+              <div>
+                <strong>
+                  {monthlyReport.contribution_count ??
+                    0}
+                </strong>
+
+                <p>
+                  {t(
+                    "reports.monthly.contributions"
+                  )}
+                </p>
+              </div>
+            </div>
+
+            {/* Total Collection */}
+
+            <div className="status-box paid">
+              <span>{"\u{1F4B0}"}</span>
+
+              <div>
+                <strong>
+                  {formatAmount(
+                    monthlyReport.total_collection
+                  )}{" "}
+                  ETB
+                </strong>
+
+                <p>
+                  {t(
+                    "reports.monthly.totalCollection"
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* ====================================================
+              MONTHLY CONTRIBUTION RECORDS
+          ==================================================== */}
+
+          <div className="report-section">
+            <h3>
+              {t(
+                "reports.monthly.records"
+              )}
+            </h3>
+
+            {Array.isArray(
+              monthlyReport.contributions
+            ) &&
+            monthlyReport.contributions.length >
+              0 ? (
               <div className="table-container">
-
                 <table>
-
                   <thead>
-
                     <tr>
                       <th>#</th>
-                      <th>Member</th>
-                      <th>Amount</th>
-                      <th>Date</th>
+                      <th>
+                        {t(
+                          "reports.table.member"
+                        )}
+                      </th>
+                      <th>
+                        {t(
+                          "reports.table.amount"
+                        )}
+                      </th>
+                      <th>
+                        {t(
+                          "reports.table.date"
+                        )}
+                      </th>
                     </tr>
-
                   </thead>
 
                   <tbody>
-
                     {monthlyReport.contributions.map(
                       (contribution, index) => (
-
                         <tr
                           key={
-                            contribution.id ||
+                            contribution.id ??
                             index
                           }
                         >
-
                           <td>
                             {index + 1}
                           </td>
 
                           <td>
-
                             <strong>
                               {contribution.full_name ||
                                 contribution.member_name ||
-                                `Member #${contribution.member_id}`}
+                                t(
+                                  "reports.common.unknownMember"
+                                )}
                             </strong>
-
                           </td>
 
                           <td>
-                            {contribution.amount} ETB
+                            {formatAmount(
+                              contribution.amount
+                            )}{" "}
+                            ETB
                           </td>
 
                           <td>
-                            {String(
+                            {formatDate(
                               contribution.contribution_date
-                            ).substring(0, 10)}
+                            )}
                           </td>
-
                         </tr>
-
                       )
                     )}
-
                   </tbody>
-
                 </table>
-
               </div>
-
             ) : (
-
               <div className="empty">
-                No contributions found for this
-                month.
+                {t(
+                  "reports.monthly.noRecords"
+                )}
               </div>
-
             )}
-
           </div>
 
-          {/* PRINT FOOTER */}
+          {/* ====================================================
+              MONTHLY PRINT FOOTER
+          ==================================================== */}
 
           <div className="print-footer">
-
-            <p>
-              Generated on:{" "}
+            <div>
               <strong>
-                {generatedDate}
-              </strong>
-            </p>
-
-            <div className="print-signatures">
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Administrator
-                </div>
-
-              </div>
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Treasurer
-                </div>
-
-              </div>
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Shabab Representative
-                </div>
-
-              </div>
-
+                {t(
+                  "reports.print.generatedDate"
+                )}
+                :
+              </strong>{" "}
+              {generatedDate}
             </div>
 
+            <div className="print-signatures">
+              <div>
+                <span>
+                  {t(
+                    "reports.print.administrator"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+
+              <div>
+                <span>
+                  {t(
+                    "reports.print.treasurer"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+
+              <div>
+                <span>
+                  {t(
+                    "reports.print.shababRepresentative"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+            </div>
           </div>
-
         </div>
-
       )}
 
-      {/* ==================================================
-          MEMBER REPORT
-      ================================================== */}
+      {/* ========================================================
+          MEMBER REPORT GENERATOR
+      ======================================================== */}
 
       <div className="section-card">
-
         <div className="section-header">
-
           <div>
-
             <h2>
-              Member Report
+              {t("reports.member.title")}
             </h2>
 
             <p>
-              View the contribution history of
-              a specific member.
+              {t(
+                "reports.member.description"
+              )}
             </p>
-
           </div>
-
         </div>
 
-        {/* MEMBER SELECTION */}
-
         <div className="report-filter">
-
           <div className="form-group">
-
-            <label>
-              Select Member
+            <label htmlFor="member-report">
+              {t(
+                "reports.member.selectMember"
+              )}
             </label>
 
             <select
+              id="member-report"
               value={selectedMemberId}
               onChange={(e) => {
-
-                const memberId =
-                  e.target.value;
-
-                console.log(
-                  "Member selected:",
-                  memberId
-                );
-
                 setSelectedMemberId(
-                  memberId
+                  e.target.value
                 );
-
-                setMemberReport(null);
                 setMemberError("");
               }}
             >
-
               <option value="">
-                Select a member
+                {t(
+                  "reports.member.chooseMember"
+                )}
               </option>
 
-              {memberList.map((member) => {
-
-                const memberId =
-                  member.id ??
-                  member.member_id;
-
-                const memberName =
-                  member.full_name ??
-                  member.name ??
-                  member.member_name ??
-                  `Member #${memberId}`;
-
-                return (
-                  <option
-                    key={memberId}
-                    value={String(memberId)}
-                  >
-                    {memberName}
-                  </option>
-                );
-              })}
-
+              {memberList.map((member) => (
+                <option
+                  key={member.id}
+                  value={member.id}
+                >
+                  {member.full_name}
+                  {member.phone
+                    ? ` - ${member.phone}`
+                    : ""}
+                </option>
+              ))}
             </select>
-
           </div>
 
           <button
@@ -1032,17 +1072,15 @@ function Reports() {
             disabled={memberLoading}
           >
             {memberLoading
-              ? "Loading..."
-              : "Generate Member Report"}
+              ? t("reports.common.loading")
+              : t("reports.member.generate")}
           </button>
-
         </div>
-
       </div>
 
-      {/* ==================================================
-          MEMBER REPORT ERROR
-      ================================================== */}
+      {/* ========================================================
+          MEMBER ERROR
+      ======================================================== */}
 
       {memberError && (
         <div className="error-message">
@@ -1050,348 +1088,296 @@ function Reports() {
         </div>
       )}
 
-      {/* ==================================================
+      {/* ========================================================
           MEMBER REPORT RESULT
-      ================================================== */}
+      ======================================================== */}
 
       {memberReport && (
-
         <div className="section-card">
-
-          {/* PRINT HEADER */}
-
-          <div className="print-report-header">
-
-            <div className="print-logo">
-              🕌
-            </div>
-
-            <h1>
-              MASJIDUL-FATWA SHABAB
-            </h1>
-
-            <h2>
-              Contribution Management System
-            </h2>
-
-            <div className="print-divider"></div>
-
-            <h3>
-              MEMBER CONTRIBUTION REPORT
-            </h3>
-
-            <p>
-              Member:{" "}
-              <strong>
-                {memberReport.member?.full_name ||
-                  memberReport.full_name ||
-                  "Member"}
-              </strong>
-            </p>
-
-          </div>
-
-          {/* REPORT HEADER */}
-
           <div className="section-header">
-
             <div>
-
               <h2>
-                Member Report
+                {t(
+                  "reports.member.resultTitle"
+                )}
               </h2>
 
               <p>
+                {t(
+                  "reports.member.selected"
+                )}
+                :{" "}
                 {memberReport.member?.full_name ||
-                  memberReport.full_name ||
-                  "Member"}
+                  "-"}
               </p>
-
             </div>
 
             <button
               className="save-button"
-              onClick={() =>
-                window.print()
-              }
+              onClick={() => window.print()}
             >
-              Print Report
+              {t("reports.common.print")}
             </button>
-
           </div>
 
-          {/* SUMMARY */}
+          {/* ====================================================
+              MEMBER PRINT HEADER
+          ==================================================== */}
 
-          <div className="payment-status">
-
-            <div className="status-box">
-
-              <span>👤</span>
-
-              <div>
-
-                <strong>
-                  {memberReport.member?.full_name ||
-                    memberReport.full_name ||
-                    "Member"}
-                </strong>
-
-                <p>
-                  Member
-                </p>
-
-              </div>
-
+          <div className="print-header">
+            <div className="print-mosque-icon">
+              {"\u{1F54C}"}
             </div>
 
-            <div className="status-box">
+            <h2>
+              {t("reports.print.systemName")}
+            </h2>
 
-              <span>📋</span>
+            <h3>
+              {t("reports.print.memberTitle")}
+            </h3>
+
+            <p>
+              {memberReport.member?.full_name ||
+                "-"}
+            </p>
+          </div>
+
+          {/* ====================================================
+              MEMBER SUMMARY
+          ==================================================== */}
+
+          <div className="payment-status">
+            <div className="status-box">
+              <span>{"\u{1F4CB}"}</span>
 
               <div>
-
                 <strong>
-                  {memberReport.total_contributions ??
-                    memberReport.totalContributions ??
+                  {memberReport.contribution_count ??
                     0}
                 </strong>
 
                 <p>
-                  Total Contributions
+                  {t(
+                    "reports.member.contributions"
+                  )}
                 </p>
-
               </div>
-
             </div>
 
             <div className="status-box paid">
-
-              <span>💰</span>
+              <span>{"\u{1F4B0}"}</span>
 
               <div>
-
                 <strong>
-                  {memberReport.total_amount ??
-                    memberReport.totalAmount ??
-                    0} ETB
+                  {formatAmount(
+                    memberReport.total_collection
+                  )}{" "}
+                  ETB
                 </strong>
 
                 <p>
-                  Total Amount
+                  {t(
+                    "reports.member.totalCollection"
+                  )}
                 </p>
-
               </div>
-
             </div>
-
           </div>
 
-          {/* MEMBER INFORMATION */}
+          {/* ====================================================
+              MEMBER INFORMATION
+          ==================================================== */}
 
           <div className="report-section">
-
             <h3>
-              Member Information
+              {t(
+                "reports.member.memberInformation"
+              )}
             </h3>
 
             <div className="table-container">
-
               <table>
-
                 <tbody>
-
                   <tr>
-
                     <th>
-                      Full Name
+                      {t(
+                        "reports.member.fullName"
+                      )}
                     </th>
 
                     <td>
-                      {memberReport.member?.full_name ||
-                        memberReport.full_name ||
-                        "-"}
+                      {memberReport.member
+                        ?.full_name || "-"}
                     </td>
-
                   </tr>
 
                   <tr>
-
                     <th>
-                      Phone
+                      {t(
+                        "reports.member.phone"
+                      )}
                     </th>
 
                     <td>
-                      {memberReport.member?.phone ||
-                        memberReport.phone ||
-                        "-"}
+                      {memberReport.member
+                        ?.phone || "-"}
                     </td>
-
                   </tr>
 
                   <tr>
-
                     <th>
-                      Telegram
+                      {t(
+                        "reports.member.telegram"
+                      )}
                     </th>
 
                     <td>
                       {memberReport.member
                         ?.telegram_username ||
-                        memberReport.telegram_username ||
                         "-"}
                     </td>
-
                   </tr>
 
                   <tr>
-
                     <th>
-                      Status
+                      {t(
+                        "reports.member.status"
+                      )}
                     </th>
 
                     <td>
-                      {memberReport.member?.status ||
-                        memberReport.status ||
-                        "active"}
+                      {memberReport.member
+                        ?.status || "-"}
                     </td>
-
                   </tr>
-
                 </tbody>
-
               </table>
-
             </div>
-
           </div>
 
-          {/* CONTRIBUTION HISTORY */}
+          {/* ====================================================
+              CONTRIBUTION HISTORY
+          ==================================================== */}
 
           <div className="report-section">
-
             <h3>
-              Contribution History
+              {t(
+                "reports.member.history"
+              )}
             </h3>
 
-            {(
-              memberReport.contributions ||
-              memberReport.history ||
-              []
-            ).length > 0 ? (
-
+            {Array.isArray(
+              memberReport.contributions
+            ) &&
+            memberReport.contributions.length >
+              0 ? (
               <div className="table-container">
-
                 <table>
-
                   <thead>
-
                     <tr>
                       <th>#</th>
-                      <th>Date</th>
-                      <th>Amount</th>
-                    </tr>
 
+                      <th>
+                        {t(
+                          "reports.table.amount"
+                        )}
+                      </th>
+
+                      <th>
+                        {t(
+                          "reports.table.date"
+                        )}
+                      </th>
+                    </tr>
                   </thead>
 
                   <tbody>
-
-                    {(
-                      memberReport.contributions ||
-                      memberReport.history ||
-                      []
-                    ).map(
+                    {memberReport.contributions.map(
                       (contribution, index) => (
-
                         <tr
                           key={
-                            contribution.id ||
+                            contribution.id ??
                             index
                           }
                         >
-
                           <td>
                             {index + 1}
                           </td>
 
                           <td>
-                            {String(
-                              contribution.contribution_date ||
-                                contribution.date ||
-                                ""
-                            ).substring(0, 10)}
+                            {formatAmount(
+                              contribution.amount
+                            )}{" "}
+                            ETB
                           </td>
 
                           <td>
-                            {contribution.amount} ETB
+                            {formatDate(
+                              contribution.contribution_date
+                            )}
                           </td>
-
                         </tr>
-
                       )
                     )}
-
                   </tbody>
-
                 </table>
-
               </div>
-
             ) : (
-
               <div className="empty">
-                No contribution records found
-                for this member.
+                {t(
+                  "reports.member.noHistory"
+                )}
               </div>
-
             )}
-
           </div>
 
-          {/* PRINT FOOTER */}
+          {/* ====================================================
+              MEMBER PRINT FOOTER
+          ==================================================== */}
 
           <div className="print-footer">
-
-            <p>
-              Generated on:{" "}
+            <div>
               <strong>
-                {generatedDate}
-              </strong>
-            </p>
-
-            <div className="print-signatures">
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Administrator
-                </div>
-
-              </div>
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Treasurer
-                </div>
-
-              </div>
-
-              <div className="signature-box">
-
-                <div className="signature-line">
-                  Shabab Representative
-                </div>
-
-              </div>
-
+                {t(
+                  "reports.print.generatedDate"
+                )}
+                :
+              </strong>{" "}
+              {generatedDate}
             </div>
 
+            <div className="print-signatures">
+              <div>
+                <span>
+                  {t(
+                    "reports.print.administrator"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+
+              <div>
+                <span>
+                  {t(
+                    "reports.print.treasurer"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+
+              <div>
+                <span>
+                  {t(
+                    "reports.print.shababRepresentative"
+                  )}
+                </span>
+                <div className="signature-line" />
+              </div>
+            </div>
           </div>
-
         </div>
-
       )}
-
     </div>
   );
 }

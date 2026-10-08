@@ -1,0 +1,752 @@
+﻿
+{
+  "nav": {
+    "home": "Mana",
+    "about": "Waa'ee Keenya",
+    "services": "Tajaajiloota",
+    "activities": "Hojiiwwan",
+    "gallery": "Kuusaa Suuraa",
+    "contact": "Nu Qunnamaa",
+    "adminLogin": "Seensa Admin",
+    "dashboard": "Daashboordii",
+    "members": "Miseensota",
+    "contributions": "Gumaachawwan",
+    "reports": "Gabaasota",
+    "admins": "Bulchitoota",
+    "settings": "Qindaa'ina"
+  },
+
+  "language": {
+    "title": "Afaan",
+    "english": "English",
+    "oromo": "Afaan Oromoo",
+    "amharic": "Amharic",
+    "arabic": "Arabiffaa"
+  },
+
+  "hero": {
+    "eyebrow": "Gumaacha Dargaggootaa fi Bulchiinsa",
+    "title": "Hawaasa Ijaaruu",
+    "titleHighlight": "Gumaachaa fi Bu'aa Karaa",
+    "description": "Sirni dijitaalaa iftoomaa kun miseensota Masjidul-Fatwa Shabab bulchuuf, gumaacha torbanii galmeessuuf fi galmeewwan hawaasaa ifa ta'an eeguuf gargaara.",
+    "exploreServices": "Tajaajiloota Keenya Ilaali",
+    "adminLogin": "Seensa Admin",
+    "organizedRecords": "Galmee sirnaan qindaa'e",
+    "transparentContributions": "Gumaacha iftoomaa",
+    "communityFocused": "Hawaasa irratti xiyyeeffate",
+    "systemName": "Sirna Gumaacha fi Bulchiinsa Dargaggootaa",
+    "activeMembers": "Miseensota Hojii Irra Jiran",
+    "totalCollection": "Walitti Qabama Guutuu"
+  },
+
+  "impact": {
+    "kicker": "Bu'aa Waloo Keenya",
+    "title": "Lakkoofsota dhugaa sirna gumaacha keenyaa",
+    "activeMembers": "Miseensota Hojii Irra Jiran",
+    "thisWeek": "Torban Kana",
+    "thisMonth": "Ji'a Kana",
+    "totalCollection": "Walitti Qabama Guutuu"
+  },
+
+  "about": {
+    "kicker": "Nuti Eenyu",
+    "title": "Hawaasa amanamummaa, itti gaafatamummaa fi tajaajila irratti hundaa'e.",
+    "description": "Masjidul-Fatwa Shabab hawaasa dargaggootaa kan gumaacha sirnaawaa, waliin hojjechuu fi itti gaafatamummaa kabajuudha. Platformiin kun galmee waraqaa gara sirna dijitaalaa ifa ta'etti jijjiiruuf gargaara.",
+    "points": {
+      "transparentRecords": {
+        "title": "Galmee Iftoomaa",
+        "description": "Gumaachawwan dijitaalaan kuufamu; bulchitoonni galmeewwan waraqaa irratti hirkachuu malee ilaalu danda'u."
+      },
+      "responsibleManagement": {
+        "title": "Bulchiinsa Itti Gaafatamummaa",
+        "description": "Miseensotni, kaffaltiin fi gabaasni sirna bulchiinsaa tokko keessatti qindaa'u."
+      },
+      "communityImpact": {
+        "title": "Bu'aa Hawaasaa",
+        "description": "Galmeewwan ifaan hirmaannaa fi qabeenya Shabab walitti qabame hubachuun salphata."
+      }
+    },
+    "label": "Hawaasa • Gumaacha • Bu'aa"
+  },
+
+  "services": {
+    "kicker": "Tajaajiloota Keenya",
+    "title": "Wanti gareen Shabab barbaadu hundi bakka tokko keessatti argama.",
+    "description": "Weebsaayitiin uummataa fi sirni bulchiinsaa waliin hojjetanii bulchiinsa hawaasaa salphisu.",
+    "explore": "Ilaali",
+    "items": {
+      "memberManagement": {
+        "title": "Bulchiinsa Miseensotaa",
+        "description": "Odeeffannoo miseensota Shabab dabali, gulaali, hojii irra oolchi fi bulchi."
+      },
+      "contributionRecording": {
+        "title": "Galmeessa Gumaachaa",
+        "description": "Gumaacha torbanii galmeessi, galmee deddeebi'amee uumamu ittisi."
+      },
+      "weeklyReports": {
+        "title": "Gabaasa Torbanii",
+        "description": "Miseensota kaffalan, kanneen hin kaffalin fi walitti qabama torbanii ilaali."
+      },
+      "monthlyReports": {
+        "title": "Gabaasa Ji'aa",
+        "description": "Galmeewwan gumaacha ji'aa fi lakkoofsa miseensotaa qoradhu."
+      },
+      "telegramBot": {
+        "title": "Botii Telegram",
+        "description": "Hojii gumaachaa fi gabaasa karaa botii Telegram Shabab bulchi."
+      },
+      "printableReports": {
+        "title": "Gabaasa Maxxanfamuu Danda'u",
+        "description": "Gabaasa qulqulluu kuusuu fi maxxansuuf mijatu uumi."
+      }
+    }
+  },
+
+  "achievements": {
+    "kicker": "Bu'aawwan Keenya",
+    "title": "Sirni kun hojii hawaasa keenyaa calaqqisiisa.",
+    "activeMembers": "Miseensota Shabab Hojii Irra Jiran",
+    "totalCollection": "Walitti Qabama Galmaa'e Guutuu",
+    "weeklyCollection": "Walitti Qabama Torbanii Ammaa",
+    "monthlyCollection": "Walitti Qabama Ji'aa Ammaa"
+  },
+
+  "why": {
+    "kicker": "Maaliif Platformiin Kun",
+    "title": "Bulchiinsa gumaachaa ifa fi salphaa gochuuf qophaa'e.",
+    "items": {
+      "simpleRecords": {
+        "title": "Galmeessa Salphaa",
+        "description": "Galmeewwan torbanii waraqaa irraa gara database dijitaalaa qindaa'etti jijjiiri."
+      },
+      "accountability": {
+        "title": "Itti Gaafatamummaa Fooyya'aa",
+        "description": "Gabaasni sochii gumaachaa bulchitoonni salphaatti akka qoratan gargaara."
+      },
+      "duplicates": {
+        "title": "Galmee Deddeebi'amee Uumamu Xiqqeessuu",
+        "description": "Adeemsi gumaachaa galmee guyyaa tokkoof irra deddeebi'amee galmaa'uu ni sakatta'a."
+      },
+      "accessible": {
+        "title": "Odeeffannoo Argamu",
+        "description": "Bulchitoonni hayyamaman weebsaayitii ykn botii Telegram fayyadamuu danda'u."
+      }
+    }
+  },
+
+  "events": {
+    "kicker": "Hojiiwwan Hawaasaa",
+    "title": "Shabab walitti hidhuu fi sirnaan qindeessuu.",
+    "weekly": "Torban Torbaniin",
+    "monthly": "Ji'a Ji'aan",
+    "community": "Hawaasa",
+    "friday": "Jimaata",
+    "report": "Gabaasa",
+    "shabab": "Shabab",
+    "fridayContribution": "Gumaacha Jimaataa",
+    "fridayDescription": "Sochii gumaacha torbanii fi galmeessa kaffaltii miseensota Shabab.",
+    "manageContributions": "Gumaacha Bulchi",
+    "monthlyReview": "Qorannoo Ji'aa",
+    "monthlyDescription": "Galmeewwan gumaacha ji'aa qoradhu fi maallaqa walitti qabame hubadhu.",
+    "viewReports": "Gabaasa Ilaali",
+    "shababActivities": "Hojiiwwan Shabab",
+    "activitiesDescription": "Platformii kana bu'uura hojiiwwan dargaggootaa sirnaan qindaa'anitti fayyadami.",
+    "openSystem": "Sirna Bani",
+    "viewGallery": "Kuusaa Suuraa Ilaali"
+  },
+
+  "membership": {
+    "kicker": "Eenyutu Miseensa Keenya Ta'uu Danda'a?",
+    "title": "Bakka Shabab gumaachuu fi tajaajiluu barbaadan.",
+    "items": {
+      "members": {
+        "title": "Miseensota Shabab",
+        "description": "Miseensota hawaasaa fi hojiiwwan gumaacha torbanii irratti hirmaatan."
+      },
+      "volunteers": {
+        "title": "Gargaartota Hawaasaa",
+        "description": "Namoota sagantaalee hawaasaa fi hojiiwwan qindaa'an deeggaran."
+      },
+      "administrators": {
+        "title": "Bulchitoota",
+        "description": "Namoota hayyamaman kanneen galmeewwanii fi gabaasota bulchan."
+      },
+      "supporters": {
+        "title": "Deeggartota Hawaasaa",
+        "description": "Deeggartota hojiiwwan gaarii hawaasaa cimsuu barbaadan."
+      }
+    }
+  },
+
+  "commitment": {
+    "kicker": "Waadaa Keenya",
+    "title": "Gumaacha sirnaan qindaa'een waliin guddachuu.",
+    "description": "Gumaachi hundi barbaachisaa dha. Kaayyoon sirna kanaa adeemsa galmeessuu, qorachuu fi bulchuu salphisuudha; yeroo hundaa hawaasa giddu galeessa godhata.",
+    "button": "Sirna Bulchiinsaa Seeni"
+  },
+
+  "contact": {
+    "kicker": "Nu Qunnamaa",
+    "title": "Masjidul-Fatwa Shabab waliin wal qunnami.",
+    "description": "Yeroo lakkoofsi bilbilaa, email, chaanaalii Telegram fi odeeffannoon bakka Shabab mootummaa ta'e qophaa'u, odeeffannoon qunnamtii as irratti dabalama.",
+    "location": "Bakka",
+    "locationDescription": "Hawaasa Masjidul-Fatwa",
+    "telegram": "Telegram",
+    "telegramDescription": "Qunnamtii Telegram mootummaa Shabab",
+    "email": "Imeelii",
+    "emailDescription": "Odeeffannoon qunnamtii mootummaa as irratti dabalama"
+  },
+
+  "footer": {
+    "systemName": "Sirna Gumaacha fi Bulchiinsa Dargaggootaa",
+    "description": "Qindoomina, gumaacha fi tajaajila itti gaafatamummaa qabuun hawaasa jabaa ijaaraa.",
+    "quickLinks": "Geessituuwwan Saffisaa",
+    "system": "Sirna",
+    "members": "Miseensota",
+    "reports": "Gabaasota",
+    "contributions": "Gumaachawwan",
+    "copyright": "Masjidul-Fatwa Shabab. Mirgi hundi eegama.",
+    "builtBy": "Built by Jemal Seid"
+  },
+
+  "login": {
+    "title": "Seensa Admin",
+    "description": "Sirna gumaacha Shabab bulchuuf seeni.",
+    "username": "Maqaa Fayyadamaa",
+    "usernamePlaceholder": "Maqaa fayyadamaa kee galchi",
+    "password": "Jecha Iccitii",
+    "passwordPlaceholder": "Jecha iccitii kee galchi",
+    "showPassword": "Jecha iccitii agarsiisi",
+    "hidePassword": "Jecha iccitii dhoksi",
+    "signingIn": "Seenaa jira...",
+    "signIn": "Seeni",
+    "backToWebsite": "Gara Weebsaayititti Deebi'i",
+    "errors": {
+      "required": "Maqaa fayyadamaa fi jecha iccitii kee galchi.",
+      "invalidCredentials": "Maqaan fayyadamaa ykn jechi iccitii sirrii miti.",
+      "inactive": "Herregni kee kan bulchaa hojii irraa dhaabbateera.",
+      "loginFailed": "Seensni kufeera.",
+      "server": "Server waliin wal qunnamsiisuu hin dandeenye.",
+      "unexpected": "Dogoggorri hin eegamne uumame."
+    }
+  },
+
+  "admin": {
+    "shababSystem": "Sirna Shabab",
+    "management": "Bulchiinsa",
+    "website": "Weebsaayitii",
+    "publicWebsite": "Weebsaayitii Uummataa",
+    "superAdministrator": "Bulchaa Olaanaa",
+    "administrator": "Bulchaa",
+    "logout": "Ba'i",
+    "closeMenu": "Meenuu cufi",
+    "openNavigation": "Qajeelcha bani"
+  },
+
+  "dashboard": {
+    "managementOverview": "Cuunfaa Bulchiinsaa",
+    "title": "Daashboordii",
+    "welcome": "Baga gara Sirna Gumaacha Shabab Masjidul-Fatwa dhuftan.",
+    "addContribution": "Gumaacha Dabali",
+    "activeMembers": "Miseensota Hojii Irra Jiran",
+    "totalCollection": "Walitti Qabama Waliigalaa",
+    "thisWeek": "Torban Kana",
+    "thisMonth": "Ji'a Kana",
+    "collectionTrend": "Adeemsa Gumaachaa",
+    "collectionTrendDescription": "Gumaacha torbanoota 6 darban keessatti walitti qabame.",
+    "loadingCollectionTrend": "Adeemsa gumaachaa fe'aa jira...",
+    "collection": "Gumaacha",
+    "weekOf": "Torban",
+    "noCollectionData": "Ammaaf odeeffannoon gumaachaa hin jiru.",
+    "weeklyPaymentStatus": "Haala Kaffaltii Torbanii",
+    "weeklyPaymentDescription": "Haala gumaacha miseensotaa torban kanaa.",
+    "paidMembers": "Miseensota Kaffalan",
+    "unpaidMembers": "Miseensota Hin Kaffalle",
+    "quickActions": "Tarkaanfiiwwan Ariifachiisoo",
+    "quickActionsDescription": "Gara hojiiwwan beekamoo saffisaan darba.",
+    "recordContribution": "Gumaacha Galmeessi",
+    "manageMembers": "Miseensota Bulchi",
+    "generateReports": "Gabaasa Uumi",
+    "recentContributions": "Gumaachawwan Dhihoo",
+    "recentContributionsDescription": "Galmeewwan gumaachaa haaraa.",
+    "viewAll": "Hunda Ilaali",
+    "loadingContributions": "Gumaachawwan fe'aa jira...",
+    "noContributions": "Ammaaf gumaachi hin galmoofne."
+  },
+
+  "reports": {
+    "title": "Gabaasota",
+    "description": "Gabaasa gumaacha Shabab ilaali fi bulchi.",
+
+    "common": {
+      "loading": "Fe'aa jira...",
+      "print": "Gabaasa Maxxansi",
+      "date": "Guyyaa",
+      "month": "Ji'a",
+      "unknownMember": "Miseensa Hin Beekamne"
+    },
+
+    "weekly": {
+      "title": "Gabaasa Gumaacha Torbanii",
+      "description": "Haala kaffaltii ilaaluuf guyyaa filadhu.",
+      "date": "Guyyaa Gabaasaa",
+      "generate": "Gabaasa Uumi",
+      "resultTitle": "Gabaasa Torbanii",
+      "totalMembers": "Miseensota Waliigalaa",
+      "paid": "Kaffale",
+      "unpaid": "Hin Kaffalle",
+      "totalCollection": "Walitti Qabama Waliigalaa",
+      "paidMembers": "Miseensota Kaffalan",
+      "unpaidMembers": "Miseensota Hin Kaffalle",
+      "noPaidMembers": "Miseensi kaffale hin argamne.",
+      "allPaid": "Miseensonni hundi kaffalaniiru."
+    },
+
+    "monthly": {
+      "title": "Gabaasa Gumaacha Ji'aa",
+      "description": "Galmee gumaachaa ji'a filatameef ilaali.",
+      "month": "Ji'a Gabaasaa",
+      "generate": "Gabaasa Ji'aa Uumi",
+      "resultTitle": "Gabaasa Ji'aa",
+      "contributions": "Gumaachawwan",
+      "totalCollection": "Walitti Qabama Waliigalaa",
+      "records": "Galmee Gumaachaa",
+      "noRecords": "Ji'a kanaaf gumaachi hin argamne."
+    },
+
+    "member": {
+      "title": "Gabaasa Miseensaa",
+      "description": "Seenaa gumaacha miseensa tokkoo ilaali.",
+      "selectMember": "Miseensa Filadhu",
+      "chooseMember": "Miseensa filadhu",
+      "generate": "Gabaasa Miseensaa Uumi",
+      "resultTitle": "Gabaasa Miseensaa",
+      "selected": "Miseensa",
+      "contributions": "Gumaachawwan",
+      "totalCollection": "Walitti Qabama Waliigalaa",
+      "memberInformation": "Odeeffannoo Miseensaa",
+      "fullName": "Maqaa Guutuu",
+      "phone": "Bilbila",
+      "telegram": "Telegram",
+      "status": "Haala",
+      "history": "Seenaa Gumaachaa",
+      "noHistory": "Seenaa gumaachaa hin argamne."
+    },
+
+    "table": {
+      "member": "Miseensa",
+      "phone": "Bilbila",
+      "amount": "Hanga",
+      "date": "Guyyaa",
+      "status": "Haala"
+    },
+
+    "print": {
+      "systemName": "Masjidul-Fatwa Shabab",
+      "weeklyTitle": "GABAASA GUMAACHA TORBANII",
+      "monthlyTitle": "GABAASA GUMAACHA JI'AA",
+      "memberTitle": "GABAASA GUMAACHA MISEENSAA",
+      "generatedDate": "Guyyaa Uumame",
+      "administrator": "Bulchaa",
+      "treasurer": "Qabduu Maallaqaa",
+      "shababRepresentative": "Bakka Bu'aa Shabab"
+    },
+
+        "errors": {
+      "loadMembers": "Miseensota fe'uun hin danda'amne.",
+      "weekly": "Gabaasa torbanii fe'uun hin danda'amne.",
+      "monthly": "Gabaasa ji'aa fe'uun hin danda'amne.",
+      "member": "Gabaasa miseensaa fe'uun hin danda'amne.",
+      "selectMember": "Mee miseensa tokko filadhu."
+    }
+  },
+
+  "settings": {
+    "title": "Qindaa'ina",
+    "description": "Qindaa'ina sirna gumaacha dargaggootaa bulchi.",
+    "common": {
+      "saving": "Olkaa'aa jira...",
+      "saveChanges": "Jijjiirama Olkaa'i",
+      "cancel": "Haqi"
+    },
+    "contribution": {
+      "title": "Qindaa'ina Gumaachaa",
+      "description": "Hanga gumaacha torbanii durtii murteessi.",
+      "amountLabel": "Hanga Gumaachaa",
+      "amountPlaceholder": "Hanga gumaachaa galchi",
+      "amountHelp": "Hangi kun yeroo gumaacha galmeessitu ni fayyada."
+    },
+    "danger": {
+      "title": "Naannoo Balaa",
+      "superAdminOnly": "Bulchaa Olaanaa Qofaaf",
+      "description": "Tarkaanfiiwwan armaan gadii daataa gumaachaa jiru irratti dhiibbaa qabu.",
+      "warningTitle": "Gumaachawwan Hunda Haqi",
+      "warningDescription": "Tarkaanfiin kun galmeewwan gumaachaa hunda ni haqa. Tarkaanfiin kun deebifamuu hin danda'u.",
+      "clearButton": "Gumaachawwan Hunda Haqi",
+      "irreversible": "Tarkaanfiin kun deebifamuu hin danda'u.",
+      "lastCleared": "Galmeewwan gumaachaa {{count}} haqamaniiru."
+    },
+    "modal": {
+      "title": "Gumaachawwan Hunda Haquu?",
+      "description": "Galmeewwan gumaachaa hunda sirna keessaa haquuf jetta.",
+      "warningTitle": "Akeekkachiisa",
+      "warningDescription": "Galmeewwan gumaachaa hunda dhaabbataadhaan ni haqamu. Itti fufuu akka barbaaddu mirkaneeffadhu.",
+      "clearing": "Haqaa jira...",
+      "confirm": "Eeyyee, Gumaachawwan Hunda Haqi"
+    },
+    "messages": {
+      "amountUpdated": "Hangi gumaachaa milkaa'inaan haaromfame.",
+      "contributionsCleared": "Galmeewwan gumaachaa {{count}} haqamaniiru."
+    },
+    "errors": {
+      "load": "Qindaa'ina sirnaa fe'uun hin danda'amne.",
+      "invalidAmount": "Mee hanga gumaachaa sirrii galchi.",
+      "save": "Qindaa'ina gumaachaa olkaa'uun hin danda'amne.",
+      "clearContributions": "Galmeewwan gumaachaa haquun hin danda'amne."
+    }
+  },
+
+  "members": {
+    "title": "Miseensota",
+    "description": "Miseensota Masjidul-Fatwa Shabab bulchi.",
+    "addMember": "Miseensa Dabali",
+    "statistics": {
+      "total": "Miseensota Waliigalaa",
+      "active": "Miseensota Hojii Irra Jiran",
+      "inactive": "Miseensota Hojii Irra Hin Jirin"
+    },
+    "list": {
+      "title": "Miseensota Hunda",
+      "count": "Miseensa {{visible}} keessaa {{total}}"
+    },
+    "sort": {
+      "label": "Qindeessi",
+      "nameAsc": "Maqaa A → Z",
+      "nameDesc": "Maqaa Z → A",
+      "newest": "Haaraa",
+      "oldest": "Moofaa"
+    },
+    "search": {
+      "placeholder": "Miseensota barbaadi...",
+      "ariaLabel": "Miseensota barbaadi",
+      "clear": "Barbaacha Haqi"
+    },
+    "form": {
+      "addTitle": "Miseensa Haaraa Dabali",
+      "editTitle": "Miseensa Gulaali",
+      "addDescription": "Odeeffannoo miseensaa armaan gadii galchi.",
+      "editDescription": "Odeeffannoo miseensaa armaan gadii haaromsi.",
+      "fullName": "Maqaa Guutuu",
+      "fullNamePlaceholder": "Maqaa guutuu galchi",
+      "phone": "Lakkoofsa Bilbilaa",
+      "phonePlaceholder": "Lakkoofsa bilbilaa galchi",
+      "telegram": "Maqaa Fayyadamaa Telegram",
+      "cancel": "Haqi",
+      "saving": "Olkaa'aa jira...",
+      "save": "Miseensa Olkaa'i",
+      "update": "Miseensa Haaromsi"
+    },
+    "table": {
+      "name": "Maqaa",
+      "phone": "Bilbila",
+      "telegram": "Telegram",
+      "status": "Haala",
+      "actions": "Tarkaanfii"
+    },
+    "status": {
+      "active": "Hojii Irra Jira",
+      "inactive": "Hojii Irra Hin Jiru"
+    },
+    "actions": {
+      "edit": "Gulaali",
+      "activate": "Hojii Irra Oolchi",
+      "deactivate": "Hojii Irraa Dhaabi"
+    },
+    "confirm": {
+      "activate": "{{name}} hojii irra akka oolu mirkaneeffattaa?",
+      "deactivate": "{{name}} hojii irraa akka dhaabbatu mirkaneeffattaa?"
+    },
+    "messages": {
+      "added": "Miseensi milkaa'inaan dabalame.",
+      "updated": "Miseensi milkaa'inaan haaromfame.",
+      "activated": "{{name}} hojii irra ooleera.",
+      "deactivated": "{{name}} hojii irraa dhaabbateera."
+    },
+    "loading": "Miseensota fe'aa jira...",
+    "empty": "Miseensi hin argamne.",
+    "noSearchResults": "Miseensi barbaacha kee waliin wal simu hin jiru.",
+    "errors": {
+      "fullNameRequired": "Maqaan guutuun barbaachisaa dha.",
+      "connection": "Server backend waliin wal qunnamsiisuu hin dandeenye.",
+      "server": "Dogoggora serverii: {{status}} - {{statusText}}",
+      "unexpected": "Dogoggora: {{message}}"
+    }
+  },
+    "contributions": {
+    "title": "Gumaachawwan",
+    "description": "Gumaacha torbanii Shabab galmeessi fi bulchi.",
+
+    "form": {
+      "title": "Gumaacha Galmeessi",
+      "weeklyAmount": "Hanga gumaacha torbanii:",
+      "member": "Miseensa",
+      "selectMember": "Miseensa filadhu",
+      "amount": "Hanga (ETB)",
+      "date": "Guyyaa Gumaachaa",
+      "saving": "Olkaa'aa jira...",
+      "record": "Gumaacha Galmeessi"
+    },
+
+    "status": {
+      "title": "Haala Kaffaltii Jimaataa",
+      "description": "Haala kaffaltii guyyaa",
+      "loading": "Fe'aa jira...",
+      "refresh": "Haaromsi",
+      "loadingMembers": "Haala kaffaltii miseensotaa fe'aa jira...",
+      "paid": "Kaffale",
+      "unpaid": "Hin Kaffalle",
+      "recording": "Galmeessaa jira...",
+      "recordAmount": "Hanga {{amount}} ETB Galmeessi",
+      "noMembers": "Miseensi kaffale ykn hin kaffalle jedhamuun galmee keessa hin jiru.",
+      "table": {
+        "member": "Miseensa",
+        "phone": "Bilbila",
+        "status": "Haala",
+        "action": "Tarkaanfii"
+      }
+    },
+
+    "recent": {
+      "title": "Gumaachawwan Dhihoo",
+      "count": "Galmee {{count}}",
+      "loading": "Gumaachawwan fe'aa jira...",
+      "empty": "Gumaachi hin argamne.",
+      "memberFallback": "Miseensa #{{id}}",
+      "table": {
+        "member": "Miseensa",
+        "amount": "Hanga",
+        "date": "Guyyaa"
+      }
+    },
+
+    "messages": {
+      "recorded": "Gumaachi milkaa'inaan galmaa'e.",
+      "memberRecorded": "{{name}} akka kaffaleetti milkaa'inaan galmaa'e."
+    },
+
+    "errors": {
+      "loadMembers": "Miseensota fe'uun hin danda'amne.",
+      "loadContributions": "Gumaachawwan fe'uun hin danda'amne.",
+      "loadAmount": "Hanga gumaachaa fe'uun hin danda'amne.",
+      "loadStatus": "Haala kaffaltii fe'uun hin danda'amne.",
+      "invalidMember": "Miseensa sirrii hin taane filatame.",
+      "selectMember": "Mee miseensa tokko filadhu.",
+      "invalidAmount": "Mee hanga sirrii galchi.",
+      "selectDate": "Mee guyyaa filadhu.",
+      "duplicate": "Miseensi kun guyyaa kanaaf duraan gumaacheera.",
+      "duplicateMember": "{{name}} guyyaa kanaaf duraan kaffaleera.",
+      "recordContribution": "Gumaacha galmeessuun hin danda'amne.",
+      "connection": "Server backend waliin wal qunnamsiisuu hin dandeenye.",
+      "unexpected": "Dogoggora: {{message}}"
+    }
+  },
+    "gallery": {
+    "kicker": "Kuusaa Suuraa Shabab",
+    "title": "Yaadannoo, Hojiiwwan fi Yeroo Hawaasaa",
+    "description": "Kuusaa suuraa hojiiwwan, sagantaalee fi yeroo yaadatamoo Masjidul-Fatwa Shabab agarsiisan.",
+    "loading": "Kuusaa Suuraa Fe'aa Jira...",
+    "loadingDescription": "Mee suuraawwan hawaasaa keenya fe'aa jirruuf xiqqoo eegi.",
+    "comingSoonBadge": "Kuusaan Suuraa Dhufaa Jira",
+    "emptyTitle": "Suuraawwan Keenya Yeroo Dhiyootti As Jiraatu",
+    "emptyDescription": "Suuraawwan hojiiwwan Shabab, walga'iiwwan, sagantaalee fi walitti qabama hawaasaa yeroo dhiyootti as irratti dabalamu.",
+    "note": "Hojiiwwan hawaasaa fi yeroo yaadatamoon as irratti mul'atu.",
+    "defaultAlt": "Masjidul-Fatwa Shabab"
+  },
+    "adminGallery": {
+    "kicker": "Bulchiinsa Qabiyyee",
+    "title": "Kuusaa Suuraa",
+    "description": "Suuraawwan hawaasaa Masjidul-Fatwa Shabab olkaa'i fi bulchi.",
+    "totalPhotos": "Suuraawwan Waliigalaa",
+    "loading": "Kuusaa suuraa fe'aa jira...",
+    "emptyTitle": "Ammaaf Suuraan Hin Jiru",
+    "emptyDescription": "Kuusaan suuraa kee qophaa'eera. Yeroo suuraa qabaattu dabali.",
+    "defaultAlt": "Masjidul-Fatwa Shabab",
+
+    "actions": {
+      "addPhoto": "Suuraa Dabali",
+      "addFirstPhoto": "Suuraa Jalqabaa Dabali",
+      "editPhoto": "Suuraa Gulaali",
+      "deletePhoto": "Suuraa Haqi"
+    },
+
+    "form": {
+      "addTitle": "Suuraa Dabali",
+      "editTitle": "Suuraa Gulaali",
+      "addDescription": "Suuraa hawaasaa olkaa'i.",
+      "editDescription": "Odeeffannoo suuraa haaromsi.",
+      "close": "Cufi",
+      "titleLabel": "Mata Duree",
+      "titlePlaceholder": "Sagantaa Shabab Jimaataa",
+      "descriptionLabel": "Ibsa",
+      "descriptionPlaceholder": "Yeroo hawaasaa kana ibsi...",
+      "photoLabel": "Suuraa",
+      "fileHelp": "JPG, PNG, WEBP fi bifa suuraa biroo. Daangaan 10 MB.",
+      "preview": "Durargii",
+      "previewAlt": "Durargii suuraa",
+      "cancel": "Haqi",
+      "saving": "Olkaa'aa jira...",
+      "saveChanges": "Jijjiirama Olkaa'i",
+      "uploadPhoto": "Suuraa Olkaa'i"
+    },
+
+    "messages": {
+      "uploaded": "Suuraan milkaa'inaan olkaa'ameera.",
+      "updated": "Suuraan milkaa'inaan haaromfameera.",
+      "deleted": "Suuraan milkaa'inaan haqameera."
+    },
+
+    "errors": {
+      "load": "Kuusaa suuraa fe'uun hin danda'amne.",
+      "save": "Suuraa olkaa'uun hin danda'amne.",
+      "delete": "Suuraa haquun hin danda'amne.",
+      "invalidImage": "Mee faayilii suuraa sirrii filadhu.",
+      "fileTooLarge": "Hangi suuraa 10 MB ykn isaa gadi ta'uu qaba.",
+      "titleRequired": "Mee mata duree suuraa galchi.",
+      "photoRequired": "Mee suuraa filadhu.",
+      "connection": "Server backend waliin wal qunnamsiisuu hin dandeenye.",
+      "unexpected": "Dogoggora: {{message}}"
+    },
+
+    "deleteConfirm": "Suuraa kana haquu akka barbaaddu mirkaneeffattaa?"
+  },
+    "adminManagement": {
+    "kicker": "BULCHIINSA",
+    "title": "Bulchiinsa Admin",
+    "description": "Bulchitoota fi hayyama isaanii sirna irratti bulchi.",
+    "you": "Ati",
+    "loading": "Bulchitoota fe'aa jira...",
+
+    "actions": {
+      "add": "Bulchaa Dabali",
+      "refresh": "Haaromsi",
+      "edit": "Gulaali",
+      "activate": "Hojii Irra Oolchi",
+      "deactivate": "Hojii Irraa Dhaabi"
+    },
+
+    "stats": {
+      "total": "Bulchitoota Waliigalaa",
+      "active": "Hojii Irra Jiran",
+      "superAdmins": "Bulchitoota Olaanoo"
+    },
+
+    "table": {
+      "title": "Bulchitoota",
+      "description": "Herrega bulchitootaa fi hayyama isaanii bulchi.",
+      "administrator": "Bulchaa",
+      "username": "Maqaa Fayyadamaa",
+      "role": "Gahee",
+      "status": "Haala",
+      "created": "Uumame",
+      "actions": "Tarkaanfii"
+    },
+
+    "roles": {
+      "admin": "Bulchaa",
+      "superAdmin": "Bulchaa Olaanaa"
+    },
+
+    "status": {
+      "active": "Hojii Irra Jira",
+      "inactive": "Hojii Irra Hin Jiru",
+      "updating": "Haaromaa jira..."
+    },
+
+    "empty": {
+      "title": "Bulchaan hin argamne",
+      "description": "Jalqabuuf bulchaa tokko dabali."
+    },
+
+    "confirm": {
+      "activate": "\"{{name}}\" hojii irra oolchuu akka barbaaddu mirkaneeffattaa?",
+      "deactivate": "\"{{name}}\" hojii irraa dhaabuu akka barbaaddu mirkaneeffattaa?"
+    },
+
+    "tooltips": {
+      "selfStatus": "Haala herrega kee ofii jijjiiruu hin dandeessu",
+      "updating": "Haaromaa jira...",
+      "deactivate": "Bulchaa kana hojii irraa dhaabi",
+      "activate": "Bulchaa kana hojii irra oolchi"
+    },
+
+    "form": {
+      "addTitle": "Bulchaa Dabali",
+      "editTitle": "Bulchaa Gulaali",
+      "addDescription": "Herrega bulchaa haaraa uumi.",
+      "editDescription": "Odeeffannoo herrega bulchaa haaromsi.",
+      "close": "Cufi",
+      "fullName": "Maqaa Guutuu",
+      "fullNamePlaceholder": "Maqaa guutuu galchi",
+      "username": "Maqaa Fayyadamaa",
+      "usernamePlaceholder": "Maqaa fayyadamaa galchi",
+      "password": "Jecha Iccitii",
+      "passwordPlaceholder": "Jecha iccitii galchi",
+      "passwordEditPlaceholder": "Jechi iccitii ammaa akka turuuf duwwaa dhiisi",
+      "optional": "Dirqama miti",
+      "passwordNote": "Jechi iccitii yoo xiqqaate arfiilee 6 qabaachuu qaba.",
+      "passwordEditNote": "Jechoota iccitii jijjiiruu yoo barbaadde qofa galchi.",
+      "role": "Gahee",
+      "selfRoleNote": "Gahee kee ofii jijjiiruu hin dandeessu.",
+      "cancel": "Haqi",
+      "saving": "Olkaa'aa jira...",
+      "saveChanges": "Jijjiirama Olkaa'i",
+      "create": "Bulchaa Uumi"
+    },
+
+    "messages": {
+      "created": "Bulchaan milkaa'inaan uumameera.",
+      "updated": "Bulchaan milkaa'inaan haaromfameera."
+    },
+
+    "errors": {
+      "load": "Bulchitoota fe'uun hin danda'amne.",
+      "fullNameRequired": "Maqaan guutuun barbaachisaa dha.",
+      "usernameRequired": "Maqaan fayyadamaa barbaachisaa dha.",
+      "passwordMin": "Jechi iccitii yoo xiqqaate arfiilee 6 qabaachuu qaba.",
+      "newPasswordMin": "Jechi iccitii haaraan yoo xiqqaate arfiilee 6 qabaachuu qaba.",
+      "operation": "Tarkaanfiin kufeera.",
+      "save": "Bulchaa olkaa'uun hin danda'amne.",
+      "selfStatus": "Herrega kee ofii hojii irraa dhaabuu ykn haala isaa jijjiiruu hin dandeessu.",
+      "statusUpdate": "Haala bulchaa haaromsuun hin danda'amne."
+    }
+  },
+  "loading": "Qindaa'ina fe'aa jira...",
+
+"account": {
+  "title": "Qindaa'ina Herregaa",
+  "description": "Maqaa fayyadamaa fi jecha iccitii bulchaa kee haaromsi.",
+  "username": "Maqaa Fayyadamaa",
+  "usernamePlaceholder": "Maqaa fayyadamaa galchi",
+  "newPassword": "Jechoota Iccitii Haaraa",
+  "newPasswordPlaceholder": "Jechoota iccitii haaraa galchi",
+  "confirmPassword": "Jechoota Iccitii Haaraa Mirkaneessi",
+  "confirmPasswordPlaceholder": "Jechoota iccitii haaraa irra deebi'ii galchi",
+  "showPassword": "Jechoota iccitii agarsiisi",
+  "hidePassword": "Jechoota iccitii dhoksi",
+  "passwordHelp": "Maqaa fayyadamaa qofa jijjiiruu yoo barbaadde, bakka kana duwwaa dhiisi.",
+  "updateButton": "Herrega Haaromsi",
+
+  "messages": {
+    "updated": "Qindaa'inni herregaa milkaa'inaan haaromfameera."
+  },
+
+  "errors": {
+    "usernameRequired": "Maqaan fayyadamaa barbaachisaa dha.",
+    "passwordMin": "Jechi iccitii haaraan yoo xiqqaate arfiilee 6 qabaachuu qaba.",
+    "passwordMismatch": "Jechi iccitii haaraan fi jechi iccitii mirkaneessaa wal hin siman.",
+    "accountNotFound": "Odeeffannoon herrega kee hin argamne. Mee irra deebi'ii seeni.",
+    "update": "Qindaa'ina herregaa haaromsuun hin danda'amne."
+  }
+}
+}
+

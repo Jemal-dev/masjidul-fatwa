@@ -1,8 +1,10 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 function Settings() {
+  const { t, i18n } = useTranslation();
+
   // =====================================================
   // STORED ADMIN
   // =====================================================
@@ -11,12 +13,15 @@ function Settings() {
     localStorage.getItem("adminUser") || "{}"
   );
 
-  const token = localStorage.getItem("adminToken");
+  const getAxiosConfig = () => {
+    const token =
+      localStorage.getItem("adminToken");
 
-  const axiosConfig = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
   };
 
   // =====================================================
@@ -25,14 +30,17 @@ function Settings() {
 
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(true);
-  const [savingAmount, setSavingAmount] = useState(false);
+  const [savingAmount, setSavingAmount] =
+    useState(false);
 
   // =====================================================
   // CLEAR CONTRIBUTIONS
   // =====================================================
 
-  const [clearingContributions, setClearingContributions] =
-    useState(false);
+  const [
+    clearingContributions,
+    setClearingContributions,
+  ] = useState(false);
 
   const [showClearModal, setShowClearModal] =
     useState(false);
@@ -45,15 +53,19 @@ function Settings() {
     storedUser.username || ""
   );
 
-  const [newPassword, setNewPassword] = useState("");
+  const [newPassword, setNewPassword] =
+    useState("");
+
   const [confirmPassword, setConfirmPassword] =
     useState("");
 
   const [showPassword, setShowPassword] =
     useState(false);
 
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState(false);
+  const [
+    showConfirmPassword,
+    setShowConfirmPassword,
+  ] = useState(false);
 
   const [savingAccount, setSavingAccount] =
     useState(false);
@@ -66,6 +78,25 @@ function Settings() {
   const [success, setSuccess] = useState("");
 
   // =====================================================
+  // GET DATE LOCALE
+  // =====================================================
+
+  const getDateLocale = () => {
+    const language = i18n.language || "en";
+
+    const localeMap = {
+      en: "en-US",
+      om: "om-ET",
+      am: "am-ET",
+      ar: "ar",
+    };
+
+    return (
+      localeMap[language] || "en-US"
+    );
+  };
+
+  // =====================================================
   // GET CONTRIBUTION SETTINGS
   // =====================================================
 
@@ -76,16 +107,21 @@ function Settings() {
 
       const response = await axios.get(
         "/api/settings/contribution-amount",
-        axiosConfig
+        getAxiosConfig()
       );
 
-      setAmount(response.data.amount);
+      setAmount(
+        response.data?.amount ?? ""
+      );
     } catch (err) {
-      console.error("Settings load error:", err);
+      console.error(
+        "Settings load error:",
+        err
+      );
 
       setError(
         err.response?.data?.message ||
-          "Failed to load settings."
+          t("settings.errors.load")
       );
     } finally {
       setLoading(false);
@@ -96,8 +132,8 @@ function Settings() {
   // UPDATE CONTRIBUTION AMOUNT
   // =====================================================
 
-  const handleSaveAmount = async (e) => {
-    e.preventDefault();
+  const handleSaveAmount = async (event) => {
+    event.preventDefault();
 
     setError("");
     setSuccess("");
@@ -109,7 +145,7 @@ function Settings() {
       numericAmount <= 0
     ) {
       setError(
-        "Contribution amount must be greater than 0."
+        t("settings.errors.invalidAmount")
       );
       return;
     }
@@ -122,11 +158,13 @@ function Settings() {
         {
           amount: numericAmount,
         },
-        axiosConfig
+        getAxiosConfig()
       );
 
       setSuccess(
-        "Weekly contribution amount updated successfully."
+        t(
+          "settings.messages.amountUpdated"
+        )
       );
     } catch (err) {
       console.error(
@@ -136,7 +174,7 @@ function Settings() {
 
       setError(
         err.response?.data?.message ||
-          "Failed to update contribution amount."
+          t("settings.errors.save")
       );
     } finally {
       setSavingAmount(false);
@@ -177,14 +215,17 @@ function Settings() {
 
       const response = await axios.delete(
         "/api/contributions/clear",
-        axiosConfig
+        getAxiosConfig()
       );
 
       setShowClearModal(false);
 
       setSuccess(
-        response.data.message ||
-          "All old contributions cleared successfully."
+        response.data?.message ||
+          t(
+            "settings.messages.contributionsCleared",
+            { count: 0 }
+          )
       );
     } catch (err) {
       console.error(
@@ -194,7 +235,9 @@ function Settings() {
 
       setError(
         err.response?.data?.message ||
-          "Failed to clear contributions."
+          t(
+            "settings.errors.clearContributions"
+          )
       );
     } finally {
       setClearingContributions(false);
@@ -205,8 +248,8 @@ function Settings() {
   // UPDATE ACCOUNT
   // =====================================================
 
-  const handleSaveAccount = async (e) => {
-    e.preventDefault();
+  const handleSaveAccount = async (event) => {
+    event.preventDefault();
 
     setError("");
     setSuccess("");
@@ -215,7 +258,11 @@ function Settings() {
 
     // Username validation
     if (!cleanUsername) {
-      setError("Username is required.");
+      setError(
+        t(
+          "settings.account.errors.usernameRequired"
+        )
+      );
       return;
     }
 
@@ -225,15 +272,21 @@ function Settings() {
       newPassword.length < 6
     ) {
       setError(
-        "New password must be at least 6 characters."
+        t(
+          "settings.account.errors.passwordMin"
+        )
       );
       return;
     }
 
     // Password confirmation
-    if (newPassword !== confirmPassword) {
+    if (
+      newPassword !== confirmPassword
+    ) {
       setError(
-        "New password and confirmation password do not match."
+        t(
+          "settings.account.errors.passwordMismatch"
+        )
       );
       return;
     }
@@ -241,7 +294,9 @@ function Settings() {
     // Logged-in account validation
     if (!storedUser.id) {
       setError(
-        "Your account information could not be found. Please log in again."
+        t(
+          "settings.account.errors.accountNotFound"
+        )
       );
       return;
     }
@@ -249,23 +304,26 @@ function Settings() {
     try {
       setSavingAccount(true);
 
+      const updateData = {
+        full_name:
+          storedUser.full_name || "",
+
+        username: cleanUsername,
+
+        password: newPassword,
+
+        role:
+          storedUser.role || "admin",
+      };
+
       const response = await axios.put(
         `/api/admins/${storedUser.id}`,
-        {
-          full_name:
-            storedUser.full_name || "",
-
-          username: cleanUsername,
-
-          password: newPassword,
-
-          role: storedUser.role || "admin",
-        },
-        axiosConfig
+        updateData,
+        getAxiosConfig()
       );
 
       if (response.data.success) {
-        // Never store password in localStorage
+        // Never store password in localStorage.
         const updatedUser = {
           ...storedUser,
           username: cleanUsername,
@@ -281,7 +339,16 @@ function Settings() {
         setConfirmPassword("");
 
         setSuccess(
-          "Account settings updated successfully."
+          t(
+            "settings.account.messages.updated"
+          )
+        );
+      } else {
+        setError(
+          response.data?.message ||
+            t(
+              "settings.account.errors.update"
+            )
         );
       }
     } catch (err) {
@@ -292,7 +359,9 @@ function Settings() {
 
       setError(
         err.response?.data?.message ||
-          "Failed to update account settings."
+          t(
+            "settings.account.errors.update"
+          )
       );
     } finally {
       setSavingAccount(false);
@@ -346,7 +415,7 @@ function Settings() {
     return (
       <div className="page">
         <div className="loading">
-          Loading settings...
+          {t("settings.loading")}
         </div>
       </div>
     );
@@ -358,35 +427,38 @@ function Settings() {
 
   return (
     <div className="page settings-page">
-
-      {/* =================================================
-          PAGE HEADER
-      ================================================== */}
+      {/* PAGE HEADER */}
 
       <div className="page-header">
         <div>
-          <h1>Settings</h1>
+          <h1>
+            {t("settings.title")}
+          </h1>
 
           <p>
-            Manage system settings and your account.
+            {t("settings.description")}
           </p>
         </div>
       </div>
 
-      {/* =================================================
-          GLOBAL MESSAGES
-      ================================================== */}
+      {/* GLOBAL MESSAGES */}
 
       {error && (
         <div className="error-message">
-          <span>⚠️</span>
+          <span aria-hidden="true">
+            {"!"}
+          </span>
+
           <span>{error}</span>
         </div>
       )}
 
       {success && (
         <div className="success-message">
-          <span>✓</span>
+          <span aria-hidden="true">
+            {"\u2713"}
+          </span>
+
           <span>{success}</span>
         </div>
       )}
@@ -396,63 +468,71 @@ function Settings() {
       ================================================== */}
 
       <div className="section-card settings-card">
-
         <div className="section-header settings-section-header">
-
           <div>
             <div className="settings-title-row">
-
-              <span className="settings-icon">
-                👤
+              <span
+                className="settings-icon"
+                aria-hidden="true"
+              >
+                {"\u{1F464}"}
               </span>
 
-              <h2>Account Settings</h2>
+              <h2>
+                {t(
+                  "settings.account.title"
+                )}
+              </h2>
             </div>
 
             <p>
-              Update your administrator username
-              and password.
+              {t(
+                "settings.account.description"
+              )}
             </p>
           </div>
-
         </div>
 
         <form
           onSubmit={handleSaveAccount}
           className="settings-form"
         >
-
           {/* USERNAME */}
 
           <div className="form-group">
-
             <label htmlFor="username">
-              Username
+              {t(
+                "settings.account.username"
+              )}
             </label>
 
             <input
               id="username"
               type="text"
               value={username}
-              onChange={(e) =>
-                setUsername(e.target.value)
+              onChange={(event) =>
+                setUsername(
+                  event.target.value
+                )
               }
-              placeholder="Enter username"
+              placeholder={t(
+                "settings.account.usernamePlaceholder"
+              )}
               autoComplete="username"
+              disabled={savingAccount}
             />
-
           </div>
 
           {/* NEW PASSWORD */}
 
           <div className="form-group">
-
             <label htmlFor="new-password">
-              New Password
+              {t(
+                "settings.account.newPassword"
+              )}
             </label>
 
             <div className="password-input-wrapper">
-
               <input
                 id="new-password"
                 type={
@@ -461,47 +541,60 @@ function Settings() {
                     : "password"
                 }
                 value={newPassword}
-                onChange={(e) =>
-                  setNewPassword(e.target.value)
+                onChange={(event) =>
+                  setNewPassword(
+                    event.target.value
+                  )
                 }
-                placeholder="Enter new password"
+                placeholder={t(
+                  "settings.account.newPasswordPlaceholder"
+                )}
                 autoComplete="new-password"
+                disabled={savingAccount}
               />
 
               <button
                 type="button"
                 className="password-toggle"
                 onClick={() =>
-                  setShowPassword(!showPassword)
+                  setShowPassword(
+                    (current) => !current
+                  )
                 }
+                disabled={savingAccount}
                 aria-label={
                   showPassword
-                    ? "Hide password"
-                    : "Show password"
+                    ? t(
+                        "settings.account.hidePassword"
+                      )
+                    : t(
+                        "settings.account.showPassword"
+                      )
                 }
               >
-                {showPassword ? "🙈" : "👁"}
+                {showPassword
+                  ? "\u{1F648}"
+                  : "\u{1F441}\uFE0F"}
               </button>
-
             </div>
 
             <small className="form-help">
-              Leave blank if you only want to
-              change the username.
+              {t(
+                "settings.account.passwordHelp"
+              )}
             </small>
-
           </div>
 
           {/* CONFIRM PASSWORD */}
 
           <div className="form-group">
-
             <label htmlFor="confirm-password">
-              Confirm New Password
+              {t(
+                "settings.account.confirmPassword"
+              )}
             </label>
 
             <div className="password-input-wrapper">
-
               <input
                 id="confirm-password"
                 type={
@@ -510,11 +603,16 @@ function Settings() {
                     : "password"
                 }
                 value={confirmPassword}
-                onChange={(e) =>
-                  setConfirmPassword(e.target.value)
+                onChange={(event) =>
+                  setConfirmPassword(
+                    event.target.value
+                  )
                 }
-                placeholder="Confirm new password"
+                placeholder={t(
+                  "settings.account.confirmPasswordPlaceholder"
+                )}
                 autoComplete="new-password"
+                disabled={savingAccount}
               />
 
               <button
@@ -522,42 +620,45 @@ function Settings() {
                 className="password-toggle"
                 onClick={() =>
                   setShowConfirmPassword(
-                    !showConfirmPassword
+                    (current) => !current
                   )
                 }
+                disabled={savingAccount}
                 aria-label={
                   showConfirmPassword
-                    ? "Hide password"
-                    : "Show password"
+                    ? t(
+                        "settings.account.hidePassword"
+                      )
+                    : t(
+                        "settings.account.showPassword"
+                      )
                 }
               >
                 {showConfirmPassword
-                  ? "🙈"
-                  : "👁"}
+                  ? "\u{1F648}"
+                  : "\u{1F441}\uFE0F"}
               </button>
-
             </div>
-
           </div>
 
           {/* ACCOUNT BUTTON */}
 
           <div className="settings-actions">
-
             <button
               type="submit"
               className="save-button"
               disabled={savingAccount}
             >
               {savingAccount
-                ? "Saving..."
-                : "Update Account"}
+                ? t(
+                    "settings.common.saving"
+                  )
+                : t(
+                    "settings.account.updateButton"
+                  )}
             </button>
-
           </div>
-
         </form>
-
       </div>
 
       {/* =================================================
@@ -565,176 +666,190 @@ function Settings() {
       ================================================== */}
 
       <div className="section-card settings-card">
-
         <div className="section-header settings-section-header">
-
           <div>
             <div className="settings-title-row">
-
-              <span className="settings-icon">
-                💰
+              <span
+                className="settings-icon"
+                aria-hidden="true"
+              >
+                {"\u{1F4B0}"}
               </span>
 
               <h2>
-                Weekly Contribution
+                {t(
+                  "settings.contribution.title"
+                )}
               </h2>
-
             </div>
 
             <p>
-              Set the amount members should contribute
-              every Friday.
+              {t(
+                "settings.contribution.description"
+              )}
             </p>
           </div>
-
         </div>
 
         <form
           onSubmit={handleSaveAmount}
           className="settings-form"
         >
-
           <div className="form-group">
-
             <label htmlFor="contribution-amount">
-              Weekly Contribution Amount
+              {t(
+                "settings.contribution.amountLabel"
+              )}
             </label>
 
             <div className="amount-input">
-
               <input
                 id="contribution-amount"
                 type="number"
                 min="1"
                 step="0.01"
                 value={amount}
-                onChange={(e) =>
-                  setAmount(e.target.value)
+                onChange={(event) =>
+                  setAmount(
+                    event.target.value
+                  )
                 }
-                placeholder="Enter amount"
+                placeholder={t(
+                  "settings.contribution.amountPlaceholder"
+                )}
+                disabled={savingAmount}
               />
 
               <span>ETB</span>
-
             </div>
 
+            <small className="form-help">
+              {t(
+                "settings.contribution.amountHelp"
+              )}
+            </small>
           </div>
 
           <div className="settings-actions">
-
             <button
               type="submit"
               className="save-button"
               disabled={savingAmount}
             >
               {savingAmount
-                ? "Saving..."
-                : "Save Changes"}
+                ? t(
+                    "settings.common.saving"
+                  )
+                : t(
+                    "settings.common.saveChanges"
+                  )}
             </button>
-
           </div>
-
         </form>
-
       </div>
 
       {/* =================================================
           CONTRIBUTION MANAGEMENT
       ================================================== */}
 
-      {storedUser.role === "super_admin" && (
+      {storedUser.role ===
+        "super_admin" && (
         <div className="danger-zone-card">
-
           {/* HEADER */}
 
           <div className="danger-zone-header">
-
-            <div className="danger-zone-icon">
-              🗑️
+            <div
+              className="danger-zone-icon"
+              aria-hidden="true"
+            >
+              {"\u{1F5D1}\uFE0F"}
             </div>
 
             <div className="danger-zone-heading">
-
               <div className="danger-zone-title-row">
-
                 <h2>
-                  Contribution Management
+                  {t(
+                    "settings.danger.title"
+                  )}
                 </h2>
 
                 <span className="danger-zone-badge">
-                  Super Admin
+                  {t(
+                    "settings.danger.superAdminOnly"
+                  )}
                 </span>
-
               </div>
 
               <p>
-                Manage contribution records and
-                prepare the system for a new
-                contribution period.
+                {t(
+                  "settings.danger.description"
+                )}
               </p>
-
             </div>
-
           </div>
 
           {/* CONTENT */}
 
           <div className="danger-zone-content">
-
             <div className="danger-zone-warning">
-
-              <div className="warning-icon">
-                ⚠️
+              <div
+                className="warning-icon"
+                aria-hidden="true"
+              >
+                {"!"}
               </div>
 
               <div className="warning-text">
-
                 <strong>
-                  Clear old contributions
+                  {t(
+                    "settings.danger.warningTitle"
+                  )}
                 </strong>
 
                 <p>
-                  This will permanently remove all
-                  existing contribution records
-                  from the system.
+                  {t(
+                    "settings.danger.warningDescription"
+                  )}
                 </p>
-
               </div>
-
             </div>
 
             <div className="danger-zone-action">
-
               <div className="danger-zone-info">
-
                 <span className="danger-zone-dot"></span>
 
                 <span>
-                  This action cannot be undone
+                  {t(
+                    "settings.danger.irreversible"
+                  )}
                 </span>
-
               </div>
 
               <button
                 type="button"
-                onClick={openClearModal}
+                onClick={
+                  openClearModal
+                }
                 className="danger-button"
-                disabled={clearingContributions}
+                disabled={
+                  clearingContributions
+                }
               >
-                <span className="danger-button-icon">
-                  🗑️
+                <span
+                  className="danger-button-icon"
+                  aria-hidden="true"
+                >
+                  {"\u{1F5D1}\uFE0F"}
                 </span>
 
                 <span>
-                  Clear Old Contributions
+                  {t(
+                    "settings.danger.clearButton"
+                  )}
                 </span>
-
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
 
@@ -745,89 +860,103 @@ function Settings() {
       {showClearModal && (
         <div
           className="clear-modal-overlay"
-          onMouseDown={(e) => {
+          onMouseDown={(event) => {
             if (
-              e.target === e.currentTarget &&
+              event.target ===
+                event.currentTarget &&
               !clearingContributions
             ) {
               closeClearModal();
             }
           }}
         >
-
           <div
             className="clear-modal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="clear-modal-title"
           >
-
-            <div className="clear-modal-icon">
-              🗑️
+            <div
+              className="clear-modal-icon"
+              aria-hidden="true"
+            >
+              {"\u{1F5D1}\uFE0F"}
             </div>
 
             <h2 id="clear-modal-title">
-              Clear all contributions?
+              {t(
+                "settings.modal.title"
+              )}
             </h2>
 
             <p className="clear-modal-description">
-              You are about to permanently delete
-              all contribution records from the
-              system.
+              {t(
+                "settings.modal.description"
+              )}
             </p>
 
             <div className="clear-modal-warning">
-              <span>⚠️</span>
+              <span aria-hidden="true">
+                {"!"}
+              </span>
 
               <div>
                 <strong>
-                  This action cannot be undone.
+                  {t(
+                    "settings.modal.warningTitle"
+                  )}
                 </strong>
 
                 <p>
-                  Make sure you have completed any
-                  reports or records you need before
-                  continuing.
+                  {t(
+                    "settings.modal.warningDescription"
+                  )}
                 </p>
               </div>
             </div>
 
             <div className="clear-modal-actions">
-
               <button
                 type="button"
                 className="modal-cancel-button"
-                onClick={closeClearModal}
-                disabled={clearingContributions}
+                onClick={
+                  closeClearModal
+                }
+                disabled={
+                  clearingContributions
+                }
               >
-                Cancel
+                {t(
+                  "settings.common.cancel"
+                )}
               </button>
 
               <button
                 type="button"
                 className="modal-danger-button"
-                onClick={clearContributions}
-                disabled={clearingContributions}
+                onClick={
+                  clearContributions
+                }
+                disabled={
+                  clearingContributions
+                }
               >
-
                 <span>
                   {clearingContributions
-                    ? "Clearing..."
-                    : "🗑️ Clear Records"}
+                    ? t(
+                        "settings.modal.clearing"
+                      )
+                    : t(
+                        "settings.modal.confirm"
+                      )}
                 </span>
-
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 }
 
 export default Settings;
-

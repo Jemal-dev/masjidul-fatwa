@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import "./i18n";
 import {
 ResponsiveContainer,
 LineChart,
@@ -485,1079 +487,1424 @@ PUBLIC HOME
 ========================================================= */
 
 function PublicHome({
-dashboard,
-loading,
-error,
-onAdmin,
-onNavigate,
+  dashboard,
+  loading,
+  error,
+  onAdmin,
+  onNavigate,
 }) {
-const activeMembers =
-dashboard?.total_active_members ?? 0;
+  const { t, i18n } = useTranslation();
 
-const totalCollection =
-dashboard?.total_collection ?? 0;
+  const [publicMenuOpen, setPublicMenuOpen] =
+    useState(false);
 
-const weeklyCollection =
-dashboard?.weekly_collection ?? 0;
+  const changeLanguage = (language) => {
+    i18n.changeLanguage(language);
+    setPublicMenuOpen(false);
+  };
 
-const monthlyCollection =
-dashboard?.monthly_collection ?? 0;
+  const handlePublicNavigate = (page) => {
+    setPublicMenuOpen(false);
+    onNavigate(page);
+  };
 
-const statValue = (
-value,
-suffix = ""
-) =>
-loading
-? "..."
-: `${value ?? 0}${suffix}`;
+  const handleAdminFromMenu = () => {
+    setPublicMenuOpen(false);
+    onAdmin();
+  };
 
-const formatMoney = (value) =>
-Number(value || 0).toLocaleString(
-"en-US",
-{
-maximumFractionDigits: 2,
-}
-);
+  const activeMembers =
+    dashboard?.total_active_members ?? 0;
 
-return ( <div className="public-site"> <header className="public-header">
-<button
-className="brand"
-onClick={() =>
-onNavigate("home")
-}
-> <span className="brand-mark">
-{"\u{262A}"} </span>
+  const totalCollection =
+    dashboard?.total_collection ?? 0;
 
+  const weeklyCollection =
+    dashboard?.weekly_collection ?? 0;
 
-      <span>
-        <strong>
-          MASJIDUL-FATWA
-        </strong>
+  const monthlyCollection =
+    dashboard?.monthly_collection ?? 0;
 
-        <small>SHABAB</small>
-      </span>
-    </button>
+  const statValue = (
+    value,
+    suffix = ""
+  ) =>
+    loading
+      ? "..."
+      : `${value ?? 0}${suffix}`;
 
-    <nav className="public-nav">
+  const formatMoney = (value) =>
+    Number(value || 0).toLocaleString(
+      "en-US",
+      {
+        maximumFractionDigits: 2,
+      }
+    );
+
+  const currentLanguage =
+    i18n.resolvedLanguage ||
+    i18n.language ||
+    "en";
+
+  return (
+    <div className="public-site">
+      <header className="public-header">
+        <button
+          className="brand"
+          onClick={() =>
+            handlePublicNavigate("home")
+          }
+        >
+          <span className="brand-mark">
+            {"\u{262A}"}
+          </span>
+
+          <span>
+            <strong>
+              MASJIDUL-FATWA
+            </strong>
+
+            <small>SHABAB</small>
+          </span>
+        </button>
+
+        <button
+          className="public-menu-button"
+          onClick={() =>
+            setPublicMenuOpen(
+              (value) => !value
+            )
+          }
+          aria-label={
+            publicMenuOpen
+              ? "Close menu"
+              : "Open menu"
+          }
+          aria-expanded={
+            publicMenuOpen
+          }
+        >
+          {"\u{2630}"}
+        </button>
+
+        <nav className="public-nav">
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "home"
+              )
+            }
+          >
+            {t("nav.home")}
+          </button>
+
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "about"
+              )
+            }
+          >
+            {t("nav.about")}
+          </button>
+
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "services"
+              )
+            }
+          >
+            {t("nav.services")}
+          </button>
+
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "events"
+              )
+            }
+          >
+            {t("nav.activities")}
+          </button>
+
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "gallery"
+              )
+            }
+          >
+            {t("nav.gallery")}
+          </button>
+
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "contact"
+              )
+            }
+          >
+            {t("nav.contact")}
+          </button>
+        </nav>
+
+            <div className="public-desktop-language">
       <button
+        className={
+          currentLanguage === "en"
+            ? "active"
+            : ""
+        }
         onClick={() =>
-          onNavigate("home")
+          changeLanguage("en")
         }
       >
-        Home
+        English
       </button>
 
       <button
+        className={
+          currentLanguage === "om"
+            ? "active"
+            : ""
+        }
         onClick={() =>
-          onNavigate("about")
+          changeLanguage("om")
         }
       >
-        About
+        Afaan Oromoo
       </button>
 
       <button
+        className={
+          currentLanguage === "am"
+            ? "active"
+            : ""
+        }
         onClick={() =>
-          onNavigate("services")
+          changeLanguage("am")
         }
       >
-        Services
+        አማርኛ
       </button>
 
       <button
+        className={
+          currentLanguage === "ar"
+            ? "active"
+            : ""
+        }
         onClick={() =>
-          onNavigate("events")
+          changeLanguage("ar")
         }
       >
-        Activities
+        العربية
       </button>
-
-      <button
-        onClick={() =>
-          onNavigate("gallery")
-        }
-      >
-        Gallery
-      </button>
-
-      <button
-        onClick={() =>
-          onNavigate("contact")
-        }
-      >
-        Contact
-      </button>
-    </nav>
+    </div>
 
     <button
       className="header-admin-btn"
       onClick={onAdmin}
     >
-      Admin Login
+      {t("nav.adminLogin")}
     </button>
-  </header>
+      </header>
 
-  <main>
-    {/* =================================================
-        HERO
-    ================================================= */}
+      {publicMenuOpen && (
+        <button
+          className="public-mobile-overlay"
+          onClick={() =>
+            setPublicMenuOpen(false)
+          }
+          aria-label="Close menu"
+        />
+      )}
 
-    <section
-      className="hero-section"
-      id="home"
-    >
-      <div className="hero-pattern" />
+      <aside
+        className={`public-mobile-menu ${
+          publicMenuOpen ? "open" : ""
+        }`}
+      >
+        <div className="public-mobile-menu-header">
+          <div>
+            <strong>
+              MASJIDUL-FATWA
+            </strong>
 
-      <div className="hero-content">
-        <div className="eyebrow">
-          <span>
-            {"\u{2726}"}
-          </span>{" "}
-          Youth Contribution &
-          Management
+            <span>SHABAB</span>
+          </div>
+
+          <button
+            className="public-mobile-close"
+            onClick={() =>
+              setPublicMenuOpen(false)
+            }
+            aria-label="Close menu"
+          >
+            {"\u{2715}"}
+          </button>
         </div>
 
-        <h1>
-          Building Community
-          <span>
-            {" "}
-            Through Contribution &
-            Impact
-          </span>
-        </h1>
-
-        <p>
-          A transparent digital platform
-          for Masjidul-Fatwa Shabab to
-          manage members, record weekly
-          contributions, and keep clear
-          community records.
-        </p>
-
-        <div className="hero-actions">
+        <nav className="public-mobile-nav">
           <button
-            className="primary-btn"
             onClick={() =>
-              onNavigate("services")
+              handlePublicNavigate(
+                "home"
+              )
             }
           >
-            Explore Our Services{" "}
-            <span>
-              {"\u{2192}"}
-            </span>
+            {t("nav.home")}
           </button>
 
           <button
-            className="secondary-btn"
-            onClick={onAdmin}
+            onClick={() =>
+              handlePublicNavigate(
+                "about"
+              )
+            }
           >
-            Admin Login
+            {t("nav.about")}
           </button>
-        </div>
 
-        <div className="hero-note">
-          <span>
-            {"\u{2713}"}
-          </span>{" "}
-          Organized records
-          &nbsp;{"\u{2022}"}&nbsp;
-          <span>
-            {"\u{2713}"}
-          </span>{" "}
-          Transparent contributions
-          &nbsp;{"\u{2022}"}&nbsp;
-          <span>
-            {"\u{2713}"}
-          </span>{" "}
-          Community focused
-        </div>
-      </div>
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "services"
+              )
+            }
+          >
+            {t("nav.services")}
+          </button>
 
-      <div className="hero-visual">
-        <div className="glow glow-one" />
-        <div className="glow glow-two" />
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "events"
+              )
+            }
+          >
+            {t("nav.activities")}
+          </button>
 
-        <div className="community-card main-community-card">
-          <div className="community-icon">
-            {"\u{1F54C}"}
-          </div>
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "gallery"
+              )
+            }
+          >
+            {t("nav.gallery")}
+          </button>
 
-          <div>
-            <span>
-              MASJIDUL-FATWA
-            </span>
+          <button
+            onClick={() =>
+              handlePublicNavigate(
+                "contact"
+              )
+            }
+          >
+            {t("nav.contact")}
+          </button>
 
-            <strong>
-              SHABAB
-            </strong>
+          <button
+            onClick={
+              handleAdminFromMenu
+            }
+          >
+            {t("nav.adminLogin")}
+          </button>
+        </nav>
 
-            <small>
-              Youth Contribution &
-              Management System
-            </small>
-          </div>
-        </div>
-
-        <div className="floating-card card-members">
-          <span>
-            {"\u{1F465}"}
+        <div className="public-language-section">
+          <span className="public-language-title">
+            {t("language.title")}
           </span>
 
-          <div>
-            <small>
-              Active Members
-            </small>
-
-            <strong>
-              {statValue(
-                activeMembers
-              )}
-            </strong>
-          </div>
-        </div>
-
-        <div className="floating-card card-money">
-          <span>
-            {"\u{1F4B0}"}
-          </span>
-
-          <div>
-            <small>
-              Total Collection
-            </small>
-
-            <strong>
-              {loading
-                ? "..."
-                : `${formatMoney(
-                    totalCollection
-                  )} ETB`}
-            </strong>
-          </div>
-        </div>
-
-        <div className="hero-ring ring-one" />
-        <div className="hero-ring ring-two" />
-      </div>
-    </section>
-
-    {error && (
-      <div className="public-error">
-        {error}
-      </div>
-    )}
-
-    {/* =================================================
-        IMPACT
-    ================================================= */}
-
-    <section className="impact-strip">
-      <div className="section-kicker">
-        Our Collective Impact
-      </div>
-
-      <h2>
-        Real numbers from our
-        contribution system
-      </h2>
-
-      <div className="impact-stats">
-        <div>
-          <strong>
-            {statValue(
-              activeMembers,
-              "+"
-            )}
-          </strong>
-
-          <span>
-            Active Members
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            {loading
-              ? "..."
-              : `${formatMoney(
-                  weeklyCollection
-                )} ETB`}
-          </strong>
-
-          <span>
-            This Week
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            {loading
-              ? "..."
-              : `${formatMoney(
-                  monthlyCollection
-                )} ETB`}
-          </strong>
-
-          <span>
-            This Month
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            {loading
-              ? "..."
-              : `${formatMoney(
-                  totalCollection
-                )} ETB`}
-          </strong>
-
-          <span>
-            Total Collection
-          </span>
-        </div>
-      </div>
-    </section>
-
-    {/* =================================================
-        ABOUT
-    ================================================= */}
-
-    <section
-      className="public-section about-section"
-      id="about"
-    >
-      <div className="section-heading">
-        <span className="section-kicker">
-          Who We Are
-        </span>
-
-        <h2>
-          A community built on trust,
-          responsibility and service.
-        </h2>
-
-        <p>
-          Masjidul-Fatwa Shabab is a
-          youth community that values
-          organized contribution,
-          cooperation and accountability.
-          This platform helps turn
-          paper-based records into a clear
-          digital system.
-        </p>
-      </div>
-
-      <div className="about-grid">
-        <div className="about-visual">
-          <div className="about-emblem">
-            {"\u{262A}"}
-          </div>
-
-          <div className="about-label">
-            Community {"\u{2022}"} Contribution {"\u{2022}"}
-            Impact
-          </div>
-        </div>
-
-        <div className="about-points">
-          <article>
-            <span>01</span>
-
-            <div>
-              <h3>
-                Transparent Records
-              </h3>
-
-              <p>
-                Contributions are stored
-                digitally so administrators
-                can review records without
-                depending on paper
-                notebooks.
-              </p>
-            </div>
-          </article>
-
-          <article>
-            <span>02</span>
-
-            <div>
-              <h3>
-                Responsible Management
-              </h3>
-
-              <p>
-                Members, payments and
-                reports are organized in
-                one management system.
-              </p>
-            </div>
-          </article>
-
-          <article>
-            <span>03</span>
-
-            <div>
-              <h3>
-                Community Impact
-              </h3>
-
-              <p>
-                Clear records make it
-                easier to understand
-                participation and the
-                resources collected by
-                the Shabab.
-              </p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    {/* =================================================
-        SERVICES
-    ================================================= */}
-
-    <section
-      className="public-section soft-section"
-      id="services"
-    >
-      <div className="section-heading center">
-        <span className="section-kicker">
-          Our Services
-        </span>
-
-        <h2>
-          Everything the Shabab team
-          needs in one place.
-        </h2>
-
-        <p>
-          The public website and
-          management system work together
-          to keep community administration
-          simple.
-        </p>
-      </div>
-
-      <div className="service-grid">
-        {[
-          [
-            "\u{1F465}",
-            "Member Management",
-            "Add, edit, activate and manage Shabab member information.",
-          ],
-          [
-            "\u{1F4B0}",
-            "Contribution Recording",
-            "Record weekly contributions and prevent duplicate records.",
-          ],
-          [
-            "\u{1F4CA}",
-            "Weekly Reports",
-            "See paid members, unpaid members and weekly collection totals.",
-          ],
-          [
-            "\u{1F4C5}",
-            "Monthly Reports",
-            "Review monthly contribution records and member totals.",
-          ],
-          [
-            "\u{1F916}",
-            "Telegram Bot",
-            "Manage contribution tasks and reports through the Shabab Telegram bot.",
-          ],
-          [
-            "\u{1F5A8}\u{FE0F}",
-            "Printable Reports",
-            "Create clean reports suitable for saving and printing.",
-          ],
-        ].map(
-          ([icon, title, text]) => (
-            <article
-              className="service-card"
-              key={title}
+          <div className="public-language-list">
+            <button
+              className={
+                currentLanguage === "en"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                changeLanguage("en")
+              }
             >
-              <div className="service-icon">
-                {icon}
-              </div>
+              {t("language.english")}
+            </button>
 
-              <h3>{title}</h3>
+            <button
+              className={
+                currentLanguage === "om"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                changeLanguage("om")
+              }
+            >
+              {t("language.oromo")}
+            </button>
 
-              <p>{text}</p>
+            <button
+              className={
+                currentLanguage === "am"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                changeLanguage("am")
+              }
+            >
+              {t("language.amharic")}
+            </button>
 
+            <button
+              className={
+                currentLanguage === "ar"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                changeLanguage("ar")
+              }
+            >
+              {t("language.arabic")}
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        {/* =================================================
+            HERO
+        ================================================= */}
+
+        <section
+          className="hero-section"
+          id="home"
+        >
+          <div className="hero-pattern" />
+
+          <div className="hero-content">
+            <div className="eyebrow">
+              <span>
+                {"\u{2726}"}
+              </span>{" "}
+              {t("hero.eyebrow")}
+            </div>
+
+            <h1>
+              {t("hero.title")}
+              <span>
+                {" "}
+                {t("hero.titleHighlight")}
+              </span>
+            </h1>
+
+            <p>
+              {t("hero.description")}
+            </p>
+
+            <div className="hero-actions">
               <button
-                onClick={onAdmin}
+                className="primary-btn"
+                onClick={() =>
+                  handlePublicNavigate(
+                    "services"
+                  )
+                }
               >
-                Explore{" "}
+                {t(
+                  "hero.exploreServices"
+                )}{" "}
                 <span>
                   {"\u{2192}"}
                 </span>
               </button>
-            </article>
-          )
-        )}
-      </div>
-    </section>
 
-    {/* =================================================
-        ACHIEVEMENTS
-    ================================================= */}
+              <button
+                className="secondary-btn"
+                onClick={onAdmin}
+              >
+                {t("hero.adminLogin")}
+              </button>
+            </div>
 
-    <section className="public-section achievements-section">
-      <div className="section-heading center">
-        <span className="section-kicker">
-          Our Achievements
-        </span>
+            <div className="hero-note">
+              <span>
+                {"\u{2713}"}
+              </span>{" "}
+              {t(
+                "hero.organizedRecords"
+              )}
+              &nbsp;{"\u{2022}"}&nbsp;
+              <span>
+                {"\u{2713}"}
+              </span>{" "}
+              {t(
+                "hero.transparentContributions"
+              )}
+              &nbsp;{"\u{2022}"}&nbsp;
+              <span>
+                {"\u{2713}"}
+              </span>{" "}
+              {t(
+                "hero.communityFocused"
+              )}
+            </div>
+          </div>
 
-        <h2>
-          The system reflects the work
-          of our community.
-        </h2>
-      </div>
+          <div className="hero-visual">
+            <div className="glow glow-one" />
+            <div className="glow glow-two" />
 
-      <div className="achievement-grid">
-        <div className="achievement-card">
-          <strong>
-            {statValue(
-              activeMembers,
-              "+"
-            )}
-          </strong>
-
-          <span>
-            Active Shabab Members
-          </span>
-        </div>
-
-        <div className="achievement-card">
-          <strong>
-            {loading
-              ? "..."
-              : `${formatMoney(
-                  totalCollection
-                )} ETB`}
-          </strong>
-
-          <span>
-            Total Recorded Collection
-          </span>
-        </div>
-
-        <div className="achievement-card">
-          <strong>
-            {loading
-              ? "..."
-              : `${formatMoney(
-                  weeklyCollection
-                )} ETB`}
-          </strong>
-
-          <span>
-            Current Weekly Collection
-          </span>
-        </div>
-
-        <div className="achievement-card">
-          <strong>
-            {loading
-              ? "..."
-              : `${formatMoney(
-                  monthlyCollection
-                )} ETB`}
-          </strong>
-
-          <span>
-            Current Monthly Collection
-          </span>
-        </div>
-      </div>
-    </section>
-
-    {/* =================================================
-        WHY
-    ================================================= */}
-
-    <section className="public-section why-section">
-      <div className="section-heading">
-        <span className="section-kicker">
-          Why This Platform
-        </span>
-
-        <h2>
-          Designed to make contribution
-          management clearer.
-        </h2>
-      </div>
-
-      <div className="why-list">
-        {[
-          [
-            "\u{2713}",
-            "Simple record keeping",
-            "Move weekly records from paper into a structured digital database.",
-          ],
-          [
-            "\u{25C8}",
-            "Better accountability",
-            "Reports make contribution activity easier for administrators to review.",
-          ],
-          [
-            "\u{2726}",
-            "Fewer duplicate records",
-            "The contribution workflow checks for duplicate entries for the same date.",
-          ],
-          [
-            "\u{2197}",
-            "Accessible information",
-            "Authorized administrators can use the website or Telegram bot.",
-          ],
-        ].map(
-          ([icon, title, text]) => (
-            <article key={title}>
-              <span>{icon}</span>
+            <div className="community-card main-community-card">
+              <div className="community-icon">
+                {"\u{1F54C}"}
+              </div>
 
               <div>
-                <h3>{title}</h3>
+                <span>
+                  MASJIDUL-FATWA
+                </span>
 
-                <p>{text}</p>
+                <strong>
+                  SHABAB
+                </strong>
+
+                <small>
+                  {t("hero.systemName")}
+                </small>
+              </div>
+            </div>
+
+            <div className="floating-card card-members">
+              <span>
+                {"\u{1F465}"}
+              </span>
+
+              <div>
+                <small>
+                  {t(
+                    "hero.activeMembers"
+                  )}
+                </small>
+
+                <strong>
+                  {statValue(
+                    activeMembers
+                  )}
+                </strong>
+              </div>
+            </div>
+
+            <div className="floating-card card-money">
+              <span>
+                {"\u{1F4B0}"}
+              </span>
+
+              <div>
+                <small>
+                  {t(
+                    "hero.totalCollection"
+                  )}
+                </small>
+
+                <strong>
+                  {loading
+                    ? "..."
+                    : `${formatMoney(
+                        totalCollection
+                      )} ETB`}
+                </strong>
+              </div>
+            </div>
+
+            <div className="hero-ring ring-one" />
+            <div className="hero-ring ring-two" />
+          </div>
+        </section>
+
+        {error && (
+          <div className="public-error">
+            {error}
+          </div>
+        )}
+
+        {/* =================================================
+            IMPACT
+        ================================================= */}
+
+        <section className="impact-strip">
+          <div className="section-kicker">
+            {t("impact.kicker")}
+          </div>
+
+          <h2>
+            {t("impact.title")}
+          </h2>
+
+          <div className="impact-stats">
+            <div>
+              <strong>
+                {statValue(
+                  activeMembers,
+                  "+"
+                )}
+              </strong>
+
+              <span>
+                {t(
+                  "impact.activeMembers"
+                )}
+              </span>
+            </div>
+
+            <div>
+              <strong>
+                {loading
+                  ? "..."
+                  : `${formatMoney(
+                      weeklyCollection
+                    )} ETB`}
+              </strong>
+
+              <span>
+                {t("impact.thisWeek")}
+              </span>
+            </div>
+
+            <div>
+              <strong>
+                {loading
+                  ? "..."
+                  : `${formatMoney(
+                      monthlyCollection
+                    )} ETB`}
+              </strong>
+
+              <span>
+                {t("impact.thisMonth")}
+              </span>
+            </div>
+
+            <div>
+              <strong>
+                {loading
+                  ? "..."
+                  : `${formatMoney(
+                      totalCollection
+                    )} ETB`}
+              </strong>
+
+              <span>
+                {t(
+                  "impact.totalCollection"
+                )}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* =================================================
+            ABOUT
+        ================================================= */}
+
+        <section
+          className="public-section about-section"
+          id="about"
+        >
+          <div className="section-heading">
+            <span className="section-kicker">
+              {t("about.kicker")}
+            </span>
+
+            <h2>
+              {t("about.title")}
+            </h2>
+
+            <p>
+              {t("about.description")}
+            </p>
+          </div>
+
+          <div className="about-grid">
+            <div className="about-visual">
+              <div className="about-emblem">
+                {"\u{262A}"}
+              </div>
+
+              <div className="about-label">
+                {t("about.label")}
+              </div>
+            </div>
+
+            <div className="about-points">
+              <article>
+                <span>01</span>
+
+                <div>
+                  <h3>
+                    {t(
+                      "about.points.transparentRecords.title"
+                    )}
+                  </h3>
+
+                  <p>
+                    {t(
+                      "about.points.transparentRecords.description"
+                    )}
+                  </p>
+                </div>
+              </article>
+
+              <article>
+                <span>02</span>
+
+                <div>
+                  <h3>
+                    {t(
+                      "about.points.responsibleManagement.title"
+                    )}
+                  </h3>
+
+                  <p>
+                    {t(
+                      "about.points.responsibleManagement.description"
+                    )}
+                  </p>
+                </div>
+              </article>
+
+              <article>
+                <span>03</span>
+
+                <div>
+                  <h3>
+                    {t(
+                      "about.points.communityImpact.title"
+                    )}
+                  </h3>
+
+                  <p>
+                    {t(
+                      "about.points.communityImpact.description"
+                    )}
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* =================================================
+            SERVICES
+        ================================================= */}
+
+        <section
+          className="public-section soft-section"
+          id="services"
+        >
+          <div className="section-heading center">
+            <span className="section-kicker">
+              {t("services.kicker")}
+            </span>
+
+            <h2>
+              {t("services.title")}
+            </h2>
+
+            <p>
+              {t(
+                "services.description"
+              )}
+            </p>
+          </div>
+
+          <div className="service-grid">
+            {[
+              [
+                "\u{1F465}",
+                "memberManagement",
+              ],
+              [
+                "\u{1F4B0}",
+                "contributionRecording",
+              ],
+              [
+                "\u{1F4CA}",
+                "weeklyReports",
+              ],
+              [
+                "\u{1F4C5}",
+                "monthlyReports",
+              ],
+              [
+                "\u{1F916}",
+                "telegramBot",
+              ],
+              [
+                "\u{1F5A8}\u{FE0F}",
+                "printableReports",
+              ],
+            ].map(
+              ([icon, key]) => (
+                <article
+                  className="service-card"
+                  key={key}
+                >
+                  <div className="service-icon">
+                    {icon}
+                  </div>
+
+                  <h3>
+                    {t(
+                      `services.items.${key}.title`
+                    )}
+                  </h3>
+
+                  <p>
+                    {t(
+                      `services.items.${key}.description`
+                    )}
+                  </p>
+
+                  <button
+                    onClick={onAdmin}
+                  >
+                    {t(
+                      "services.explore"
+                    )}{" "}
+                    <span>
+                      {"\u{2192}"}
+                    </span>
+                  </button>
+                </article>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* =================================================
+            ACHIEVEMENTS
+        ================================================= */}
+
+        <section className="public-section achievements-section">
+          <div className="section-heading center">
+            <span className="section-kicker">
+              {t(
+                "achievements.kicker"
+              )}
+            </span>
+
+            <h2>
+              {t(
+                "achievements.title"
+              )}
+            </h2>
+          </div>
+
+          <div className="achievement-grid">
+            <div className="achievement-card">
+              <strong>
+                {statValue(
+                  activeMembers,
+                  "+"
+                )}
+              </strong>
+
+              <span>
+                {t(
+                  "achievements.activeMembers"
+                )}
+              </span>
+            </div>
+
+            <div className="achievement-card">
+              <strong>
+                {loading
+                  ? "..."
+                  : `${formatMoney(
+                      totalCollection
+                    )} ETB`}
+              </strong>
+
+              <span>
+                {t(
+                  "achievements.totalCollection"
+                )}
+              </span>
+            </div>
+
+            <div className="achievement-card">
+              <strong>
+                {loading
+                  ? "..."
+                  : `${formatMoney(
+                      weeklyCollection
+                    )} ETB`}
+              </strong>
+
+              <span>
+                {t(
+                  "achievements.weeklyCollection"
+                )}
+              </span>
+            </div>
+
+            <div className="achievement-card">
+              <strong>
+                {loading
+                  ? "..."
+                  : `${formatMoney(
+                      monthlyCollection
+                    )} ETB`}
+              </strong>
+
+              <span>
+                {t(
+                  "achievements.monthlyCollection"
+                )}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* =================================================
+            WHY
+        ================================================= */}
+
+        <section className="public-section why-section">
+          <div className="section-heading">
+            <span className="section-kicker">
+              {t("why.kicker")}
+            </span>
+
+            <h2>
+              {t("why.title")}
+            </h2>
+          </div>
+
+          <div className="why-list">
+            {[
+              [
+                "\u{2713}",
+                "simpleRecords",
+              ],
+              [
+                "\u{25C8}",
+                "accountability",
+              ],
+              [
+                "\u{2726}",
+                "duplicates",
+              ],
+              [
+                "\u{2197}",
+                "accessible",
+              ],
+            ].map(
+              ([icon, key]) => (
+                <article key={key}>
+                  <span>{icon}</span>
+
+                  <div>
+                    <h3>
+                      {t(
+                        `why.items.${key}.title`
+                      )}
+                    </h3>
+
+                    <p>
+                      {t(
+                        `why.items.${key}.description`
+                      )}
+                    </p>
+                  </div>
+                </article>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* =================================================
+            EVENTS
+        ================================================= */}
+
+        <section
+          className="public-section events-section"
+          id="events"
+        >
+          <div className="section-heading center">
+            <span className="section-kicker">
+              {t("events.kicker")}
+            </span>
+
+            <h2>
+              {t("events.title")}
+            </h2>
+          </div>
+
+          <div className="event-grid">
+            <article className="event-card featured">
+              <div className="event-art green-art">
+                {t("events.friday")}
+              </div>
+
+              <div className="event-body">
+                <span className="event-tag">
+                  {t("events.weekly")}
+                </span>
+
+                <h3>
+                  {t(
+                    "events.fridayContribution"
+                  )}
+                </h3>
+
+                <p>
+                  {t(
+                    "events.fridayDescription"
+                  )}
+                </p>
+
+                <button
+                  onClick={onAdmin}
+                >
+                  {t(
+                    "events.manageContributions"
+                  )}{" "}
+                  {"\u{2192}"}
+                </button>
               </div>
             </article>
-          )
-        )}
-      </div>
-    </section>
 
-    {/* =================================================
-        EVENTS
-    ================================================= */}
+            <article className="event-card">
+              <div className="event-art gold-art">
+                {t("events.report")}
+              </div>
 
-    <section
-      className="public-section events-section"
-      id="events"
-    >
-      <div className="section-heading center">
-        <span className="section-kicker">
-          Community Activities
-        </span>
+              <div className="event-body">
+                <span className="event-tag">
+                  {t("events.monthly")}
+                </span>
 
-        <h2>
-          Keeping the Shabab connected
-          and organized.
-        </h2>
-      </div>
+                <h3>
+                  {t(
+                    "events.monthlyReview"
+                  )}
+                </h3>
 
-      <div className="event-grid">
-        <article className="event-card featured">
-          <div className="event-art green-art">
-            FRIDAY
+                <p>
+                  {t(
+                    "events.monthlyDescription"
+                  )}
+                </p>
+
+                <button
+                  onClick={onAdmin}
+                >
+                  {t(
+                    "events.viewReports"
+                  )}{" "}
+                  {"\u{2192}"}
+                </button>
+              </div>
+            </article>
+
+            <article className="event-card">
+              <div className="event-art navy-art">
+                {t("events.shabab")}
+              </div>
+
+              <div className="event-body">
+                <span className="event-tag">
+                  {t("events.community")}
+                </span>
+
+                <h3>
+                  {t(
+                    "events.shababActivities"
+                  )}
+                </h3>
+
+                <p>
+                  {t(
+                    "events.activitiesDescription"
+                  )}
+                </p>
+
+                <button
+                  onClick={onAdmin}
+                >
+                  {t(
+                    "events.openSystem"
+                  )}{" "}
+                  {"\u{2192}"}
+                </button>
+
+                <button
+                  onClick={() =>
+                    handlePublicNavigate(
+                      "gallery"
+                    )
+                  }
+                >
+                  {t(
+                    "events.viewGallery"
+                  )}{" "}
+                  {"\u{2192}"}
+                </button>
+              </div>
+            </article>
           </div>
+        </section>
 
-          <div className="event-body">
-            <span className="event-tag">
-              Weekly
+        <Gallery />
+
+        {/* =================================================
+            MEMBERSHIP
+        ================================================= */}
+
+        <section className="public-section membership-section">
+          <div className="section-heading center">
+            <span className="section-kicker">
+              {t(
+                "membership.kicker"
+              )}
             </span>
 
-            <h3>
-              Friday Contribution
-            </h3>
+            <h2>
+              {t("membership.title")}
+            </h2>
+          </div>
+
+          <div className="membership-grid">
+            <article>
+              <span>
+                {"\u{1F464}"}
+              </span>
+
+              <h3>
+                {t(
+                  "membership.items.members.title"
+                )}
+              </h3>
+
+              <p>
+                {t(
+                  "membership.items.members.description"
+                )}
+              </p>
+            </article>
+
+            <article>
+              <span>
+                {"\u{1F91D}"}
+              </span>
+
+              <h3>
+                {t(
+                  "membership.items.volunteers.title"
+                )}
+              </h3>
+
+              <p>
+                {t(
+                  "membership.items.volunteers.description"
+                )}
+              </p>
+            </article>
+
+            <article>
+              <span>
+                {"\u{1F4CB}"}
+              </span>
+
+              <h3>
+                {t(
+                  "membership.items.administrators.title"
+                )}
+              </h3>
+
+              <p>
+                {t(
+                  "membership.items.administrators.description"
+                )}
+              </p>
+            </article>
+
+            <article>
+              <span>
+                {"\u{1F319}"}
+              </span>
+
+              <h3>
+                {t(
+                  "membership.items.supporters.title"
+                )}
+              </h3>
+
+              <p>
+                {t(
+                  "membership.items.supporters.description"
+                )}
+              </p>
+            </article>
+          </div>
+        </section>
+
+        {/* =================================================
+            COMMITMENT
+        ================================================= */}
+
+        <section className="commitment-section">
+          <div>
+            <span className="section-kicker light">
+              {t(
+                "commitment.kicker"
+              )}
+            </span>
+
+            <h2>
+              {t("commitment.title")}
+            </h2>
 
             <p>
-              Weekly contribution activity
-              and payment recording for
-              Shabab members.
+              {t(
+                "commitment.description"
+              )}
             </p>
 
             <button
+              className="light-btn"
               onClick={onAdmin}
             >
-              Manage Contributions{" "}
+              {t("commitment.button")}{" "}
               {"\u{2192}"}
             </button>
           </div>
-        </article>
 
-        <article className="event-card">
-          <div className="event-art gold-art">
-            REPORT
+          <div className="commitment-mark">
+            {"\u{262A}"}
           </div>
+        </section>
 
-          <div className="event-body">
-            <span className="event-tag">
-              Monthly
+        {/* =================================================
+            CONTACT
+        ================================================= */}
+
+        <section
+          className="public-section contact-section"
+          id="contact"
+        >
+          <div className="section-heading center">
+            <span className="section-kicker">
+              {t("contact.kicker")}
             </span>
 
-            <h3>
-              Monthly Review
-            </h3>
+            <h2>
+              {t("contact.title")}
+            </h2>
 
             <p>
-              Review monthly contribution
-              records and understand the
-              collected amount.
+              {t(
+                "contact.description"
+              )}
             </p>
-
-            <button
-              onClick={onAdmin}
-            >
-              View Reports{" "}
-              {"\u{2192}"}
-            </button>
-          </div>
-        </article>
-
-        <article className="event-card">
-          <div className="event-art navy-art">
-            SHABAB
           </div>
 
-          <div className="event-body">
-            <span className="event-tag">
-              Community
-            </span>
+          <div className="contact-grid">
+            <div className="contact-card">
+              <span>
+                {"\u{1F4CD}"}
+              </span>
 
-            <h3>
-              Shabab Activities
-            </h3>
+              <h3>
+                {t("contact.location")}
+              </h3>
+
+              <p>
+                {t(
+                  "contact.locationDescription"
+                )}
+              </p>
+            </div>
+
+            <div className="contact-card">
+              <span>
+                {"\u{1F4F1}"}
+              </span>
+
+              <h3>
+                {t("contact.telegram")}
+              </h3>
+
+              <p>
+                {t(
+                  "contact.telegramDescription"
+                )}
+              </p>
+            </div>
+
+            <div className="contact-card">
+              <span>
+                {"\u{2709}\u{FE0F}"}
+              </span>
+
+              <h3>
+                {t("contact.email")}
+              </h3>
+
+              <p>
+                {t(
+                  "contact.emailDescription"
+                )}
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* =================================================
+          FOOTER
+      ================================================= */}
+
+      <footer className="public-footer">
+        <div className="footer-main">
+          <div>
+            <div className="footer-brand">
+              <span className="brand-mark">
+                {"\u{262A}"}
+              </span>
+
+              <div>
+                <strong>
+                  MASJIDUL-FATWA SHABAB
+                </strong>
+
+                <small>
+                  {t(
+                    "footer.systemName"
+                  )}
+                </small>
+              </div>
+            </div>
 
             <p>
-              Use the platform as a
-              foundation for organized youth
-              community activities.
+              {t(
+                "footer.description"
+              )}
             </p>
+          </div>
+
+          <div>
+            <h4>
+              {t(
+                "footer.quickLinks"
+              )}
+            </h4>
 
             <button
-              onClick={onAdmin}
+              onClick={() =>
+                handlePublicNavigate(
+                  "home"
+                )
+              }
             >
-              Open System{" "}
-              {"\u{2192}"}
+              {t("nav.home")}
             </button>
 
             <button
               onClick={() =>
-                onNavigate("gallery")
+                handlePublicNavigate(
+                  "about"
+                )
               }
             >
-              View Gallery{" "}
-              {"\u{2192}"}
+              {t("nav.about")}
+            </button>
+
+            <button
+              onClick={() =>
+                handlePublicNavigate(
+                  "services"
+                )
+              }
+            >
+              {t("nav.services")}
+            </button>
+
+            <button
+              onClick={() =>
+                handlePublicNavigate(
+                  "gallery"
+                )
+              }
+            >
+              {t("nav.gallery")}
+            </button>
+
+            <button
+              onClick={() =>
+                handlePublicNavigate(
+                  "contact"
+                )
+              }
+            >
+              {t("nav.contact")}
             </button>
           </div>
-        </article>
-      </div>
-    </section>
-
-    <Gallery />
-
-    {/* =================================================
-        MEMBERSHIP
-    ================================================= */}
-
-    <section className="public-section membership-section">
-      <div className="section-heading center">
-        <span className="section-kicker">
-          Who Can Be Our Member?
-        </span>
-
-        <h2>
-          A place for Shabab who want to
-          contribute and serve.
-        </h2>
-      </div>
-
-      <div className="membership-grid">
-        <article>
-          <span>
-            {"\u{1F464}"}
-          </span>
-
-          <h3>
-            Shabab Members
-          </h3>
-
-          <p>
-            Members participating in the
-            community and weekly
-            contribution activities.
-          </p>
-        </article>
-
-        <article>
-          <span>
-            {"\u{1F91D}"}
-          </span>
-
-          <h3>
-            Community Volunteers
-          </h3>
-
-          <p>
-            People supporting community
-            programs and organized
-            activities.
-          </p>
-        </article>
-
-        <article>
-          <span>
-            {"\u{1F4CB}"}
-          </span>
-
-          <h3>
-            Administrators
-          </h3>
-
-          <p>
-            Authorized people responsible
-            for managing records and
-            reports.
-          </p>
-        </article>
-
-        <article>
-          <span>
-            {"\u{1F319}"}
-          </span>
-
-          <h3>
-            Community Supporters
-          </h3>
-
-          <p>
-            Supporters who want to
-            strengthen positive community
-            initiatives.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    {/* =================================================
-        COMMITMENT
-    ================================================= */}
-
-    <section className="commitment-section">
-      <div>
-        <span className="section-kicker light">
-          Our Commitment
-        </span>
-
-        <h2>
-          Growing together through
-          organized contribution.
-        </h2>
-
-        <p>
-          Every contribution matters. The
-          purpose of this system is to make
-          the process easier to record,
-          review and manage while keeping
-          the community at the center.
-        </p>
-
-        <button
-          className="light-btn"
-          onClick={onAdmin}
-        >
-          Enter Management System{" "}
-          {"\u{2192}"}
-        </button>
-      </div>
-
-      <div className="commitment-mark">
-        {"\u{262A}"}
-      </div>
-    </section>
-
-    {/* =================================================
-        CONTACT
-    ================================================= */}
-
-    <section
-      className="public-section contact-section"
-      id="contact"
-    >
-      <div className="section-heading center">
-        <span className="section-kicker">
-          Get In Touch
-        </span>
-
-        <h2>
-          Connect with Masjidul-Fatwa
-          Shabab.
-        </h2>
-
-        <p>
-          Contact information can be added
-          here when the official Shabab
-          phone, email, Telegram channel
-          and location details are ready.
-        </p>
-      </div>
-
-      <div className="contact-grid">
-        <div className="contact-card">
-          <span>
-            {"\u{1F4CD}"}
-          </span>
-
-          <h3>Location</h3>
-
-          <p>
-            Masjidul-Fatwa community
-          </p>
-        </div>
-
-        <div className="contact-card">
-          <span>
-            {"\u{1F4F1}"}
-          </span>
-
-          <h3>Telegram</h3>
-
-          <p>
-            Official Shabab Telegram
-            communication
-          </p>
-        </div>
-
-        <div className="contact-card">
-          <span>
-            {"\u{2709}\u{FE0F}"}
-          </span>
-
-          <h3>Email</h3>
-
-          <p>
-            Official contact details can
-            be added here
-          </p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  {/* =================================================
-      FOOTER
-  ================================================= */}
-
-  <footer className="public-footer">
-    <div className="footer-main">
-      <div>
-        <div className="footer-brand">
-          <span className="brand-mark">
-            {"\u{262A}"}
-          </span>
 
           <div>
-            <strong>
-              MASJIDUL-FATWA SHABAB
-            </strong>
+            <h4>
+              {t("footer.system")}
+            </h4>
 
-            <small>
-              Youth Contribution &
-              Management System
-            </small>
+            <button onClick={onAdmin}>
+              {t("nav.adminLogin")}
+            </button>
+
+            <button onClick={onAdmin}>
+              {t("footer.members")}
+            </button>
+
+            <button onClick={onAdmin}>
+              {t("footer.reports")}
+            </button>
+
+            <button onClick={onAdmin}>
+              {t(
+                "footer.contributions"
+              )}
+            </button>
           </div>
         </div>
 
-        <p>
-          Building a stronger community
-          through organization,
-          contribution and responsible
-          service.
-        </p>
-      </div>
+        <div className="footer-bottom">
+          <span>
+            {"\u{00A9}"}{" "}
+            {new Date().getFullYear()}{" "}
+            {t("footer.copyright")}
+          </span>
 
-      <div>
-        <h4>Quick Links</h4>
-
-        <button
-          onClick={() =>
-            onNavigate("home")
-          }
-        >
-          Home
-        </button>
-
-        <button
-          onClick={() =>
-            onNavigate("about")
-          }
-        >
-          About
-        </button>
-
-        <button
-          onClick={() =>
-            onNavigate("services")
-          }
-        >
-          Services
-        </button>
-
-        <button
-          onClick={() =>
-            onNavigate("gallery")
-          }
-        >
-          Gallery
-        </button>
-
-        <button
-          onClick={() =>
-            onNavigate("contact")
-          }
-        >
-          Contact
-        </button>
-      </div>
-
-      <div>
-        <h4>System</h4>
-
-        <button onClick={onAdmin}>
-          Admin Login
-        </button>
-
-        <button onClick={onAdmin}>
-          Members
-        </button>
-
-        <button onClick={onAdmin}>
-          Reports
-        </button>
-
-        <button onClick={onAdmin}>
-          Contributions
-        </button>
-      </div>
+          <span>
+            <a
+              href="https://jemal-dev.github.io/jemal-portfolio/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-credit-link"
+            >
+              {t("footer.builtBy")}
+            </a>
+          </span>
+        </div>
+      </footer>
     </div>
-
-    <div className="footer-bottom">
-      <span>
-        {"\u{00A9}"}{" "}
-        {new Date().getFullYear()}{" "}
-        Masjidul-Fatwa Shabab. All rights
-        reserved.
-      </span>
-
-      <span>
-        <a
-          href="https://jemal-dev.github.io/jemal-portfolio/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="footer-credit-link"
-        >
-          Built by Jemal Seid
-        </a>
-      </span>
-    </div>
-  </footer>
-</div>
-
-
-);
+  );
 }
 
 /* =========================================================
@@ -1565,255 +1912,268 @@ ADMIN LAYOUT
 ========================================================= */
 
 function AdminLayout({
-currentPage,
-mobileOpen,
-setMobileOpen,
-goTo,
-dashboard,
-loading,
-error,
-adminUser,
-onLogout,
+  currentPage,
+  mobileOpen,
+  setMobileOpen,
+  goTo,
+  dashboard,
+  loading,
+  error,
+  adminUser,
+  onLogout,
 }) {
-const adminName =
-adminUser?.full_name || "Admin";
+  const { t } = useTranslation();
 
-const adminInitial =
-adminName.charAt(0).toUpperCase();
+  const adminName =
+    adminUser?.full_name || "Admin";
 
-const adminRole =
-adminUser?.role === "super_admin"
-? "Super Administrator"
-: "Administrator";
+  const adminInitial =
+    adminName.charAt(0).toUpperCase();
 
-const visibleNavItems =
-adminUser?.role === "super_admin"
-? navItems
-: navItems.filter(
-(item) =>
-item.id !== "settings" &&
-item.id !== "admins"
-);
+  const adminRole =
+    adminUser?.role === "super_admin"
+      ? t("admin.superAdministrator")
+      : t("admin.administrator");
 
-const currentNavItem =
-visibleNavItems.find(
-(item) =>
-item.id === currentPage
-);
+  const visibleNavItems =
+    adminUser?.role === "super_admin"
+      ? navItems
+      : navItems.filter(
+          (item) =>
+            item.id !== "settings" &&
+            item.id !== "admins"
+        );
 
-return ( <div className="admin-app">
-{mobileOpen && (
-<button
-className="sidebar-overlay"
-aria-label="Close menu"
-onClick={() =>
-setMobileOpen(false)
-}
-/>
-)}
+  const currentNavItem =
+    visibleNavItems.find(
+      (item) => item.id === currentPage
+    );
 
+  const navLabels = {
+    dashboard: t("nav.dashboard"),
+    members: t("nav.members"),
+    contributions: t("nav.contributions"),
+    reports: t("nav.reports"),
+    gallery: t("nav.gallery"),
+    admins: t("nav.admins"),
+    settings: t("nav.settings"),
+  };
 
-  <aside
-    className={`sidebar ${
-      mobileOpen ? "open" : ""
-    }`}
-  >
-    <div className="logo">
-      <div className="logo-icon">
-        {"\u{262A}"}
-      </div>
-
-      <div>
-        <h2>
-          Masjidul-Fatwa
-        </h2>
-
-        <span>
-          Shabab System
-        </span>
-      </div>
-    </div>
-
-    <nav className="navigation">
-      <div className="nav-label">
-        Management
-      </div>
-
-      {visibleNavItems.map(
-        (item) => (
-          <button
-            key={item.id}
-            className={`nav-item ${
-              currentPage === item.id
-                ? "active"
-                : ""
-            }`}
-            onClick={() =>
-              goTo(item.id)
-            }
-          >
-            <span>
-              {item.icon}
-            </span>
-
-            {item.label}
-          </button>
-        )
-      )}
-
-      <div className="nav-label public-label">
-        Website
-      </div>
-
-      <button
-        className="nav-item"
-        onClick={() =>
-          goTo("home")
-        }
-      >
-        <span>
-          {"\u{1F310}"}
-        </span>
-
-        Public Website
-      </button>
-    </nav>
-
-    <div className="sidebar-bottom">
-      <div className="admin-info">
-        <div className="admin-avatar">
-          {adminInitial}
-        </div>
-
-        <div>
-          <strong>
-            {adminName}
-          </strong>
-
-          <span>
-            {adminRole}
-          </span>
-        </div>
-      </div>
-
-      <button
-        className="logout-button"
-        onClick={onLogout}
-      >
-        {"\u{1F6AA}"} Logout
-      </button>
-    </div>
-  </aside>
-
-  <main className="main-content">
-    <header className="topbar">
-      <button
-        className="menu-button"
-        onClick={() =>
-          setMobileOpen(
-            (value) => !value
-          )
-        }
-        aria-label="Open navigation"
-      >
-        {"\u{2630}"}
-      </button>
-
-      <div className="topbar-title">
-        <span>
-          MASJIDUL-FATWA SHABAB
-        </span>
-
-        <strong>
-          {currentNavItem?.label ||
-            "Dashboard"}
-        </strong>
-      </div>
-
-      <div className="topbar-right">
+  return (
+    <div className="admin-app">
+      {mobileOpen && (
         <button
-          className="website-link"
+          className="sidebar-overlay"
+          aria-label={t("admin.closeMenu")}
           onClick={() =>
-            goTo("home")
-          }
-        >
-          {"\u{1F310}"} Website
-        </button>
-
-        <div className="profile">
-          <div className="profile-avatar">
-            {adminInitial}
-          </div>
-
-          <div>
-            <strong>
-              {adminName}
-            </strong>
-
-            <span>
-              {adminRole}
-            </span>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <section className="content">
-      {currentPage ===
-        "members" && (
-        <Members />
-      )}
-
-      {currentPage === "gallery" && (
-  <AdminGallery />
-)}
-
-      {currentPage ===
-        "contributions" && (
-        <Contributions />
-      )}
-
-      {currentPage ===
-        "reports" && (
-        <Reports />
-      )}
-
-      {currentPage === "admins" &&
-        adminUser?.role ===
-          "super_admin" && (
-          <AdminManagement />
-        )}
-
-      {currentPage ===
-        "settings" &&
-        adminUser?.role ===
-          "super_admin" && (
-          <Settings />
-        )}
-
-      {currentPage ===
-        "dashboard" && (
-        <AdminDashboard
-          dashboard={dashboard}
-          loading={loading}
-          error={error}
-          onContributions={() =>
-            goTo("contributions")
-          }
-          onMembers={() =>
-            goTo("members")
-          }
-          onReports={() =>
-            goTo("reports")
+            setMobileOpen(false)
           }
         />
       )}
-    </section>
-  </main>
-</div>
 
+      <aside
+        className={`sidebar ${
+          mobileOpen ? "open" : ""
+        }`}
+      >
+        <div className="logo">
+          <div className="logo-icon">
+            {"\u{262A}"}
+          </div>
 
-);
+          <div>
+            <h2>
+              Masjidul-Fatwa
+            </h2>
+
+            <span>
+              {t("admin.shababSystem")}
+            </span>
+          </div>
+        </div>
+
+        <nav className="navigation">
+          <div className="nav-label">
+            {t("admin.management")}
+          </div>
+
+          {visibleNavItems.map(
+            (item) => (
+              <button
+                key={item.id}
+                className={`nav-item ${
+                  currentPage === item.id
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  goTo(item.id)
+                }
+              >
+                <span>
+                  {item.icon}
+                </span>
+
+                {navLabels[item.id]}
+              </button>
+            )
+          )}
+
+          <div className="nav-label public-label">
+            {t("admin.website")}
+          </div>
+
+          <button
+            className="nav-item"
+            onClick={() =>
+              goTo("home")
+            }
+          >
+            <span>
+              {"\u{1F310}"}
+            </span>
+
+            {t("admin.publicWebsite")}
+          </button>
+        </nav>
+
+        <div className="sidebar-bottom">
+          <div className="admin-info">
+            <div className="admin-avatar">
+              {adminInitial}
+            </div>
+
+            <div>
+              <strong>
+                {adminName}
+              </strong>
+
+              <span>
+                {adminRole}
+              </span>
+            </div>
+          </div>
+
+          <button
+            className="logout-button"
+            onClick={onLogout}
+          >
+            {"\u{1F6AA}"}{" "}
+            {t("admin.logout")}
+          </button>
+        </div>
+      </aside>
+
+      <main className="main-content">
+        <header className="topbar">
+          <button
+            className="menu-button"
+            onClick={() =>
+              setMobileOpen(
+                (value) => !value
+              )
+            }
+            aria-label={t("admin.openNavigation")}
+          >
+            {"\u{2630}"}
+          </button>
+
+          <div className="topbar-title">
+            <span>
+              MASJIDUL-FATWA SHABAB
+            </span>
+
+            <strong>
+              {navLabels[currentPage] ||
+                t("nav.dashboard")}
+            </strong>
+          </div>
+
+          <div className="topbar-right">
+            <button
+              className="website-link"
+              onClick={() =>
+                goTo("home")
+              }
+            >
+              {"\u{1F310}"}{" "}
+              {t("admin.website")}
+            </button>
+
+            <div className="profile">
+              <div className="profile-avatar">
+                {adminInitial}
+              </div>
+
+              <div>
+                <strong>
+                  {adminName}
+                </strong>
+
+                <span>
+                  {adminRole}
+                </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section className="content">
+          {currentPage ===
+            "members" && (
+            <Members />
+          )}
+
+          {currentPage ===
+            "gallery" && (
+            <AdminGallery />
+          )}
+
+          {currentPage ===
+            "contributions" && (
+            <Contributions />
+          )}
+
+          {currentPage ===
+            "reports" && (
+            <Reports />
+          )}
+
+          {currentPage ===
+            "admins" &&
+            adminUser?.role ===
+              "super_admin" && (
+              <AdminManagement />
+            )}
+
+          {currentPage ===
+            "settings" &&
+            adminUser?.role ===
+              "super_admin" && (
+              <Settings />
+            )}
+
+          {currentPage ===
+            "dashboard" && (
+            <AdminDashboard
+              dashboard={dashboard}
+              loading={loading}
+              error={error}
+              onContributions={() =>
+                goTo("contributions")
+              }
+              onMembers={() =>
+                goTo("members")
+              }
+              onReports={() =>
+                goTo("reports")
+              }
+            />
+          )}
+        </section>
+      </main>
+    </div>
+  );
 }
 
 /* =========================================================
@@ -1821,465 +2181,486 @@ ADMIN DASHBOARD
 ========================================================= */
 
 function AdminDashboard({
-dashboard,
-loading,
-error,
-onContributions,
-onMembers,
-onReports,
+  dashboard,
+  loading,
+  error,
+  onContributions,
+  onMembers,
+  onReports,
 }) {
-const trendData =
-dashboard?.collection_trend?.map(
-(item) => ({
-...item,
-label: new Date(
-item.week_start
-).toLocaleDateString(
-"en-US",
-{
-month: "short",
-day: "numeric",
-}
-),
-})
-) || [];
+  const { t, i18n } = useTranslation();
 
-return (
-<> <div className="page-header"> <div> <span className="section-kicker">
-Management Overview </span>
+  const localeMap = {
+    en: "en-US",
+    om: "om-ET",
+    am: "am-ET",
+    ar: "ar",
+  };
 
+  const locale =
+    localeMap[
+      i18n.resolvedLanguage ||
+        i18n.language ||
+        "en"
+    ] || "en-US";
 
-      <h1>Dashboard</h1>
+  const trendData =
+    dashboard?.collection_trend?.map(
+      (item) => ({
+        ...item,
+        label: new Date(
+          item.week_start
+        ).toLocaleDateString(
+          locale,
+          {
+            month: "short",
+            day: "numeric",
+          }
+        ),
+      })
+    ) || [];
 
-      <p>
-        Welcome to the Masjidul-Fatwa
-        Shabab Contribution System.
-      </p>
-    </div>
-
-    <button
-      className="add-button"
-      onClick={onContributions}
-    >
-      + Add Contribution
-    </button>
-  </div>
-
-  {error && (
-    <div className="error-message">
-      {error}
-    </div>
-  )}
-
-  {/* =================================================
-      DASHBOARD STATISTICS
-  ================================================= */}
-
-  <div className="stats-grid">
-    <div className="stat-card">
-      <div className="stat-icon">
-        {"\u{1F465}"}
-      </div>
-
-      <div>
-        <span>
-          Active Members
-        </span>
-
-        <h2>
-          {loading ? (
-            "..."
-          ) : (
-            <AnimatedNumber
-              value={
-                dashboard?.total_active_members ??
-                0
-              }
-              suffix="+"
-            />
-          )}
-        </h2>
-      </div>
-    </div>
-
-    <div className="stat-card">
-      <div className="stat-icon">
-        {"\u{1F4B0}"}
-      </div>
-
-      <div>
-        <span>
-          Total Collection
-        </span>
-
-        <h2>
-          {loading ? (
-            "..."
-          ) : (
-            <AnimatedNumber
-              value={
-                dashboard?.total_collection ??
-                0
-              }
-              suffix=" ETB"
-            />
-          )}
-        </h2>
-      </div>
-    </div>
-
-    <div className="stat-card">
-      <div className="stat-icon">
-        {"\u{1F4C5}"}
-      </div>
-
-      <div>
-        <span>
-          This Week
-        </span>
-
-        <h2>
-          {loading ? (
-            "..."
-          ) : (
-            <AnimatedNumber
-              value={
-                dashboard?.weekly_collection ??
-                0
-              }
-              suffix=" ETB"
-            />
-          )}
-        </h2>
-      </div>
-    </div>
-
-    <div className="stat-card">
-      <div className="stat-icon">
-        {"\u{1F4C8}"}
-      </div>
-
-      <div>
-        <span>
-          This Month
-        </span>
-
-        <h2>
-          {loading ? (
-            "..."
-          ) : (
-            <AnimatedNumber
-              value={
-                dashboard?.monthly_collection ??
-                0
-              }
-              suffix=" ETB"
-            />
-          )}
-        </h2>
-      </div>
-    </div>
-  </div>
-
-  {/* =================================================
-      COLLECTION TREND
-  ================================================= */}
-
-  <div className="section-card collection-trend-card">
-    <div className="section-header">
-      <div>
-        <h2>
-          Collection Trend
-        </h2>
-
-        <p>
-          Weekly contribution collection
-          for the last 6 weeks.
-        </p>
-      </div>
-    </div>
-
-    {loading ? (
-      <div className="recent-loading">
-        Loading collection trend...
-      </div>
-    ) : trendData.length > 0 ? (
-      <div
-        className="collection-trend-chart"
-        style={{
-          width: "100%",
-          height: 380,
-        }}
-      >
-        <ResponsiveContainer
-          width="100%"
-          height="100%"
-        >
-          <LineChart
-            data={trendData}
-            margin={{
-              top: 20,
-              right: 30,
-              left: 30,
-              bottom: 55,
-            }}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-            />
-
-            <XAxis
-              dataKey="label"
-              interval={0}
-              tick={{
-                fontSize: 12,
-              }}
-              tickMargin={10}
-              angle={-25}
-              textAnchor="end"
-              height={70}
-            />
-
-            <YAxis
-              tick={{
-                fontSize: 12,
-              }}
-              tickFormatter={(value) =>
-                Number(value).toLocaleString(
-                  "en-US"
-                )
-              }
-            />
-
-            <Tooltip
-              formatter={(value) => [
-                `${Number(
-                  value
-                ).toLocaleString(
-                  "en-US"
-                )} ETB`,
-                "Collection",
-              ]}
-              labelFormatter={(label) =>
-                `Week of ${label}`
-              }
-            />
-
-            <Line
-              type="monotone"
-              dataKey="total_collection"
-              strokeWidth={3}
-              dot={{
-                r: 5,
-              }}
-              activeDot={{
-                r: 7,
-              }}
-              connectNulls
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    ) : (
-      <div className="recent-empty">
-        No collection data available yet.
-      </div>
-    )}
-  </div>
-
-  {/* =================================================
-      WEEKLY STATUS + QUICK ACTIONS
-  ================================================= */}
-
-  <div className="dashboard-grid">
-    <div className="section-card">
-      <div className="section-header">
+  return (
+    <>
+      <div className="page-header">
         <div>
-          <h2>
-            Weekly Payment Status
-          </h2>
-
-          <p>
-            Member contribution status
-            for the current week.
-          </p>
-        </div>
-      </div>
-
-      <div className="payment-status">
-        <div className="status-box paid">
-          <span>
-            {"\u{2713}"}
+          <span className="section-kicker">
+            {t("dashboard.managementOverview")}
           </span>
 
-          <div>
-            <strong>
-              {loading
-                ? "..."
-                : dashboard?.paid_members_this_week ??
-                  0}
-            </strong>
-
-            <p>
-              Paid Members
-            </p>
-          </div>
-        </div>
-
-        <div className="status-box unpaid">
-          <span>!</span>
-
-          <div>
-            <strong>
-              {loading
-                ? "..."
-                : dashboard?.unpaid_members_this_week ??
-                  0}
-            </strong>
-
-            <p>
-              Unpaid Members
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div className="section-card quick-actions">
-      <div className="section-header">
-        <div>
-          <h2>
-            Quick Actions
-          </h2>
+          <h1>
+            {t("dashboard.title")}
+          </h1>
 
           <p>
-            Jump directly to common
-            tasks.
+            {t("dashboard.welcome")}
           </p>
+        </div>
+
+        <button
+          className="add-button"
+          onClick={onContributions}
+        >
+          + {t("dashboard.addContribution")}
+        </button>
+      </div>
+
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon">
+            {"\u{1F465}"}
+          </div>
+
+          <div>
+            <span>
+              {t("dashboard.activeMembers")}
+            </span>
+
+            <h2>
+              {loading ? (
+                "..."
+              ) : (
+                <AnimatedNumber
+                  value={
+                    dashboard?.total_active_members ??
+                    0
+                  }
+                  suffix="+"
+                />
+              )}
+            </h2>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">
+            {"\u{1F4B0}"}
+          </div>
+
+          <div>
+            <span>
+              {t("dashboard.totalCollection")}
+            </span>
+
+            <h2>
+              {loading ? (
+                "..."
+              ) : (
+                <AnimatedNumber
+                  value={
+                    dashboard?.total_collection ??
+                    0
+                  }
+                  suffix=" ETB"
+                />
+              )}
+            </h2>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">
+            {"\u{1F4C5}"}
+          </div>
+
+          <div>
+            <span>
+              {t("dashboard.thisWeek")}
+            </span>
+
+            <h2>
+              {loading ? (
+                "..."
+              ) : (
+                <AnimatedNumber
+                  value={
+                    dashboard?.weekly_collection ??
+                    0
+                  }
+                  suffix=" ETB"
+                />
+              )}
+            </h2>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">
+            {"\u{1F4C8}"}
+          </div>
+
+          <div>
+            <span>
+              {t("dashboard.thisMonth")}
+            </span>
+
+            <h2>
+              {loading ? (
+                "..."
+              ) : (
+                <AnimatedNumber
+                  value={
+                    dashboard?.monthly_collection ??
+                    0
+                  }
+                  suffix=" ETB"
+                />
+              )}
+            </h2>
+          </div>
         </div>
       </div>
 
-      <button
-        onClick={onContributions}
-      >
-        {"\u{1F4B0}"} Record Contribution
-        <span>
-          {"\u{2192}"}
-        </span>
-      </button>
+      <div className="section-card collection-trend-card">
+        <div className="section-header">
+          <div>
+            <h2>
+              {t("dashboard.collectionTrend")}
+            </h2>
 
-      <button
-        onClick={onMembers}
-      >
-        {"\u{1F465}"} Manage Members
-        <span>
-          {"\u{2192}"}
-        </span>
-      </button>
+            <p>
+              {t("dashboard.collectionTrendDescription")}
+            </p>
+          </div>
+        </div>
 
-      <button
-        onClick={onReports}
-      >
-        {"\u{1F4CA}"} Generate Reports
-        <span>
-          {"\u{2192}"}
-        </span>
-      </button>
-    </div>
-  </div>
-
-  {/* =================================================
-      RECENT CONTRIBUTIONS
-  ================================================= */}
-
-  <div className="section-card recent-contributions-card">
-    <div className="section-header">
-      <div>
-        <h2>
-          Recent Contributions
-        </h2>
-
-        <p>
-          The latest contribution records.
-        </p>
-      </div>
-
-      <button
-        type="button"
-        className="view-all-button ui-action-link"
-        onClick={onContributions}
-      >
-        <span>
-          View All
-        </span>
-
-        <span className="ui-action-arrow">
-          {"\u{2192}"}
-        </span>
-      </button>
-    </div>
-
-    {loading ? (
-      <div className="recent-loading">
-        Loading contributions...
-      </div>
-    ) : dashboard?.recent_contributions?.length > 0 ? (
-      <div className="recent-contributions-list">
-        {dashboard.recent_contributions.map(
-          (contribution) => (
-            <div
-              className="recent-contribution-row"
-              key={contribution.id}
+        {loading ? (
+          <div className="recent-loading">
+            {t("dashboard.loadingCollectionTrend")}
+          </div>
+        ) : trendData.length > 0 ? (
+          <div
+            className="collection-trend-chart"
+            style={{
+              width: "100%",
+              height: 380,
+            }}
+          >
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
             >
-              <div className="recent-member">
-                <div className="recent-member-avatar">
-                  {contribution.full_name
-                    ?.charAt(0)
-                    ?.toUpperCase() ||
-                    "?"}
-                </div>
+              <LineChart
+                data={trendData}
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 30,
+                  bottom: 55,
+                }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                />
 
-                <div>
-                  <strong>
-                    {
-                      contribution.full_name
-                    }
-                  </strong>
+                <XAxis
+                  dataKey="label"
+                  interval={0}
+                  tick={{
+                    fontSize: 12,
+                  }}
+                  tickMargin={10}
+                  angle={-25}
+                  textAnchor="end"
+                  height={70}
+                />
 
-                  <span>
-                    {
-                      contribution.contribution_date
-                    }
-                  </span>
-                </div>
-              </div>
-
-              <strong className="recent-amount">
-                {Number(
-                  contribution.amount ||
-                    0
-                ).toLocaleString(
-                  "en-US",
-                  {
-                    maximumFractionDigits: 2,
+                <YAxis
+                  tick={{
+                    fontSize: 12,
+                  }}
+                  tickFormatter={(value) =>
+                    Number(value).toLocaleString(
+                      locale
+                    )
                   }
-                )}{" "}
-                ETB
-              </strong>
-            </div>
-          )
+                />
+
+                <Tooltip
+                  formatter={(value) => [
+                    `${Number(
+                      value
+                    ).toLocaleString(
+                      locale
+                    )} ETB`,
+                    t("dashboard.collection"),
+                  ]}
+                  labelFormatter={(label) =>
+                    `${t(
+                      "dashboard.weekOf"
+                    )} ${label}`
+                  }
+                />
+
+                <Line
+                  type="monotone"
+                  dataKey="total_collection"
+                  strokeWidth={3}
+                  dot={{
+                    r: 5,
+                  }}
+                  activeDot={{
+                    r: 7,
+                  }}
+                  connectNulls
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="recent-empty">
+            {t("dashboard.noCollectionData")}
+          </div>
         )}
       </div>
-    ) : (
-      <div className="recent-empty">
-        No contributions recorded yet.
+
+      <div className="dashboard-grid">
+        <div className="section-card">
+          <div className="section-header">
+            <div>
+              <h2>
+                {t("dashboard.weeklyPaymentStatus")}
+              </h2>
+
+              <p>
+                {t(
+                  "dashboard.weeklyPaymentDescription"
+                )}
+              </p>
+            </div>
+          </div>
+
+          <div className="payment-status">
+            <div className="status-box paid">
+              <span>
+                {"\u{2713}"}
+              </span>
+
+              <div>
+                <strong>
+                  {loading
+                    ? "..."
+                    : dashboard?.paid_members_this_week ??
+                      0}
+                </strong>
+
+                <p>
+                  {t("dashboard.paidMembers")}
+                </p>
+              </div>
+            </div>
+
+            <div className="status-box unpaid">
+              <span>!</span>
+
+              <div>
+                <strong>
+                  {loading
+                    ? "..."
+                    : dashboard?.unpaid_members_this_week ??
+                      0}
+                </strong>
+
+                <p>
+                  {t("dashboard.unpaidMembers")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="section-card quick-actions">
+          <div className="section-header">
+            <div>
+              <h2>
+                {t("dashboard.quickActions")}
+              </h2>
+
+              <p>
+                {t(
+                  "dashboard.quickActionsDescription"
+                )}
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={onContributions}
+          >
+            {"\u{1F4B0}"}{" "}
+            {t(
+              "dashboard.recordContribution"
+            )}
+
+            <span>
+              {"\u{2192}"}
+            </span>
+          </button>
+
+          <button
+            onClick={onMembers}
+          >
+            {"\u{1F465}"}{" "}
+            {t("dashboard.manageMembers")}
+
+            <span>
+              {"\u{2192}"}
+            </span>
+          </button>
+
+          <button
+            onClick={onReports}
+          >
+            {"\u{1F4CA}"}{" "}
+            {t("dashboard.generateReports")}
+
+            <span>
+              {"\u{2192}"}
+            </span>
+          </button>
+        </div>
       </div>
-    )}
-  </div>
-</>
 
+      <div className="section-card recent-contributions-card">
+        <div className="section-header">
+          <div>
+            <h2>
+              {t(
+                "dashboard.recentContributions"
+              )}
+            </h2>
 
-);
+            <p>
+              {t(
+                "dashboard.recentContributionsDescription"
+              )}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="view-all-button ui-action-link"
+            onClick={onContributions}
+          >
+            <span>
+              {t("dashboard.viewAll")}
+            </span>
+
+            <span className="ui-action-arrow">
+              {"\u{2192}"}
+            </span>
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="recent-loading">
+            {t(
+              "dashboard.loadingContributions"
+            )}
+          </div>
+        ) : dashboard?.recent_contributions?.length >
+          0 ? (
+          <div className="recent-contributions-list">
+            {dashboard.recent_contributions.map(
+              (contribution) => (
+                <div
+                  className="recent-contribution-row"
+                  key={contribution.id}
+                >
+                  <div className="recent-member">
+                    <div className="recent-member-avatar">
+                      {contribution.full_name
+                        ?.charAt(0)
+                        ?.toUpperCase() ||
+                        "?"}
+                    </div>
+
+                    <div>
+                      <strong>
+                        {
+                          contribution.full_name
+                        }
+                      </strong>
+
+                      <span>
+                        {
+                          contribution.contribution_date
+                        }
+                      </span>
+                    </div>
+                  </div>
+
+                  <strong className="recent-amount">
+                    {Number(
+                      contribution.amount ||
+                        0
+                    ).toLocaleString(
+                      locale,
+                      {
+                        maximumFractionDigits: 2,
+                      }
+                    )}{" "}
+                    ETB
+                  </strong>
+                </div>
+              )
+            )}
+          </div>
+        ) : (
+          <div className="recent-empty">
+            {t(
+              "dashboard.noContributions"
+            )}
+          </div>
+        )}
+      </div>
+    </>
+  );
 }
-
 export default App;

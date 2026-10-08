@@ -1,0 +1,717 @@
+﻿{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "activities": "Activities",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "adminLogin": "Admin Login",
+    "dashboard": "Dashboard",
+    "members": "Members",
+    "contributions": "Contributions",
+    "reports": "Reports",
+    "admins": "Admins",
+    "settings": "Settings"
+  },
+
+  "language": {
+    "title": "Language",
+    "english": "English",
+    "oromo": "Afaan Oromoo",
+    "amharic": "Amharic",
+    "arabic": "Arabic"
+  },
+
+  "hero": {
+    "eyebrow": "Youth Contribution & Management",
+    "title": "Building Community",
+    "titleHighlight": "Through Contribution & Impact",
+    "description": "A transparent digital platform for Masjidul-Fatwa Shabab to manage members, record weekly contributions, and keep clear community records.",
+    "exploreServices": "Explore Our Services",
+    "adminLogin": "Admin Login",
+    "organizedRecords": "Organized records",
+    "transparentContributions": "Transparent contributions",
+    "communityFocused": "Community focused",
+    "systemName": "Youth Contribution & Management System",
+    "activeMembers": "Active Members",
+    "totalCollection": "Total Collection"
+  },
+
+  "impact": {
+    "kicker": "Our Collective Impact",
+    "title": "Real numbers from our contribution system",
+    "activeMembers": "Active Members",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "totalCollection": "Total Collection"
+  },
+
+  "about": {
+    "kicker": "Who We Are",
+    "title": "A community built on trust, responsibility and service.",
+    "description": "Masjidul-Fatwa Shabab is a youth community that values organized contribution, cooperation and accountability. This platform helps turn paper-based records into a clear digital system.",
+    "points": {
+      "transparentRecords": {
+        "title": "Transparent Records",
+        "description": "Contributions are stored digitally so administrators can review records without depending on paper notebooks."
+      },
+      "responsibleManagement": {
+        "title": "Responsible Management",
+        "description": "Members, payments and reports are organized in one management system."
+      },
+      "communityImpact": {
+        "title": "Community Impact",
+        "description": "Clear records make it easier to understand participation and the resources collected by the Shabab."
+      }
+    },
+    "label": "Community • Contribution • Impact"
+  },
+
+  "services": {
+    "kicker": "Our Services",
+    "title": "Everything the Shabab team needs in one place.",
+    "description": "The public website and management system work together to keep community administration simple.",
+    "explore": "Explore",
+    "items": {
+      "memberManagement": {
+        "title": "Member Management",
+        "description": "Add, edit, activate and manage Shabab member information."
+      },
+      "contributionRecording": {
+        "title": "Contribution Recording",
+        "description": "Record weekly contributions and prevent duplicate records."
+      },
+      "weeklyReports": {
+        "title": "Weekly Reports",
+        "description": "See paid members, unpaid members and weekly collection totals."
+      },
+      "monthlyReports": {
+        "title": "Monthly Reports",
+        "description": "Review monthly contribution records and member totals."
+      },
+      "telegramBot": {
+        "title": "Telegram Bot",
+        "description": "Manage contribution tasks and reports through the Shabab Telegram bot."
+      },
+      "printableReports": {
+        "title": "Printable Reports",
+        "description": "Create clean reports suitable for saving and printing."
+      }
+    }
+  },
+
+  "achievements": {
+    "kicker": "Our Achievements",
+    "title": "The system reflects the work of our community.",
+    "activeMembers": "Active Shabab Members",
+    "totalCollection": "Total Recorded Collection",
+    "weeklyCollection": "Current Weekly Collection",
+    "monthlyCollection": "Current Monthly Collection"
+  },
+
+  "why": {
+    "kicker": "Why This Platform",
+    "title": "Designed to make contribution management clearer.",
+    "items": {
+      "simpleRecords": {
+        "title": "Simple record keeping",
+        "description": "Move weekly records from paper into a structured digital database."
+      },
+      "accountability": {
+        "title": "Better accountability",
+        "description": "Reports make contribution activity easier for administrators to review."
+      },
+      "duplicates": {
+        "title": "Fewer duplicate records",
+        "description": "The contribution workflow checks for duplicate entries for the same date."
+      },
+      "accessible": {
+        "title": "Accessible information",
+        "description": "Authorized administrators can use the website or Telegram bot."
+      }
+    }
+  },
+
+  "events": {
+    "kicker": "Community Activities",
+    "title": "Keeping the Shabab connected and organized.",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "community": "Community",
+    "friday": "Friday",
+    "report": "Report",
+    "shabab": "Shabab",
+    "fridayContribution": "Friday Contribution",
+    "fridayDescription": "Weekly contribution activity and payment recording for Shabab members.",
+    "manageContributions": "Manage Contributions",
+    "monthlyReview": "Monthly Review",
+    "monthlyDescription": "Review monthly contribution records and understand the collected amount.",
+    "viewReports": "View Reports",
+    "shababActivities": "Shabab Activities",
+    "activitiesDescription": "Use the platform as a foundation for organized youth community activities.",
+    "openSystem": "Open System",
+    "viewGallery": "View Gallery"
+  },
+
+  "membership": {
+    "kicker": "Who Can Be Our Member?",
+    "title": "A place for Shabab who want to contribute and serve.",
+    "items": {
+      "members": {
+        "title": "Shabab Members",
+        "description": "Members participating in the community and weekly contribution activities."
+      },
+      "volunteers": {
+        "title": "Community Volunteers",
+        "description": "People supporting community programs and organized activities."
+      },
+      "administrators": {
+        "title": "Administrators",
+        "description": "Authorized people responsible for managing records and reports."
+      },
+      "supporters": {
+        "title": "Community Supporters",
+        "description": "Supporters who want to strengthen positive community initiatives."
+      }
+    }
+  },
+
+  "commitment": {
+    "kicker": "Our Commitment",
+    "title": "Growing together through organized contribution.",
+    "description": "Every contribution matters. The purpose of this system is to make the process easier to record, review and manage while keeping the community at the center.",
+    "button": "Enter Management System"
+  },
+
+  "contact": {
+    "kicker": "Get In Touch",
+    "title": "Connect with Masjidul-Fatwa Shabab.",
+    "description": "Contact information can be added here when the official Shabab phone, email, Telegram channel and location details are ready.",
+    "location": "Location",
+    "locationDescription": "Masjidul-Fatwa community",
+    "telegram": "Telegram",
+    "telegramDescription": "Official Shabab Telegram communication",
+    "email": "Email",
+    "emailDescription": "Official contact details can be added here"
+  },
+
+  "footer": {
+    "systemName": "Youth Contribution & Management System",
+    "description": "Building a stronger community through organization, contribution and responsible service.",
+    "quickLinks": "Quick Links",
+    "system": "System",
+    "members": "Members",
+    "reports": "Reports",
+    "contributions": "Contributions",
+    "copyright": "Masjidul-Fatwa Shabab. All rights reserved.",
+    "builtBy": "Built by Jemal Seid"
+  },
+
+  "login": {
+    "title": "Admin Login",
+    "description": "Sign in to manage the Shabab contribution system.",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "signingIn": "Signing in...",
+    "signIn": "Sign In",
+    "backToWebsite": "Back to Website",
+    "errors": {
+      "required": "Please enter your username and password.",
+      "invalidCredentials": "Invalid username or password.",
+      "inactive": "Your administrator account is inactive.",
+      "loginFailed": "Login failed.",
+      "server": "Cannot connect to the server.",
+      "unexpected": "An unexpected error occurred."
+    }
+  },
+
+  "admin": {
+    "shababSystem": "Shabab System",
+    "management": "Management",
+    "website": "Website",
+    "publicWebsite": "Public Website",
+    "superAdministrator": "Super Administrator",
+    "administrator": "Administrator",
+    "logout": "Logout",
+    "closeMenu": "Close menu",
+    "openNavigation": "Open navigation"
+  },
+
+  "dashboard": {
+    "managementOverview": "Management Overview",
+    "title": "Dashboard",
+    "welcome": "Welcome to the Masjidul-Fatwa Shabab Contribution System.",
+    "addContribution": "Add Contribution",
+    "activeMembers": "Active Members",
+    "totalCollection": "Total Collection",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "collectionTrend": "Collection Trend",
+    "collectionTrendDescription": "Weekly contribution collection for the last 6 weeks.",
+    "loadingCollectionTrend": "Loading collection trend...",
+    "collection": "Collection",
+    "weekOf": "Week of",
+    "noCollectionData": "No collection data available yet.",
+    "weeklyPaymentStatus": "Weekly Payment Status",
+    "weeklyPaymentDescription": "Member contribution status for the current week.",
+    "paidMembers": "Paid Members",
+    "unpaidMembers": "Unpaid Members",
+    "quickActions": "Quick Actions",
+    "quickActionsDescription": "Jump directly to common tasks.",
+    "recordContribution": "Record Contribution",
+    "manageMembers": "Manage Members",
+    "generateReports": "Generate Reports",
+    "recentContributions": "Recent Contributions",
+    "recentContributionsDescription": "The latest contribution records.",
+    "viewAll": "View All",
+    "loadingContributions": "Loading contributions...",
+    "noContributions": "No contributions recorded yet."
+  },
+
+  "reports": {
+    "title": "Reports",
+    "description": "View and manage Shabab contribution reports.",
+
+    "common": {
+      "loading": "Loading...",
+      "print": "Print Report",
+      "date": "Date",
+      "month": "Month",
+      "unknownMember": "Unknown Member"
+    },
+
+    "weekly": {
+      "title": "Weekly Contribution Report",
+      "description": "Select a date to view the payment status.",
+      "date": "Report Date",
+      "generate": "Generate Report",
+      "resultTitle": "Weekly Report",
+      "totalMembers": "Total Members",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "totalCollection": "Total Collection",
+      "paidMembers": "Paid Members",
+      "unpaidMembers": "Unpaid Members",
+      "noPaidMembers": "No paid members found.",
+      "allPaid": "All members have paid."
+    },
+
+    "monthly": {
+      "title": "Monthly Contribution Report",
+      "description": "View contribution records for a selected month.",
+      "month": "Report Month",
+      "generate": "Generate Monthly Report",
+      "resultTitle": "Monthly Report",
+      "contributions": "Contributions",
+      "totalCollection": "Total Collection",
+      "records": "Contribution Records",
+      "noRecords": "No contributions found for this month."
+    },
+
+    "member": {
+      "title": "Member Report",
+      "description": "View the contribution history of an individual member.",
+      "selectMember": "Select Member",
+      "chooseMember": "Choose a member",
+      "generate": "Generate Member Report",
+      "resultTitle": "Member Report",
+      "selected": "Member",
+      "contributions": "Contributions",
+      "totalCollection": "Total Collection",
+      "memberInformation": "Member Information",
+      "fullName": "Full Name",
+      "phone": "Phone",
+      "telegram": "Telegram",
+      "status": "Status",
+      "history": "Contribution History",
+      "noHistory": "No contribution history found."
+    },
+
+    "table": {
+      "member": "Member",
+      "phone": "Phone",
+      "amount": "Amount",
+      "date": "Date",
+      "status": "Status"
+    },
+
+    "print": {
+      "systemName": "Masjidul-Fatwa Shabab",
+      "weeklyTitle": "WEEKLY CONTRIBUTION REPORT",
+      "monthlyTitle": "MONTHLY CONTRIBUTION REPORT",
+      "memberTitle": "MEMBER CONTRIBUTION REPORT",
+      "generatedDate": "Generated Date",
+      "administrator": "Administrator",
+      "treasurer": "Treasurer",
+      "shababRepresentative": "Shabab Representative"
+    },
+
+    "errors": {
+      "loadMembers": "Failed to load members.",
+      "weekly": "Failed to load weekly report.",
+      "monthly": "Failed to load monthly report.",
+      "member": "Failed to load member report.",
+      "selectMember": "Please select a member."
+    }
+  },
+
+  "members": {
+    "title": "Members",
+    "description": "Manage Masjidul-Fatwa Shabab members.",
+    "addMember": "Add Member",
+
+    "statistics": {
+      "total": "Total Members",
+      "active": "Active Members",
+      "inactive": "Inactive Members"
+    },
+
+    "list": {
+      "title": "All Members",
+      "count": "{{visible}} of {{total}} members"
+    },
+
+    "sort": {
+      "label": "Sort",
+      "nameAsc": "Name A → Z",
+      "nameDesc": "Name Z → A",
+      "newest": "Newest",
+      "oldest": "Oldest"
+    },
+
+    "search": {
+      "placeholder": "Search members...",
+      "ariaLabel": "Search members",
+      "clear": "Clear search"
+    },
+
+    "form": {
+      "addTitle": "Add New Member",
+      "editTitle": "Edit Member",
+      "addDescription": "Enter the member information below.",
+      "editDescription": "Update the member information below.",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter full name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number",
+      "telegram": "Telegram Username",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "save": "Save Member",
+      "update": "Update Member"
+    },
+
+    "table": {
+      "name": "Name",
+      "phone": "Phone",
+      "telegram": "Telegram",
+      "status": "Status",
+      "actions": "Actions"
+    },
+
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+
+    "actions": {
+      "edit": "Edit",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+
+    "confirm": {
+      "activate": "Are you sure you want to activate {{name}}?",
+      "deactivate": "Are you sure you want to deactivate {{name}}?"
+    },
+
+    "messages": {
+      "added": "Member added successfully.",
+      "updated": "Member updated successfully.",
+      "activated": "{{name}} has been activated.",
+      "deactivated": "{{name}} has been deactivated."
+    },
+
+    "loading": "Loading members...",
+    "empty": "No members found.",
+    "noSearchResults": "No members match your search.",
+
+    "errors": {
+      "fullNameRequired": "Full name is required.",
+      "connection": "Cannot connect to the backend server.",
+      "server": "Server error: {{status}} - {{statusText}}",
+      "unexpected": "Error: {{message}}"
+    }
+  },
+    "contributions": {
+    "title": "Contributions",
+    "description": "Record and manage weekly Shabab contributions.",
+
+    "form": {
+      "title": "Record Contribution",
+      "weeklyAmount": "Weekly contribution amount:",
+      "member": "Member",
+      "selectMember": "Select member",
+      "amount": "Amount (ETB)",
+      "date": "Contribution Date",
+      "saving": "Saving...",
+      "record": "Record Contribution"
+    },
+
+    "status": {
+      "title": "Friday Payment Status",
+      "description": "Payment status for",
+      "loading": "Loading...",
+      "refresh": "Refresh",
+      "loadingMembers": "Loading payment status...",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "recording": "Recording...",
+      "recordAmount": "Record {{amount}} ETB",
+      "noMembers": "No payment status records found.",
+      "table": {
+        "member": "Member",
+        "phone": "Phone",
+        "status": "Status",
+        "action": "Action"
+      }
+    },
+
+    "recent": {
+      "title": "Recent Contributions",
+      "count": "{{count}} records",
+      "loading": "Loading contributions...",
+      "empty": "No contributions found.",
+      "memberFallback": "Member #{{id}}",
+      "table": {
+        "member": "Member",
+        "amount": "Amount",
+        "date": "Date"
+      }
+    },
+
+    "messages": {
+      "recorded": "Contribution recorded successfully.",
+      "memberRecorded": "{{name}} has been recorded as paid."
+    },
+
+    "errors": {
+      "loadMembers": "Failed to load members.",
+      "loadContributions": "Failed to load contributions.",
+      "loadAmount": "Failed to load contribution amount.",
+      "loadStatus": "Failed to load payment status.",
+      "invalidMember": "An invalid member was selected.",
+      "selectMember": "Please select a member.",
+      "invalidAmount": "Please enter a valid amount.",
+      "selectDate": "Please select a date.",
+      "duplicate": "This member has already made a contribution for this date.",
+      "duplicateMember": "{{name}} has already paid for this date.",
+      "recordContribution": "Failed to record contribution.",
+      "connection": "Cannot connect to the backend server.",
+      "unexpected": "Error: {{message}}"
+    }
+  },
+    "gallery": {
+    "kicker": "Shabab Gallery",
+    "title": "Memories, Activities & Community Moments",
+    "description": "A visual collection of the activities, programs, and memorable moments of Masjidul-Fatwa Shabab.",
+    "loading": "Loading Gallery...",
+    "loadingDescription": "Please wait while we load our community photos.",
+    "comingSoonBadge": "Gallery Coming Soon",
+    "emptyTitle": "Our Photos Will Be Here Soon",
+    "emptyDescription": "Photos from our Shabab activities, meetings, programs, and community gatherings will be added here soon.",
+    "note": "Community activities and memorable moments will appear here.",
+    "defaultAlt": "Masjidul-Fatwa Shabab"
+  },
+    "adminGallery": {
+    "kicker": "Content Management",
+    "title": "Gallery",
+    "description": "Upload and manage Masjidul-Fatwa Shabab community photos.",
+    "totalPhotos": "Total Photos",
+    "loading": "Loading gallery...",
+    "emptyTitle": "No Photos Yet",
+    "emptyDescription": "Your gallery is ready. Add a photo whenever you have one.",
+    "defaultAlt": "Masjidul-Fatwa Shabab",
+
+    "actions": {
+      "addPhoto": "Add Photo",
+      "addFirstPhoto": "Add First Photo",
+      "editPhoto": "Edit photo",
+      "deletePhoto": "Delete photo"
+    },
+
+    "form": {
+      "addTitle": "Add Photo",
+      "editTitle": "Edit Photo",
+      "addDescription": "Upload a community photo.",
+      "editDescription": "Update photo details.",
+      "close": "Close",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Friday Shabab Program",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Describe this community moment...",
+      "photoLabel": "Photo",
+      "fileHelp": "JPG, PNG, WEBP and other image formats. Maximum 10 MB.",
+      "preview": "Preview",
+      "previewAlt": "Photo preview",
+      "cancel": "Cancel",
+      "saving": "Uploading...",
+      "saveChanges": "Save Changes",
+      "uploadPhoto": "Upload Photo"
+    },
+
+    "messages": {
+      "uploaded": "Photo uploaded successfully.",
+      "updated": "Photo updated successfully.",
+      "deleted": "Photo deleted successfully."
+    },
+
+    "errors": {
+      "load": "Failed to load gallery.",
+      "save": "Failed to save photo.",
+      "delete": "Failed to delete photo.",
+      "invalidImage": "Please select a valid image file.",
+      "fileTooLarge": "Image must be 10 MB or smaller.",
+      "titleRequired": "Please enter a photo title.",
+      "photoRequired": "Please choose a photo.",
+      "connection": "Cannot connect to the backend server.",
+      "unexpected": "Error: {{message}}"
+    },
+
+    "deleteConfirm": "Are you sure you want to delete this photo?"
+  },
+    "adminManagement": {
+    "kicker": "ADMINISTRATION",
+    "title": "Admin Management",
+    "description": "Manage administrators and their access to the system.",
+    "you": "You",
+    "loading": "Loading administrators...",
+
+    "actions": {
+      "add": "Add Administrator",
+      "refresh": "Refresh",
+      "edit": "Edit",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+
+    "stats": {
+      "total": "Total Administrators",
+      "active": "Active",
+      "superAdmins": "Super Admins"
+    },
+
+    "table": {
+      "title": "Administrators",
+      "description": "Manage administrator accounts and permissions.",
+      "administrator": "Administrator",
+      "username": "Username",
+      "role": "Role",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions"
+    },
+
+    "roles": {
+      "admin": "Admin",
+      "superAdmin": "Super Admin"
+    },
+
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "updating": "Updating..."
+    },
+
+    "empty": {
+      "title": "No administrators found",
+      "description": "Add an administrator to get started."
+    },
+
+    "confirm": {
+      "activate": "Are you sure you want to activate \"{{name}}\"?",
+      "deactivate": "Are you sure you want to deactivate \"{{name}}\"?"
+    },
+
+    "tooltips": {
+      "selfStatus": "You cannot change your own account status",
+      "updating": "Updating...",
+      "deactivate": "Deactivate this administrator",
+      "activate": "Activate this administrator"
+    },
+
+    "form": {
+      "addTitle": "Add Administrator",
+      "editTitle": "Edit Administrator",
+      "addDescription": "Create a new administrator account.",
+      "editDescription": "Update administrator account details.",
+      "close": "Close",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter full name",
+      "username": "Username",
+      "usernamePlaceholder": "Enter username",
+      "password": "Password",
+      "passwordPlaceholder": "Enter password",
+      "passwordEditPlaceholder": "Leave blank to keep current password",
+      "optional": "Optional",
+      "passwordNote": "Password must be at least 6 characters.",
+      "passwordEditNote": "Only enter a password if you want to change it.",
+      "role": "Role",
+      "selfRoleNote": "You cannot change your own role.",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes",
+      "create": "Create Administrator"
+    },
+
+    "messages": {
+      "created": "Administrator created successfully.",
+      "updated": "Administrator updated successfully."
+    },
+
+    "errors": {
+      "load": "Failed to load administrators.",
+      "fullNameRequired": "Full name is required.",
+      "usernameRequired": "Username is required.",
+      "passwordMin": "Password must be at least 6 characters.",
+      "newPasswordMin": "New password must be at least 6 characters.",
+      "operation": "Operation failed.",
+      "save": "Failed to save administrator.",
+      "selfStatus": "You cannot deactivate or change the status of your own account.",
+      "statusUpdate": "Failed to update administrator status."
+    }
+  },
+  "loading": "Loading settings...",
+
+"account": {
+  "title": "Account Settings",
+  "description": "Update your administrator username and password.",
+  "username": "Username",
+  "usernamePlaceholder": "Enter username",
+  "newPassword": "New Password",
+  "newPasswordPlaceholder": "Enter new password",
+  "confirmPassword": "Confirm New Password",
+  "confirmPasswordPlaceholder": "Confirm new password",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "passwordHelp": "Leave blank if you only want to change the username.",
+  "updateButton": "Update Account",
+
+  "messages": {
+    "updated": "Account settings updated successfully."
+  },
+
+  "errors": {
+    "usernameRequired": "Username is required.",
+    "passwordMin": "New password must be at least 6 characters.",
+    "passwordMismatch": "New password and confirmation password do not match.",
+    "accountNotFound": "Your account information could not be found. Please log in again.",
+    "update": "Failed to update account settings."
+  }
+}
+}

@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "./AdminManagement.css";
 
 function AdminManagement() {
+    const { t, i18n } = useTranslation();
+
     const [admins, setAdmins] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -22,35 +25,60 @@ function AdminManagement() {
         localStorage.getItem("adminUser") || "{}"
     );
 
-    const token = localStorage.getItem("adminToken");
+    const getAxiosConfig = () => {
+        const token = localStorage.getItem("adminToken");
 
-    const axiosConfig = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
+        return {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+    };
+
+    // ==========================================
+    // DATE LOCALE
+    // ==========================================
+
+    const getDateLocale = () => {
+        const language = i18n.language || "en";
+
+        const localeMap = {
+            en: "en-US",
+            om: "om-ET",
+            am: "am-ET",
+            ar: "ar"
+        };
+
+        return localeMap[language] || "en-US";
     };
 
     // ================================
     // LOAD ADMINISTRATORS
     // ================================
+
     const loadAdmins = async () => {
         try {
             setLoading(true);
 
             const response = await axios.get(
                 "/api/admins",
-                axiosConfig
+                getAxiosConfig()
             );
 
             if (response.data.success) {
                 setAdmins(response.data.admins || []);
+            } else {
+                setAdmins([]);
             }
         } catch (error) {
-            console.error("Error loading admins:", error);
+            console.error(
+                "Error loading admins:",
+                error
+            );
 
             alert(
                 error.response?.data?.message ||
-                "Failed to load administrators."
+                t("adminManagement.errors.load")
             );
         } finally {
             setLoading(false);
@@ -64,6 +92,7 @@ function AdminManagement() {
     // ================================
     // OPEN ADD ADMIN MODAL
     // ================================
+
     const openAddModal = () => {
         setEditingAdmin(null);
 
@@ -80,6 +109,7 @@ function AdminManagement() {
     // ================================
     // OPEN EDIT ADMIN MODAL
     // ================================
+
     const openEditModal = (admin) => {
         setEditingAdmin(admin);
 
@@ -96,8 +126,11 @@ function AdminManagement() {
     // ================================
     // CLOSE MODAL
     // ================================
+
     const closeModal = () => {
-        if (saving) return;
+        if (saving) {
+            return;
+        }
 
         setShowModal(false);
         setEditingAdmin(null);
@@ -113,6 +146,7 @@ function AdminManagement() {
     // ================================
     // FORM INPUT
     // ================================
+
     const handleChange = (event) => {
         const { name, value } = event.target;
 
@@ -125,6 +159,7 @@ function AdminManagement() {
     // ================================
     // SAVE ADMINISTRATOR
     // ================================
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -133,17 +168,23 @@ function AdminManagement() {
         const password = formData.password;
 
         if (!fullName) {
-            alert("Full name is required.");
+            alert(
+                t("adminManagement.errors.fullNameRequired")
+            );
             return;
         }
 
         if (!username) {
-            alert("Username is required.");
+            alert(
+                t("adminManagement.errors.usernameRequired")
+            );
             return;
         }
 
         if (!editingAdmin && password.length < 6) {
-            alert("Password must be at least 6 characters.");
+            alert(
+                t("adminManagement.errors.passwordMin")
+            );
             return;
         }
 
@@ -159,12 +200,15 @@ function AdminManagement() {
                     role: formData.role
                 };
 
-                // Only send password when user entered a new one.
+                // Only send password when a new password is entered.
                 if (password.trim() !== "") {
                     if (password.length < 6) {
                         alert(
-                            "New password must be at least 6 characters."
+                            t(
+                                "adminManagement.errors.newPasswordMin"
+                            )
                         );
+
                         setSaving(false);
                         return;
                     }
@@ -175,7 +219,7 @@ function AdminManagement() {
                 response = await axios.put(
                     `/api/admins/${editingAdmin.id}`,
                     updateData,
-                    axiosConfig
+                    getAxiosConfig()
                 );
             } else {
                 response = await axios.post(
@@ -186,31 +230,48 @@ function AdminManagement() {
                         password,
                         role: formData.role
                     },
-                    axiosConfig
+                    getAxiosConfig()
                 );
             }
 
             if (response.data.success) {
                 alert(
                     editingAdmin
-                        ? "Administrator updated successfully."
-                        : "Administrator created successfully."
+                        ? t(
+                              "adminManagement.messages.updated"
+                          )
+                        : t(
+                              "adminManagement.messages.created"
+                          )
                 );
 
-                closeModal();
+                // Close modal directly because saving is still true here.
+                setShowModal(false);
+                setEditingAdmin(null);
+
+                setFormData({
+                    full_name: "",
+                    username: "",
+                    password: "",
+                    role: "admin"
+                });
+
                 await loadAdmins();
             } else {
                 alert(
                     response.data.message ||
-                    "Operation failed."
+                    t("adminManagement.errors.operation")
                 );
             }
         } catch (error) {
-            console.error("Save administrator error:", error);
+            console.error(
+                "Save administrator error:",
+                error
+            );
 
             alert(
                 error.response?.data?.message ||
-                "Failed to save administrator."
+                t("adminManagement.errors.save")
             );
         } finally {
             setSaving(false);
@@ -220,6 +281,7 @@ function AdminManagement() {
     // ================================
     // ACTIVATE / DEACTIVATE
     // ================================
+
     const toggleStatus = async (admin) => {
         const adminId = Number(admin.id);
         const currentUserId = Number(currentUser.id);
@@ -230,7 +292,9 @@ function AdminManagement() {
             adminId === currentUserId
         ) {
             alert(
-                "You cannot deactivate or change the status of your own account."
+                t(
+                    "adminManagement.errors.selfStatus"
+                )
             );
             return;
         }
@@ -240,12 +304,20 @@ function AdminManagement() {
 
         const newStatus = !isCurrentlyActive;
 
-        const action = newStatus
-            ? "activate"
-            : "deactivate";
-
         const confirmed = window.confirm(
-            `Are you sure you want to ${action} "${admin.full_name}"?`
+            newStatus
+                ? t(
+                      "adminManagement.confirm.activate",
+                      {
+                          name: admin.full_name
+                      }
+                  )
+                : t(
+                      "adminManagement.confirm.deactivate",
+                      {
+                          name: admin.full_name
+                      }
+                  )
         );
 
         if (!confirmed) {
@@ -260,7 +332,7 @@ function AdminManagement() {
                 {
                     active: newStatus
                 },
-                axiosConfig
+                getAxiosConfig()
             );
 
             if (response.data.success) {
@@ -270,7 +342,9 @@ function AdminManagement() {
                         Number(item.id) === adminId
                             ? {
                                   ...item,
-                                  active: newStatus ? 1 : 0
+                                  active: newStatus
+                                      ? 1
+                                      : 0
                               }
                             : item
                     )
@@ -281,7 +355,9 @@ function AdminManagement() {
             } else {
                 alert(
                     response.data.message ||
-                    "Failed to update administrator status."
+                    t(
+                        "adminManagement.errors.statusUpdate"
+                    )
                 );
             }
         } catch (error) {
@@ -292,7 +368,9 @@ function AdminManagement() {
 
             alert(
                 error.response?.data?.message ||
-                "Failed to update administrator status."
+                t(
+                    "adminManagement.errors.statusUpdate"
+                )
             );
         } finally {
             setStatusUpdating(null);
@@ -302,6 +380,7 @@ function AdminManagement() {
     // ================================
     // STATISTICS
     // ================================
+
     const totalAdmins = admins.length;
 
     const activeAdmins = admins.filter(
@@ -315,12 +394,18 @@ function AdminManagement() {
     // ================================
     // LOADING
     // ================================
+
     if (loading) {
         return (
             <div className="admin-management">
                 <div className="admin-loading">
                     <div className="loading-spinner"></div>
-                    <p>Loading administrators...</p>
+
+                    <p>
+                        {t(
+                            "adminManagement.loading"
+                        )}
+                    </p>
                 </div>
             </div>
         );
@@ -328,22 +413,26 @@ function AdminManagement() {
 
     return (
         <div className="admin-management">
+            {/* PAGE HEADER */}
 
-            {/* ================================
-                PAGE HEADER
-            ================================= */}
             <div className="admin-page-header">
-
                 <div>
                     <div className="page-kicker">
-                        ADMINISTRATION
+                        {t(
+                            "adminManagement.kicker"
+                        )}
                     </div>
 
-                    <h1>Admin Management</h1>
+                    <h1>
+                        {t(
+                            "adminManagement.title"
+                        )}
+                    </h1>
 
                     <p>
-                        Manage administrators and their
-                        access to the system.
+                        {t(
+                            "adminManagement.description"
+                        )}
                     </p>
                 </div>
 
@@ -353,23 +442,26 @@ function AdminManagement() {
                     onClick={openAddModal}
                 >
                     <span>+</span>
-                    Add Administrator
+
+                    {t(
+                        "adminManagement.actions.add"
+                    )}
                 </button>
             </div>
 
-            {/* ================================
-                SUMMARY CARDS
-            ================================= */}
-            <div className="admin-summary">
+            {/* SUMMARY CARDS */}
 
+            <div className="admin-summary">
                 <div className="admin-summary-card">
                     <div className="summary-icon">
-                        👥
+                        {"\u{1F465}"}
                     </div>
 
                     <div>
                         <span>
-                            Total Administrators
+                            {t(
+                                "adminManagement.stats.total"
+                            )}
                         </span>
 
                         <strong>
@@ -380,12 +472,14 @@ function AdminManagement() {
 
                 <div className="admin-summary-card">
                     <div className="summary-icon">
-                        ✓
+                        {"\u2713"}
                     </div>
 
                     <div>
                         <span>
-                            Active
+                            {t(
+                                "adminManagement.stats.active"
+                            )}
                         </span>
 
                         <strong>
@@ -396,12 +490,14 @@ function AdminManagement() {
 
                 <div className="admin-summary-card">
                     <div className="summary-icon">
-                        🛡️
+                        {"\u{1F6E1}\uFE0F"}
                     </div>
 
                     <div>
                         <span>
-                            Super Admins
+                            {t(
+                                "adminManagement.stats.superAdmins"
+                            )}
                         </span>
 
                         <strong>
@@ -411,21 +507,21 @@ function AdminManagement() {
                 </div>
             </div>
 
-            {/* ================================
-                ADMIN TABLE
-            ================================= */}
+            {/* ADMIN TABLE */}
+
             <div className="admin-table-card">
-
                 <div className="admin-table-header">
-
                     <div>
                         <h2>
-                            Administrators
+                            {t(
+                                "adminManagement.table.title"
+                            )}
                         </h2>
 
                         <p>
-                            Manage administrator accounts
-                            and permissions.
+                            {t(
+                                "adminManagement.table.description"
+                            )}
                         </p>
                     </div>
 
@@ -434,54 +530,70 @@ function AdminManagement() {
                         className="refresh-admins"
                         onClick={loadAdmins}
                     >
-                        ↻ Refresh
+                        {"\u21BB"}{" "}
+                        {t(
+                            "adminManagement.actions.refresh"
+                        )}
                     </button>
                 </div>
 
                 {admins.length === 0 ? (
                     <div className="admin-empty">
                         <div>
-                            👥
+                            {"\u{1F465}"}
                         </div>
 
                         <h3>
-                            No administrators found
+                            {t(
+                                "adminManagement.empty.title"
+                            )}
                         </h3>
 
                         <p>
-                            Add an administrator to get
-                            started.
+                            {t(
+                                "adminManagement.empty.description"
+                            )}
                         </p>
                     </div>
                 ) : (
                     <div className="admin-table-wrapper">
-
                         <table className="admin-table">
-
                             <thead>
                                 <tr>
                                     <th>
-                                        Administrator
+                                        {t(
+                                            "adminManagement.table.administrator"
+                                        )}
                                     </th>
 
                                     <th>
-                                        Username
+                                        {t(
+                                            "adminManagement.table.username"
+                                        )}
                                     </th>
 
                                     <th>
-                                        Role
+                                        {t(
+                                            "adminManagement.table.role"
+                                        )}
                                     </th>
 
                                     <th>
-                                        Status
+                                        {t(
+                                            "adminManagement.table.status"
+                                        )}
                                     </th>
 
                                     <th>
-                                        Created
+                                        {t(
+                                            "adminManagement.table.created"
+                                        )}
                                     </th>
 
                                     <th>
-                                        Actions
+                                        {t(
+                                            "adminManagement.table.actions"
+                                        )}
                                     </th>
                                 </tr>
                             </thead>
@@ -503,17 +615,20 @@ function AdminManagement() {
 
                                     const isUpdating =
                                         statusUpdating ===
-                                        Number(admin.id);
+                                        Number(
+                                            admin.id
+                                        );
 
                                     return (
                                         <tr
-                                            key={admin.id}
+                                            key={
+                                                admin.id
+                                            }
                                         >
-
                                             {/* ADMINISTRATOR */}
+
                                             <td>
                                                 <div className="admin-person">
-
                                                     <div className="admin-avatar">
                                                         {(
                                                             admin.full_name ||
@@ -533,16 +648,18 @@ function AdminManagement() {
 
                                                             {isSelf && (
                                                                 <span className="you-badge">
-                                                                    You
+                                                                    {t(
+                                                                        "adminManagement.you"
+                                                                    )}
                                                                 </span>
                                                             )}
                                                         </strong>
                                                     </div>
-
                                                 </div>
                                             </td>
 
                                             {/* USERNAME */}
+
                                             <td>
                                                 <span className="username-text">
                                                     @
@@ -553,6 +670,7 @@ function AdminManagement() {
                                             </td>
 
                                             {/* ROLE */}
+
                                             <td>
                                                 <span
                                                     className={`role-badge ${
@@ -564,12 +682,17 @@ function AdminManagement() {
                                                 >
                                                     {admin.role ===
                                                     "super_admin"
-                                                        ? "Super Admin"
-                                                        : "Admin"}
+                                                        ? t(
+                                                              "adminManagement.roles.superAdmin"
+                                                          )
+                                                        : t(
+                                                              "adminManagement.roles.admin"
+                                                          )}
                                                 </span>
                                             </td>
 
                                             {/* STATUS */}
+
                                             <td>
                                                 <span
                                                     className={`status-badge ${
@@ -581,19 +704,24 @@ function AdminManagement() {
                                                     <span className="status-dot"></span>
 
                                                     {isActive
-                                                        ? "Active"
-                                                        : "Inactive"}
+                                                        ? t(
+                                                              "adminManagement.status.active"
+                                                          )
+                                                        : t(
+                                                              "adminManagement.status.inactive"
+                                                          )}
                                                 </span>
                                             </td>
 
                                             {/* CREATED */}
+
                                             <td>
                                                 <span className="created-date">
                                                     {admin.created_at
                                                         ? new Date(
                                                               admin.created_at
                                                           ).toLocaleDateString(
-                                                              "en-US",
+                                                              getDateLocale(),
                                                               {
                                                                   year: "numeric",
                                                                   month: "short",
@@ -605,10 +733,11 @@ function AdminManagement() {
                                             </td>
 
                                             {/* ACTIONS */}
+
                                             <td>
                                                 <div className="admin-actions">
-
                                                     {/* EDIT */}
+
                                                     <button
                                                         type="button"
                                                         className="edit-admin-btn"
@@ -621,10 +750,13 @@ function AdminManagement() {
                                                             isUpdating
                                                         }
                                                     >
-                                                        Edit
+                                                        {t(
+                                                            "adminManagement.actions.edit"
+                                                        )}
                                                     </button>
 
                                                     {/* ACTIVATE / DEACTIVATE */}
+
                                                     <button
                                                         type="button"
                                                         className={
@@ -643,37 +775,47 @@ function AdminManagement() {
                                                         }
                                                         title={
                                                             isSelf
-                                                                ? "You cannot change your own account status"
+                                                                ? t(
+                                                                      "adminManagement.tooltips.selfStatus"
+                                                                  )
                                                                 : isUpdating
-                                                                ? "Updating..."
+                                                                ? t(
+                                                                      "adminManagement.tooltips.updating"
+                                                                  )
                                                                 : isActive
-                                                                ? "Deactivate this administrator"
-                                                                : "Activate this administrator"
+                                                                ? t(
+                                                                      "adminManagement.tooltips.deactivate"
+                                                                  )
+                                                                : t(
+                                                                      "adminManagement.tooltips.activate"
+                                                                  )
                                                         }
                                                     >
                                                         {isUpdating
-                                                            ? "Updating..."
+                                                            ? t(
+                                                                  "adminManagement.status.updating"
+                                                              )
                                                             : isActive
-                                                            ? "Deactivate"
-                                                            : "Activate"}
+                                                            ? t(
+                                                                  "adminManagement.actions.deactivate"
+                                                              )
+                                                            : t(
+                                                                  "adminManagement.actions.activate"
+                                                              )}
                                                     </button>
-
                                                 </div>
                                             </td>
-
                                         </tr>
                                     );
                                 })}
                             </tbody>
-
                         </table>
                     </div>
                 )}
             </div>
 
-            {/* ================================
-                ADD / EDIT MODAL
-            ================================= */}
+            {/* ADD / EDIT MODAL */}
+
             {showModal && (
                 <div
                     className="admin-modal-overlay"
@@ -686,32 +828,36 @@ function AdminManagement() {
                         }
                     }}
                 >
-
                     <div className="admin-modal">
-
                         {/* MODAL HEADER */}
+
                         <div className="admin-modal-header">
-
                             <div className="modal-title-area">
-
                                 <div className="modal-icon">
-                                    🛡️
+                                    {"\u{1F6E1}\uFE0F"}
                                 </div>
 
                                 <div>
                                     <h2>
                                         {editingAdmin
-                                            ? "Edit Administrator"
-                                            : "Add Administrator"}
+                                            ? t(
+                                                  "adminManagement.form.editTitle"
+                                              )
+                                            : t(
+                                                  "adminManagement.form.addTitle"
+                                              )}
                                     </h2>
 
                                     <p>
                                         {editingAdmin
-                                            ? "Update administrator account details."
-                                            : "Create a new administrator account."}
+                                            ? t(
+                                                  "adminManagement.form.editDescription"
+                                              )
+                                            : t(
+                                                  "adminManagement.form.addDescription"
+                                              )}
                                     </p>
                                 </div>
-
                             </div>
 
                             <button
@@ -719,24 +865,27 @@ function AdminManagement() {
                                 className="modal-close"
                                 onClick={closeModal}
                                 disabled={saving}
-                                aria-label="Close"
+                                aria-label={t(
+                                    "adminManagement.form.close"
+                                )}
                             >
-                                ×
+                                {"\u00D7"}
                             </button>
-
                         </div>
 
                         {/* FORM */}
+
                         <form
                             className="admin-form"
                             onSubmit={handleSubmit}
                         >
-
                             {/* FULL NAME */}
-                            <div className="form-group">
 
+                            <div className="form-group">
                                 <label htmlFor="full_name">
-                                    Full Name
+                                    {t(
+                                        "adminManagement.form.fullName"
+                                    )}
                                 </label>
 
                                 <input
@@ -749,19 +898,22 @@ function AdminManagement() {
                                     onChange={
                                         handleChange
                                     }
-                                    placeholder="Enter full name"
+                                    placeholder={t(
+                                        "adminManagement.form.fullNamePlaceholder"
+                                    )}
                                     autoComplete="name"
                                     disabled={saving}
                                     required
                                 />
-
                             </div>
 
                             {/* USERNAME */}
-                            <div className="form-group">
 
+                            <div className="form-group">
                                 <label htmlFor="username">
-                                    Username
+                                    {t(
+                                        "adminManagement.form.username"
+                                    )}
                                 </label>
 
                                 <input
@@ -774,23 +926,28 @@ function AdminManagement() {
                                     onChange={
                                         handleChange
                                     }
-                                    placeholder="Enter username"
+                                    placeholder={t(
+                                        "adminManagement.form.usernamePlaceholder"
+                                    )}
                                     autoComplete="username"
                                     disabled={saving}
                                     required
                                 />
-
                             </div>
 
                             {/* PASSWORD */}
-                            <div className="form-group">
 
+                            <div className="form-group">
                                 <label htmlFor="password">
-                                    Password
+                                    {t(
+                                        "adminManagement.form.password"
+                                    )}
 
                                     {editingAdmin && (
                                         <span className="optional">
-                                            Optional
+                                            {t(
+                                                "adminManagement.form.optional"
+                                            )}
                                         </span>
                                     )}
                                 </label>
@@ -807,14 +964,14 @@ function AdminManagement() {
                                     }
                                     placeholder={
                                         editingAdmin
-                                            ? "Leave blank to keep current password"
-                                            : "Enter password"
+                                            ? t(
+                                                  "adminManagement.form.passwordEditPlaceholder"
+                                              )
+                                            : t(
+                                                  "adminManagement.form.passwordPlaceholder"
+                                              )
                                     }
-                                    autoComplete={
-                                        editingAdmin
-                                            ? "new-password"
-                                            : "new-password"
-                                    }
+                                    autoComplete="new-password"
                                     disabled={saving}
                                     required={
                                         !editingAdmin
@@ -824,17 +981,22 @@ function AdminManagement() {
 
                                 <small className="field-note">
                                     {editingAdmin
-                                        ? "Only enter a password if you want to change it."
-                                        : "Password must be at least 6 characters."}
+                                        ? t(
+                                              "adminManagement.form.passwordEditNote"
+                                          )
+                                        : t(
+                                              "adminManagement.form.passwordNote"
+                                          )}
                                 </small>
-
                             </div>
 
                             {/* ROLE */}
-                            <div className="form-group">
 
+                            <div className="form-group">
                                 <label htmlFor="role">
-                                    Role
+                                    {t(
+                                        "adminManagement.form.role"
+                                    )}
                                 </label>
 
                                 <select
@@ -848,23 +1010,25 @@ function AdminManagement() {
                                     }
                                     disabled={
                                         saving ||
-                                        (
-                                            editingAdmin &&
+                                        (editingAdmin &&
                                             Number(
                                                 editingAdmin.id
                                             ) ===
                                                 Number(
                                                     currentUser.id
-                                                )
-                                        )
+                                                ))
                                     }
                                 >
                                     <option value="admin">
-                                        Admin
+                                        {t(
+                                            "adminManagement.roles.admin"
+                                        )}
                                     </option>
 
                                     <option value="super_admin">
-                                        Super Admin
+                                        {t(
+                                            "adminManagement.roles.superAdmin"
+                                        )}
                                     </option>
                                 </select>
 
@@ -876,25 +1040,25 @@ function AdminManagement() {
                                             currentUser.id
                                         ) && (
                                         <small className="field-note">
-                                            You cannot change
-                                            your own role.
+                                            {t(
+                                                "adminManagement.form.selfRoleNote"
+                                            )}
                                         </small>
                                     )}
-
                             </div>
 
                             {/* FOOTER */}
-                            <div className="admin-form-footer">
 
+                            <div className="admin-form-footer">
                                 <button
                                     type="button"
                                     className="cancel-btn"
-                                    onClick={
-                                        closeModal
-                                    }
+                                    onClick={closeModal}
                                     disabled={saving}
                                 >
-                                    Cancel
+                                    {t(
+                                        "adminManagement.form.cancel"
+                                    )}
                                 </button>
 
                                 <button
@@ -903,16 +1067,19 @@ function AdminManagement() {
                                     disabled={saving}
                                 >
                                     {saving
-                                        ? "Saving..."
+                                        ? t(
+                                              "adminManagement.form.saving"
+                                          )
                                         : editingAdmin
-                                        ? "Save Changes"
-                                        : "Create Administrator"}
+                                        ? t(
+                                              "adminManagement.form.saveChanges"
+                                          )
+                                        : t(
+                                              "adminManagement.form.create"
+                                          )}
                                 </button>
-
                             </div>
-
                         </form>
-
                     </div>
                 </div>
             )}

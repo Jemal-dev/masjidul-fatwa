@@ -1,7 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+
+function getLocalDateString() {
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
 
 function Contributions() {
+  const { t } = useTranslation();
+
   const [members, setMembers] = useState([]);
   const [contributions, setContributions] = useState([]);
 
@@ -22,9 +35,7 @@ function Contributions() {
   const [formData, setFormData] = useState({
     member_id: "",
     amount: "20",
-    contribution_date: new Date()
-      .toISOString()
-      .split("T")[0],
+    contribution_date: getLocalDateString(),
   });
 
   // ==========================================
@@ -35,22 +46,19 @@ function Contributions() {
     try {
       const response = await axios.get("/api/members");
 
-      console.log("Members from backend:", response.data);
+      const allMembers = response.data.data || response.data;
 
-      const allMembers =
-        response.data.data || response.data;
-
-      const activeMembers = allMembers.filter(
-        (member) => member.status === "active"
-      );
-
-      console.log("Active members:", activeMembers);
+      const activeMembers = Array.isArray(allMembers)
+        ? allMembers.filter(
+            (member) => member.status === "active"
+          )
+        : [];
 
       setMembers(activeMembers);
     } catch (err) {
       console.error("Members error:", err);
 
-      setError("Failed to load members.");
+      setError(t("contributions.errors.loadMembers"));
     }
   };
 
@@ -64,16 +72,15 @@ function Contributions() {
         "/api/contributions"
       );
 
-      setContributions(
-        response.data.data || response.data
-      );
-    } catch (err) {
-      console.error(
-        "Contributions error:",
-        err
-      );
+      const data = response.data.data || response.data;
 
-      setError("Failed to load contributions.");
+      setContributions(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Contributions error:", err);
+
+      setError(
+        t("contributions.errors.loadContributions")
+      );
     }
   };
 
@@ -87,17 +94,11 @@ function Contributions() {
         "/api/settings/contribution-amount"
       );
 
-      console.log(
-        "Contribution amount from backend:",
-        response.data
-      );
-
       const amount = Number(response.data.amount);
 
       if (amount > 0) {
         setContributionAmount(amount);
 
-        // Also update the normal form amount
         setFormData((previous) => ({
           ...previous,
           amount: String(amount),
@@ -110,7 +111,7 @@ function Contributions() {
       );
 
       setError(
-        "Failed to load contribution amount."
+        t("contributions.errors.loadAmount")
       );
     }
   };
@@ -120,25 +121,27 @@ function Contributions() {
   // ==========================================
 
   const getPaymentStatus = async () => {
+    if (!formData.contribution_date) {
+      return;
+    }
+
     try {
       setStatusLoading(true);
-      setError("");
 
       const response = await axios.get(
         `/api/reports/weekly?date=${formData.contribution_date}`
       );
 
-      console.log(
-        "Weekly payment status:",
-        response.data
-      );
-
       setPaidMembers(
-        response.data.paid_members || []
+        Array.isArray(response.data.paid_members)
+          ? response.data.paid_members
+          : []
       );
 
       setUnpaidMembers(
-        response.data.unpaid_members || []
+        Array.isArray(response.data.unpaid_members)
+          ? response.data.unpaid_members
+          : []
       );
     } catch (err) {
       console.error(
@@ -147,7 +150,7 @@ function Contributions() {
       );
 
       setError(
-        "Failed to load payment status."
+        t("contributions.errors.loadStatus")
       );
     } finally {
       setStatusLoading(false);
@@ -159,6 +162,17 @@ function Contributions() {
   // ==========================================
 
   const recordForMember = async (member) => {
+    const memberId = Number(
+      member.member_id ?? member.id
+    );
+
+    if (!memberId) {
+      setError(
+        t("contributions.errors.invalidMember")
+      );
+      return;
+    }
+
     try {
       setSaving(true);
       setError("");
@@ -167,7 +181,7 @@ function Contributions() {
       await axios.post(
         "/api/contributions",
         {
-          member_id: Number(member.member_id),
+          member_id: memberId,
           amount: Number(contributionAmount),
           contribution_date:
             formData.contribution_date,
@@ -175,13 +189,12 @@ function Contributions() {
       );
 
       setSuccess(
-        `${member.full_name} has been recorded as paid.`
+        t("contributions.messages.memberRecorded", {
+          name: member.full_name,
+        })
       );
 
-      // Refresh contributions
       await getContributions();
-
-      // Refresh paid/unpaid status
       await getPaymentStatus();
     } catch (err) {
       console.error(
@@ -193,26 +206,34 @@ function Contributions() {
         const message =
           err.response.data?.message || "";
 
+        const lowerMessage = message.toLowerCase();
+
         if (
-          message
-            .toLowerCase()
-            .includes("duplicate") ||
-          message
-            .toLowerCase()
-            .includes("unique")
+          lowerMessage.includes("duplicate") ||
+          lowerMessage.includes("unique")
         ) {
           setError(
-            `${member.full_name} has already paid for this date.`
+            t("contributions.errors.duplicateMember", {
+              name: member.full_name,
+            })
           );
         } else {
           setError(
             message ||
-              "Failed to record contribution."
+              t(
+                "contributions.errors.recordContribution"
+              )
           );
         }
+      } else if (err.request) {
+        setError(
+          t("contributions.errors.connection")
+        );
       } else {
         setError(
-          "Could not connect to the server."
+          t("contributions.errors.unexpected", {
+            message: err.message,
+          })
         );
       }
     } finally {
@@ -221,7 +242,7 @@ function Contributions() {
   };
 
   // ==========================================
-  // LOAD DATA
+  // LOAD INITIAL DATA
   // ==========================================
 
   useEffect(() => {
@@ -257,10 +278,10 @@ function Contributions() {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setFormData({
-      ...formData,
+    setFormData((previous) => ({
+      ...previous,
       [name]: value,
-    });
+    }));
   };
 
   // ==========================================
@@ -275,7 +296,9 @@ function Contributions() {
 
     // Validate member
     if (!formData.member_id) {
-      setError("Please select a member.");
+      setError(
+        t("contributions.errors.selectMember")
+      );
       return;
     }
 
@@ -284,13 +307,17 @@ function Contributions() {
       !formData.amount ||
       Number(formData.amount) <= 0
     ) {
-      setError("Please enter a valid amount.");
+      setError(
+        t("contributions.errors.invalidAmount")
+      );
       return;
     }
 
     // Validate date
     if (!formData.contribution_date) {
-      setError("Please select a date.");
+      setError(
+        t("contributions.errors.selectDate")
+      );
       return;
     }
 
@@ -308,19 +335,15 @@ function Contributions() {
       );
 
       setSuccess(
-        "Contribution recorded successfully."
+        t("contributions.messages.recorded")
       );
 
-      // Reset selected member
       setFormData((previous) => ({
         ...previous,
         member_id: "",
       }));
 
-      // Refresh contributions
       await getContributions();
-
-      // Refresh payment status
       await getPaymentStatus();
     } catch (err) {
       console.error(
@@ -332,29 +355,33 @@ function Contributions() {
         const message =
           err.response.data?.message || "";
 
+        const lowerMessage = message.toLowerCase();
+
         if (
-          message
-            .toLowerCase()
-            .includes("duplicate") ||
-          message
-            .toLowerCase()
-            .includes("unique")
+          lowerMessage.includes("duplicate") ||
+          lowerMessage.includes("unique")
         ) {
           setError(
-            "This member has already made a contribution for this date."
+            t("contributions.errors.duplicate")
           );
         } else {
           setError(
             message ||
-              `Server error: ${err.response.status}`
+              t(
+                "contributions.errors.recordContribution"
+              )
           );
         }
       } else if (err.request) {
         setError(
-          "Cannot connect to the backend server."
+          t("contributions.errors.connection")
         );
       } else {
-        setError(`Error: ${err.message}`);
+        setError(
+          t("contributions.errors.unexpected", {
+            message: err.message,
+          })
+        );
       }
     } finally {
       setSaving(false);
@@ -367,15 +394,15 @@ function Contributions() {
 
   return (
     <div className="contributions-page">
-
       {/* Header */}
       <div className="page-header">
         <div>
-          <h1>Contributions</h1>
+          <h1>
+            {t("contributions.title")}
+          </h1>
 
           <p>
-            Record and manage weekly Shabab
-            contributions.
+            {t("contributions.description")}
           </p>
         </div>
       </div>
@@ -399,34 +426,29 @@ function Contributions() {
       ====================================== */}
 
       <div className="section-card">
-
         <div className="section-header">
-
           <div>
             <h2>
-              Record Contribution
+              {t("contributions.form.title")}
             </h2>
 
             <p>
-              Weekly contribution amount:{" "}
+              {t("contributions.form.weeklyAmount")}{" "}
               <strong>
                 {contributionAmount} ETB
               </strong>
             </p>
           </div>
-
         </div>
 
         <form
           className="contribution-form"
           onSubmit={handleSubmit}
         >
-
           {/* Member */}
           <div className="form-group">
-
             <label>
-              Member
+              {t("contributions.form.member")}
             </label>
 
             <select
@@ -434,9 +456,10 @@ function Contributions() {
               value={formData.member_id}
               onChange={handleChange}
             >
-
               <option value="">
-                Select member
+                {t(
+                  "contributions.form.selectMember"
+                )}
               </option>
 
               {members.map((member) => (
@@ -447,16 +470,13 @@ function Contributions() {
                   {member.full_name}
                 </option>
               ))}
-
             </select>
-
           </div>
 
           {/* Amount */}
           <div className="form-group">
-
             <label>
-              Amount (ETB)
+              {t("contributions.form.amount")}
             </label>
 
             <input
@@ -467,44 +487,39 @@ function Contributions() {
               min="1"
               step="0.01"
             />
-
           </div>
 
           {/* Date */}
           <div className="form-group">
-
             <label>
-              Contribution Date
+              {t("contributions.form.date")}
             </label>
 
             <input
               type="date"
               name="contribution_date"
-              value={
-                formData.contribution_date
-              }
+              value={formData.contribution_date}
               onChange={handleChange}
             />
-
           </div>
 
           {/* Submit */}
           <div className="form-submit">
-
             <button
               type="submit"
               className="save-button"
               disabled={saving}
             >
               {saving
-                ? "Saving..."
-                : "Record Contribution"}
+                ? t(
+                    "contributions.form.saving"
+                  )
+                : t(
+                    "contributions.form.record"
+                  )}
             </button>
-
           </div>
-
         </form>
-
       </div>
 
       {/* ======================================
@@ -512,109 +527,121 @@ function Contributions() {
       ====================================== */}
 
       <div className="section-card">
-
         <div className="section-header">
-
           <div>
-
             <h2>
-              Friday Payment Status
+              {t(
+                "contributions.status.title"
+              )}
             </h2>
 
             <p>
-              Payment status for{" "}
+              {t(
+                "contributions.status.description"
+              )}{" "}
               {formData.contribution_date}
             </p>
-
           </div>
 
           <button
+            type="button"
             className="save-button"
             onClick={getPaymentStatus}
             disabled={statusLoading}
           >
             {statusLoading
-              ? "Loading..."
-              : "Refresh"}
+              ? t(
+                  "contributions.status.loading"
+                )
+              : t(
+                  "contributions.status.refresh"
+                )}
           </button>
-
         </div>
 
         {/* Summary */}
         <div className="payment-status">
-
           <div className="status-box paid">
-
             <span>✓</span>
 
             <div>
-
               <strong>
                 {paidMembers.length}
               </strong>
 
-              <p>Paid</p>
-
+              <p>
+                {t(
+                  "contributions.status.paid"
+                )}
+              </p>
             </div>
-
           </div>
 
           <div className="status-box unpaid">
-
             <span>!</span>
 
             <div>
-
               <strong>
                 {unpaidMembers.length}
               </strong>
 
-              <p>Unpaid</p>
-
+              <p>
+                {t(
+                  "contributions.status.unpaid"
+                )}
+              </p>
             </div>
-
           </div>
-
         </div>
 
         {/* Members Table */}
         {statusLoading ? (
-
           <div className="loading">
-            Loading payment status...
+            {t(
+              "contributions.status.loadingMembers"
+            )}
           </div>
-
         ) : (
-
           <div className="table-container">
-
             <table>
-
               <thead>
-
                 <tr>
                   <th>#</th>
-                  <th>Member</th>
-                  <th>Phone</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <th>
+                    {t(
+                      "contributions.status.table.member"
+                    )}
+                  </th>
+                  <th>
+                    {t(
+                      "contributions.status.table.phone"
+                    )}
+                  </th>
+                  <th>
+                    {t(
+                      "contributions.status.table.status"
+                    )}
+                  </th>
+                  <th>
+                    {t(
+                      "contributions.status.table.action"
+                    )}
+                  </th>
                 </tr>
-
               </thead>
 
               <tbody>
-
                 {/* Paid Members */}
                 {paidMembers.map(
                   (member, index) => (
-
                     <tr
-                      key={`paid-${member.member_id}`}
+                      key={`paid-${
+                        member.member_id ??
+                        member.id ??
+                        index
+                      }`}
                     >
-
-                      <td>
-                        {index + 1}
-                      </td>
+                      <td>{index + 1}</td>
 
                       <td>
                         <strong>
@@ -628,14 +655,16 @@ function Contributions() {
 
                       <td>
                         <span className="status-active">
-                          ✓ Paid
+                          ✓{" "}
+                          {t(
+                            "contributions.status.paid"
+                          )}
                         </span>
                       </td>
 
                       <td>
                         {member.amount} ETB
                       </td>
-
                     </tr>
                   )
                 )}
@@ -643,11 +672,13 @@ function Contributions() {
                 {/* Unpaid Members */}
                 {unpaidMembers.map(
                   (member, index) => (
-
                     <tr
-                      key={`unpaid-${member.member_id}`}
+                      key={`unpaid-${
+                        member.member_id ??
+                        member.id ??
+                        index
+                      }`}
                     >
-
                       <td>
                         {paidMembers.length +
                           index +
@@ -666,38 +697,58 @@ function Contributions() {
 
                       <td>
                         <span className="status-inactive">
-                          ! Unpaid
+                          !{" "}
+                          {t(
+                            "contributions.status.unpaid"
+                          )}
                         </span>
                       </td>
 
                       <td>
-
                         <button
                           type="button"
                           className="record-button"
                           onClick={() =>
-                            recordForMember(member)
+                            recordForMember(
+                              member
+                            )
                           }
                           disabled={saving}
                         >
                           {saving
-                            ? "Recording..."
-                            : `Record ${contributionAmount} ETB`}
+                            ? t(
+                                "contributions.status.recording"
+                              )
+                            : t(
+                                "contributions.status.recordAmount",
+                                {
+                                  amount:
+                                    contributionAmount,
+                                }
+                              )}
                         </button>
-
                       </td>
-
                     </tr>
                   )
                 )}
 
+                {/* No members */}
+                {paidMembers.length === 0 &&
+                  unpaidMembers.length === 0 && (
+                    <tr>
+                      <td colSpan="5">
+                        <div className="empty">
+                          {t(
+                            "contributions.status.noMembers"
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
               </tbody>
-
             </table>
-
           </div>
         )}
-
       </div>
 
       {/* ======================================
@@ -705,79 +756,85 @@ function Contributions() {
       ====================================== */}
 
       <div className="members-card">
-
         <div className="members-card-header">
-
           <div>
             <h2>
-              Recent Contributions
+              {t(
+                "contributions.recent.title"
+              )}
             </h2>
           </div>
 
           <span>
-            {contributions.length} records
+            {t(
+              "contributions.recent.count",
+              {
+                count: contributions.length,
+              }
+            )}
           </span>
-
         </div>
 
         {loading ? (
-
           <div className="loading">
-            Loading contributions...
+            {t(
+              "contributions.recent.loading"
+            )}
           </div>
-
         ) : contributions.length === 0 ? (
-
           <div className="empty">
-            No contributions found.
+            {t(
+              "contributions.recent.empty"
+            )}
           </div>
-
         ) : (
-
           <div className="table-container">
-
             <table>
-
               <thead>
-
                 <tr>
-
                   <th>#</th>
 
                   <th>
-                    Member
+                    {t(
+                      "contributions.recent.table.member"
+                    )}
                   </th>
 
                   <th>
-                    Amount
+                    {t(
+                      "contributions.recent.table.amount"
+                    )}
                   </th>
 
                   <th>
-                    Date
+                    {t(
+                      "contributions.recent.table.date"
+                    )}
                   </th>
-
                 </tr>
-
               </thead>
 
               <tbody>
-
                 {contributions.map(
                   (contribution, index) => (
-
                     <tr
-                      key={contribution.id}
+                      key={
+                        contribution.id ??
+                        `${contribution.member_id}-${index}`
+                      }
                     >
-
-                      <td>
-                        {index + 1}
-                      </td>
+                      <td>{index + 1}</td>
 
                       <td>
                         <strong>
                           {contribution.full_name ||
                             contribution.member_name ||
-                            `Member #${contribution.member_id}`}
+                            t(
+                              "contributions.recent.memberFallback",
+                              {
+                                id: contribution.member_id,
+                              }
+                            )}
                         </strong>
                       </td>
 
@@ -787,25 +844,18 @@ function Contributions() {
 
                       <td>
                         {String(
-                          contribution.contribution_date
+                          contribution.contribution_date ||
+                            ""
                         ).substring(0, 10)}
                       </td>
-
                     </tr>
-
                   )
                 )}
-
               </tbody>
-
             </table>
-
           </div>
-
         )}
-
       </div>
-
     </div>
   );
 }

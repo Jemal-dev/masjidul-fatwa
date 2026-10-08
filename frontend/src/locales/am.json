@@ -1,0 +1,755 @@
+﻿{
+  "nav": {
+    "home": "መነሻ",
+    "about": "ስለ እኛ",
+    "services": "አገልግሎቶች",
+    "activities": "እንቅስቃሴዎች",
+    "gallery": "የፎቶ ማዕከል",
+    "contact": "ያግኙን",
+    "adminLogin": "የአስተዳዳሪ መግቢያ",
+    "dashboard": "ዳሽቦርድ",
+    "members": "አባላት",
+    "contributions": "መዋጮዎች",
+    "reports": "ሪፖርቶች",
+    "admins": "አስተዳዳሪዎች",
+    "settings": "ቅንብሮች"
+  },
+
+  "language": {
+    "title": "ቋንቋ",
+    "english": "English",
+    "oromo": "Afaan Oromoo",
+    "amharic": "አማርኛ",
+    "arabic": "ዓረብኛ"
+  },
+
+  "hero": {
+    "eyebrow": "የወጣቶች አስተዋጽኦ እና አስተዳደር",
+    "title": "ማህበረሰብን መገንባት",
+    "titleHighlight": "በአስተዋጽኦ እና በተፅእኖ",
+    "description": "ይህ ግልጽ ዲጂታል መድረክ የመስጂዱል-ፈትዋ ሻባብ አባላትን ለማስተዳደር፣ ሳምንታዊ አስተዋጽኦዎችን ለመመዝገብ እና ግልጽ የማህበረሰብ መዝገቦችን ለመጠበቅ ያግዛል።",
+    "exploreServices": "አገልግሎቶቻችንን ይመልከቱ",
+    "adminLogin": "የአስተዳዳሪ መግቢያ",
+    "organizedRecords": "የተደራጁ መዝገቦች",
+    "transparentContributions": "ግልጽ አስተዋጽኦዎች",
+    "communityFocused": "በማህበረሰብ ላይ ያተኮረ",
+    "systemName": "የወጣቶች አስተዋጽኦ እና አስተዳደር ስርዓት",
+    "activeMembers": "ንቁ አባላት",
+    "totalCollection": "አጠቃላይ ስብስብ"
+  },
+
+  "impact": {
+    "kicker": "የጋራ ተፅእኖአችን",
+    "title": "ከአስተዋጽኦ ስርዓታችን የተገኙ እውነተኛ ቁጥሮች",
+    "activeMembers": "ንቁ አባላት",
+    "thisWeek": "በዚህ ሳምንት",
+    "thisMonth": "በዚህ ወር",
+    "totalCollection": "አጠቃላይ ስብስብ"
+  },
+
+  "about": {
+    "kicker": "እኛ ማን ነን",
+    "title": "በእምነት፣ በኃላፊነት እና በአገልግሎት ላይ የተገነባ ማህበረሰብ።",
+    "description": "መስጂዱል-ፈትዋ ሻባብ የተደራጀ አስተዋጽኦ፣ ትብብር እና ተጠያቂነትን የሚያከብር የወጣቶች ማህበረሰብ ነው። ይህ መድረክ የወረቀት መዝገቦችን ወደ ግልጽ ዲጂታል ስርዓት ለመቀየር ያግዛል።",
+    "points": {
+      "transparentRecords": {
+        "title": "ግልጽ መዝገቦች",
+        "description": "አስተዋጽኦዎች በዲጂታል መልክ ይቀመጣሉ፣ ስለዚህ አስተዳዳሪዎች በወረቀት ላይ ሳይመሰረቱ መዝገቦችን ማየት ይችላሉ።"
+      },
+      "responsibleManagement": {
+        "title": "ኃላፊነት ያለው አስተዳደር",
+        "description": "አባላት፣ ክፍያዎች እና ሪፖርቶች በአንድ የአስተዳደር ስርዓት ይደራጃሉ።"
+      },
+      "communityImpact": {
+        "title": "የማህበረሰብ ተፅእኖ",
+        "description": "ግልጽ መዝገቦች የሻባብን ተሳትፎ እና የተሰበሰበውን ሀብት ለመረዳት ያቀላሉ።"
+      }
+    },
+    "label": "ማህበረሰብ • አስተዋጽኦ • ተፅእኖ"
+  },
+
+  "services": {
+    "kicker": "አገልግሎቶቻችን",
+    "title": "የሻባብ ቡድን የሚፈልገው ሁሉ በአንድ ቦታ።",
+    "description": "የህዝብ ድረ-ገጹ እና የአስተዳደር ስርዓቱ በአንድነት በመስራት የማህበረሰብ አስተዳደርን ቀላል ያደርጋሉ።",
+    "explore": "ይመልከቱ",
+    "items": {
+      "memberManagement": {
+        "title": "የአባላት አስተዳደር",
+        "description": "የሻባብ አባላትን መረጃ ያክሉ፣ ያርሙ፣ ንቁ ያድርጉ እና ያስተዳድሩ።"
+      },
+      "contributionRecording": {
+        "title": "የአስተዋጽኦ መመዝገብ",
+        "description": "ሳምንታዊ አስተዋጽኦዎችን ይመዝግቡ እና ተደጋጋሚ መዝገቦችን ይከላከሉ።"
+      },
+      "weeklyReports": {
+        "title": "ሳምንታዊ ሪፖርቶች",
+        "description": "የከፈሉ አባላትን፣ ያልከፈሉ አባላትን እና የሳምንቱን ጠቅላላ ስብስብ ይመልከቱ።"
+      },
+      "monthlyReports": {
+        "title": "ወርሃዊ ሪፖርቶች",
+        "description": "የወርሃዊ አስተዋጽኦ መዝገቦችን እና የአባላት ብዛትን ይገምግሙ።"
+      },
+      "telegramBot": {
+        "title": "ቴሌግራም ቦት",
+        "description": "የአስተዋጽኦ ስራዎችን እና ሪፖርቶችን በሻባብ ቴሌግራም ቦት ያስተዳድሩ።"
+      },
+      "printableReports": {
+        "title": "ሊታተሙ የሚችሉ ሪፖርቶች",
+        "description": "ለማስቀመጥ እና ለማተም ተስማሚ የሆኑ ንጹህ ሪፖርቶችን ይፍጠሩ።"
+      }
+    }
+  },
+
+  "achievements": {
+    "kicker": "ስኬቶቻችን",
+    "title": "ስርዓቱ የማህበረሰባችንን ስራ ያሳያል።",
+    "activeMembers": "ንቁ የሻባብ አባላት",
+    "totalCollection": "አጠቃላይ የተመዘገበ ስብስብ",
+    "weeklyCollection": "የዚህ ሳምንት ስብስብ",
+    "monthlyCollection": "የዚህ ወር ስብስብ"
+  },
+
+  "why": {
+    "kicker": "ለምን ይህ መድረክ",
+    "title": "የአስተዋጽኦ አስተዳደርን ይበልጥ ግልጽ ለማድረግ የተዘጋጀ።",
+    "items": {
+      "simpleRecords": {
+        "title": "ቀላል የመዝገብ አያያዝ",
+        "description": "ሳምንታዊ መዝገቦችን ከወረቀት ወደ የተደራጀ ዲጂታል ዳታቤዝ ይቀይሩ።"
+      },
+      "accountability": {
+        "title": "የተሻለ ተጠያቂነት",
+        "description": "ሪፖርቶች አስተዳዳሪዎች የአስተዋጽኦ እንቅስቃሴን በቀላሉ እንዲገመግሙ ያግዛሉ።"
+      },
+      "duplicates": {
+        "title": "የተደጋጋሚ መዝገቦች መቀነስ",
+        "description": "የአስተዋጽኦ ሂደቱ ለአንድ ቀን የተደጋገመ መዝገብ መኖሩን ይፈትሻል።"
+      },
+      "accessible": {
+        "title": "ተደራሽ መረጃ",
+        "description": "ፈቃድ ያላቸው አስተዳዳሪዎች ድረ-ገጹን ወይም ቴሌግራም ቦትን መጠቀም ይችላሉ።"
+      }
+    }
+  },
+
+  "events": {
+    "kicker": "የማህበረሰብ እንቅስቃሴዎች",
+    "title": "ሻባብን በአንድነት እና በስርዓት ማቆየት።",
+    "weekly": "ሳምንታዊ",
+    "monthly": "ወርሃዊ",
+    "community": "ማህበረሰብ",
+    "friday": "ዓርብ",
+    "report": "ሪፖርት",
+    "shabab": "ሻባብ",
+    "fridayContribution": "የዓርብ አስተዋጽኦ",
+    "fridayDescription": "ሳምንታዊ የአስተዋጽኦ እንቅስቃሴ እና የሻባብ አባላት ክፍያ መመዝገብ።",
+    "manageContributions": "አስተዋጽኦዎችን ያስተዳድሩ",
+    "monthlyReview": "ወርሃዊ ግምገማ",
+    "monthlyDescription": "የወርሃዊ አስተዋጽኦ መዝገቦችን ይመልከቱ እና የተሰበሰበውን መጠን ይረዱ።",
+    "viewReports": "ሪፖርቶችን ይመልከቱ",
+    "shababActivities": "የሻባብ እንቅስቃሴዎች",
+    "activitiesDescription": "ይህን መድረክ ለተደራጀ የወጣቶች ማህበረሰብ እንቅስቃሴ መሠረት ያድርጉ።",
+    "openSystem": "ስርዓቱን ይክፈቱ",
+    "viewGallery": "የፎቶ ማዕከሉን ይመልከቱ"
+  },
+
+  "membership": {
+    "kicker": "አባላችን መሆን የሚችለው ማነው?",
+    "title": "መስጠት እና ማገልገል ለሚፈልጉ ሻባብ የተዘጋጀ ቦታ።",
+    "items": {
+      "members": {
+        "title": "የሻባብ አባላት",
+        "description": "በማህበረሰቡ እና በሳምንታዊ አስተዋጽኦ እንቅስቃሴዎች የሚሳተፉ አባላት።"
+      },
+      "volunteers": {
+        "title": "የማህበረሰብ በጎ ፈቃደኞች",
+        "description": "የማህበረሰብ ፕሮግራሞችን እና የተደራጁ እንቅስቃሴዎችን የሚደግፉ ሰዎች።"
+      },
+      "administrators": {
+        "title": "አስተዳዳሪዎች",
+        "description": "መዝገቦችን እና ሪፖርቶችን ለማስተዳደር ፈቃድ ያላቸው ሰዎች።"
+      },
+      "supporters": {
+        "title": "የማህበረሰብ ደጋፊዎች",
+        "description": "አዎንታዊ የማህበረሰብ ተነሳሽነቶችን ማጠናከር የሚፈልጉ ደጋፊዎች።"
+      }
+    }
+  },
+
+  "commitment": {
+    "kicker": "ቁርጠኝነታችን",
+    "title": "በተደራጀ አስተዋጽኦ አብረን እያደግን።",
+    "description": "እያንዳንዱ አስተዋጽኦ ጠቃሚ ነው። የዚህ ስርዓት ዓላማ ሂደቱን ለመመዝገብ፣ ለመገምገም እና ለማስተዳደር ቀላል ማድረግ ሲሆን ማህበረሰቡን በማዕከል ማቆየት ነው።",
+    "button": "ወደ አስተዳደር ስርዓት ይግቡ"
+  },
+
+  "contact": {
+    "kicker": "ያግኙን",
+    "title": "ከመስጂዱል-ፈትዋ ሻባብ ጋር ይገናኙ።",
+    "description": "የሻባብ ኦፊሴላዊ ስልክ፣ ኢሜይል፣ የቴሌግራም ቻናል እና የቦታ መረጃ ሲዘጋጅ የግንኙነት መረጃ እዚህ ሊጨመር ይችላል።",
+    "location": "ቦታ",
+    "locationDescription": "የመስጂዱል-ፈትዋ ማህበረሰብ",
+    "telegram": "ቴሌግራም",
+    "telegramDescription": "የሻባብ ኦፊሴላዊ የቴሌግራም ግንኙነት",
+    "email": "ኢሜይል",
+    "emailDescription": "የኦፊሴላዊ ግንኙነት መረጃ እዚህ ሊጨመር ይችላል"
+  },
+
+  "footer": {
+    "systemName": "የወጣቶች አስተዋጽኦ እና አስተዳደር ስርዓት",
+    "description": "በድርጅታዊ አቀራረብ፣ በአስተዋጽኦ እና በኃላፊነት ያለው አገልግሎት ጠንካራ ማህበረሰብ መገንባት።",
+    "quickLinks": "ፈጣን አገናኞች",
+    "system": "ስርዓት",
+    "members": "አባላት",
+    "reports": "ሪፖርቶች",
+    "contributions": "አስተዋጽኦዎች",
+    "copyright": "መስጂዱል-ፈትዋ ሻባብ። መብቱ በሙሉ የተጠበቀ ነው።",
+    "builtBy": "Built by Jemal Seid"
+  },
+
+  "login": {
+    "title": "የአስተዳዳሪ መግቢያ",
+    "description": "የሻባብ አስተዋጽኦ ስርዓትን ለማስተዳደር ይግቡ።",
+    "username": "የተጠቃሚ ስም",
+    "usernamePlaceholder": "የተጠቃሚ ስምዎን ያስገቡ",
+    "password": "የይለፍ ቃል",
+    "passwordPlaceholder": "የይለፍ ቃልዎን ያስገቡ",
+    "showPassword": "የይለፍ ቃል አሳይ",
+    "hidePassword": "የይለፍ ቃል ደብቅ",
+    "signingIn": "በመግባት ላይ...",
+    "signIn": "ግባ",
+    "backToWebsite": "ወደ ድረ-ገጹ ተመለስ",
+    "errors": {
+      "required": "እባክዎ የተጠቃሚ ስምዎን እና የይለፍ ቃልዎን ያስገቡ።",
+      "invalidCredentials": "የተጠቃሚ ስም ወይም የይለፍ ቃል ልክ አይደለም።",
+      "inactive": "የአስተዳዳሪ መለያዎ እንቅስቃሴ ታግዷል።",
+      "loginFailed": "መግባት አልተሳካም።",
+      "server": "ከሰርቨሩ ጋር መገናኘት አልተቻለም።",
+      "unexpected": "ያልተጠበቀ ስህተት ተፈጥሯል።"
+    }
+  },
+
+  "admin": {
+    "shababSystem": "የሻባብ ስርዓት",
+    "management": "አስተዳደር",
+    "website": "ድረ-ገጽ",
+    "publicWebsite": "የህዝብ ድረ-ገጽ",
+    "superAdministrator": "ዋና አስተዳዳሪ",
+    "administrator": "አስተዳዳሪ",
+    "logout": "ውጣ",
+    "closeMenu": "ሜኑን ዝጋ",
+    "openNavigation": "የአሰሳ ሜኑን ክፈት"
+  },
+
+  "dashboard": {
+    "managementOverview": "የአስተዳደር አጠቃላይ እይታ",
+    "title": "ዳሽቦርድ",
+    "welcome": "እንኳን ወደ መስጂዱል-ፈትዋ ሻባብ የመዋጮ ስርዓት በሰላም መጡ።",
+    "addContribution": "መዋጮ ጨምር",
+    "activeMembers": "ንቁ አባላት",
+    "totalCollection": "አጠቃላይ ስብስብ",
+    "thisWeek": "በዚህ ሳምንት",
+    "thisMonth": "በዚህ ወር",
+    "collectionTrend": "የመዋጮ አዝማሚያ",
+    "collectionTrendDescription": "ላለፉት 6 ሳምንታት የተሰበሰበ ሳምንታዊ መዋጮ።",
+    "loadingCollectionTrend": "የመዋጮ አዝማሚያ በመጫን ላይ...",
+    "collection": "መዋጮ",
+    "weekOf": "የሳምንቱ",
+    "noCollectionData": "እስካሁን የመዋጮ መረጃ የለም።",
+    "weeklyPaymentStatus": "የሳምንታዊ ክፍያ ሁኔታ",
+    "weeklyPaymentDescription": "በዚህ ሳምንት የአባላት መዋጮ ሁኔታ።",
+    "paidMembers": "የከፈሉ አባላት",
+    "unpaidMembers": "ያልከፈሉ አባላት",
+    "quickActions": "ፈጣን ተግባራት",
+    "quickActionsDescription": "ወደ የተለመዱ ተግባራት በቀጥታ ይሂዱ።",
+    "recordContribution": "መዋጮ መዝግብ",
+    "manageMembers": "አባላትን አስተዳድር",
+    "generateReports": "ሪፖርት ፍጠር",
+    "recentContributions": "የቅርብ ጊዜ መዋጮዎች",
+    "recentContributionsDescription": "የቅርብ ጊዜ የመዋጮ መዝገቦች።",
+    "viewAll": "ሁሉንም ይመልከቱ",
+    "loadingContributions": "መዋጮዎችን በመጫን ላይ...",
+    "noContributions": "እስካሁን ምንም መዋጮ አልተመዘገበም።"
+  },
+
+  "reports": {
+    "title": "ሪፖርቶች",
+    "description": "የሻባብ መዋጮ ሪፖርቶችን ይመልከቱ እና ያስተዳድሩ።",
+    "common": {
+      "loading": "በመጫን ላይ...",
+      "print": "ሪፖርት አትም",
+      "date": "ቀን",
+      "month": "ወር",
+      "unknownMember": "ያልታወቀ አባል"
+    },
+    "weekly": {
+      "title": "ሳምንታዊ የመዋጮ ሪፖርት",
+      "description": "የክፍያ ሁኔታን ለማየት ቀን ይምረጡ።",
+      "date": "የሪፖርት ቀን",
+      "generate": "ሪፖርት ፍጠር",
+      "resultTitle": "ሳምንታዊ ሪፖርት",
+      "totalMembers": "አጠቃላይ አባላት",
+      "paid": "የከፈሉ",
+      "unpaid": "ያልከፈሉ",
+      "totalCollection": "አጠቃላይ ስብስብ",
+      "paidMembers": "የከፈሉ አባላት",
+      "unpaidMembers": "ያልከፈሉ አባላት",
+      "noPaidMembers": "የከፈሉ አባላት አልተገኙም።",
+      "allPaid": "ሁሉም አባላት ከፍለዋል።"
+    },
+    "monthly": {
+      "title": "ወርሃዊ የመዋጮ ሪፖርት",
+      "description": "ለተመረጠ ወር የመዋጮ መዝገቦችን ይመልከቱ።",
+      "month": "የሪፖርት ወር",
+      "generate": "ወርሃዊ ሪፖርት ፍጠር",
+      "resultTitle": "ወርሃዊ ሪፖርት",
+      "contributions": "መዋጮዎች",
+      "totalCollection": "አጠቃላይ ስብስብ",
+      "records": "የመዋጮ መዝገቦች",
+      "noRecords": "ለዚህ ወር ምንም መዋጮ አልተገኘም።"
+    },
+    "member": {
+      "title": "የአባል ሪፖርት",
+      "description": "የአንድ አባልን የመዋጮ ታሪክ ይመልከቱ።",
+      "selectMember": "አባል ይምረጡ",
+      "chooseMember": "አባል ይምረጡ",
+      "generate": "የአባል ሪፖርት ፍጠር",
+      "resultTitle": "የአባል ሪፖርት",
+      "selected": "አባል",
+      "contributions": "መዋጮዎች",
+      "totalCollection": "አጠቃላይ ስብስብ",
+      "memberInformation": "የአባል መረጃ",
+      "fullName": "ሙሉ ስም",
+      "phone": "ስልክ",
+      "telegram": "ቴሌግራም",
+      "status": "ሁኔታ",
+      "history": "የመዋጮ ታሪክ",
+      "noHistory": "የመዋጮ ታሪክ አልተገኘም።"
+    },
+    "table": {
+      "member": "አባል",
+      "phone": "ስልክ",
+      "amount": "መጠን",
+      "date": "ቀን",
+      "status": "ሁኔታ"
+    },
+    "print": {
+      "systemName": "መስጂዱል-ፈትዋ ሻባብ",
+      "weeklyTitle": "ሳምንታዊ የመዋጮ ሪፖርት",
+      "monthlyTitle": "ወርሃዊ የመዋጮ ሪፖርት",
+      "memberTitle": "የአባል የመዋጮ ሪፖርት",
+      "generatedDate": "የተፈጠረበት ቀን",
+      "administrator": "አስተዳዳሪ",
+      "treasurer": "ገንዘብ ያዥ",
+      "shababRepresentative": "የሻባብ ተወካይ"
+    },
+    "errors": {
+      "loadMembers": "አባላትን መጫን አልተቻለም።",
+      "weekly": "ሳምንታዊ ሪፖርትን መጫን አልተቻለም።",
+      "monthly": "ወርሃዊ ሪፖርትን መጫን አልተቻለም።",
+      "member": "የአባል ሪፖርትን መጫን አልተቻለም።",
+      "selectMember": "እባክዎ አንድ አባል ይምረጡ።"
+    }
+  },
+
+  "settings": {
+    "title": "ቅንብሮች",
+    "description": "የሻባብ መዋጮ ስርዓት ቅንብሮችን ያስተዳድሩ።",
+    "common": {
+      "saving": "በማስቀመጥ ላይ...",
+      "saveChanges": "ለውጦችን አስቀምጥ",
+      "cancel": "ሰርዝ"
+    },
+    "contribution": {
+      "title": "የመዋጮ ቅንብር",
+      "description": "የአንድ የዓርብ መዋጮ መጠን ያዘጋጁ።",
+      "amountLabel": "የመዋጮ መጠን",
+      "amountPlaceholder": "የመዋጮ መጠን ያስገቡ",
+      "amountHelp": "ይህ መጠን ለአዲስ የዓርብ መዋጮ መዝገቦች ይጠቀማል።"
+    },
+    "danger": {
+      "title": "አደገኛ አማራጮች",
+      "superAdminOnly": "ይህ ክፍል ለዋና አስተዳዳሪ ብቻ ነው።",
+      "description": "ከፍተኛ ጥንቃቄ የሚፈልጉ የስርዓት ተግባራት።",
+      "warningTitle": "ሁሉንም የመዋጮ መዝገቦች አጥፋ",
+      "warningDescription": "ይህ ተግባር የተመዘገቡ የመዋጮ መረጃዎችን በሙሉ ያጠፋል። ይህ ተግባር መመለስ አይችልም።",
+      "clearButton": "የድሮ መዋጮዎችን አጥፋ",
+      "irreversible": "ይህ ተግባር መመለስ አይችልም።",
+      "lastCleared": "በመጨረሻ {{count}} የመዋጮ መዝገቦች ተጠፍተዋል።"
+    },
+    "modal": {
+      "title": "የመዋጮ መዝገቦችን ማጥፋት",
+      "description": "ሁሉንም የተመዘገቡ የመዋጮ መረጃዎች ሊያጠፉ ነው።",
+      "warningTitle": "ይህ ተግባር መመለስ አይችልም።",
+      "warningDescription": "ሁሉም የመዋጮ መዝገቦች በቋሚነት ይጠፋሉ።",
+      "clearing": "በማጥፋት ላይ...",
+      "confirm": "ሁሉንም መዋጮዎች አጥፋ"
+    },
+    "messages": {
+      "amountUpdated": "የመዋጮ መጠን በተሳካ ሁኔታ ተዘምኗል።",
+      "contributionsCleared": "{{count}} የመዋጮ መዝገቦች በተሳካ ሁኔታ ጠፍተዋል።"
+    },
+    "errors": {
+      "load": "የቅንብሮች መረጃን መጫን አልተቻለም።",
+      "invalidAmount": "እባክዎ ትክክለኛ የመዋጮ መጠን ያስገቡ።",
+      "save": "የመዋጮ መጠንን ማስቀመጥ አልተቻለም።",
+      "clearContributions": "የመዋጮ መዝገቦችን ማጥፋት አልተቻለም።"
+    }
+  },
+
+  "members": {
+    "title": "አባላት",
+    "description": "የመስጂዱል-ፈትዋ ሻባብ አባላትን ያስተዳድሩ።",
+    "addMember": "አባል ጨምር",
+
+    "statistics": {
+      "total": "ጠቅላላ አባላት",
+      "active": "ንቁ አባላት",
+      "inactive": "ንቁ ያልሆኑ አባላት"
+    },
+
+    "list": {
+      "title": "ሁሉም አባላት",
+      "count": "{{total}} ውስጥ {{visible}} አባላት"
+    },
+
+    "sort": {
+      "label": "ደርድር",
+      "nameAsc": "ስም A → Z",
+      "nameDesc": "ስም Z → A",
+      "newest": "አዲስ",
+      "oldest": "የቆየ"
+    },
+
+    "search": {
+      "placeholder": "አባላትን ይፈልጉ...",
+      "ariaLabel": "አባላትን ይፈልጉ",
+      "clear": "ፍለጋን አጽዳ"
+    },
+
+    "form": {
+      "addTitle": "አዲስ አባል ጨምር",
+      "editTitle": "አባል አርም",
+      "addDescription": "የአባሉን መረጃ ከታች ያስገቡ።",
+      "editDescription": "የአባሉን መረጃ ከታች ያዘምኑ።",
+      "fullName": "ሙሉ ስም",
+      "fullNamePlaceholder": "ሙሉ ስም ያስገቡ",
+      "phone": "ስልክ ቁጥር",
+      "phonePlaceholder": "ስልክ ቁጥር ያስገቡ",
+      "telegram": "የቴሌግራም የተጠቃሚ ስም",
+      "cancel": "ሰርዝ",
+      "saving": "በመቀመጥ ላይ...",
+      "save": "አባል አስቀምጥ",
+      "update": "አባል አዘምን"
+    },
+
+    "table": {
+      "name": "ስም",
+      "phone": "ስልክ",
+      "telegram": "ቴሌግራም",
+      "status": "ሁኔታ",
+      "actions": "ተግባራት"
+    },
+
+    "status": {
+      "active": "ንቁ",
+      "inactive": "ንቁ አይደለም"
+    },
+
+    "actions": {
+      "edit": "አርም",
+      "activate": "ንቁ አድርግ",
+      "deactivate": "ንቁነትን አሰናክል"
+    },
+
+    "confirm": {
+      "activate": "{{name}} ንቁ እንዲሆን እርግጠኛ ነዎት?",
+      "deactivate": "{{name}} ንቁ እንዳይሆን እርግጠኛ ነዎት?"
+    },
+
+    "messages": {
+      "added": "አባሉ በተሳካ ሁኔታ ታክሏል።",
+      "updated": "አባሉ በተሳካ ሁኔታ ተዘምኗል።",
+      "activated": "{{name}} ንቁ ሆኗል።",
+      "deactivated": "{{name}} ንቁነቱ ተሰናክሏል።"
+    },
+
+    "loading": "አባላትን በመጫን ላይ...",
+    "empty": "ምንም አባላት አልተገኙም።",
+    "noSearchResults": "ከፍለጋዎ ጋር የሚዛመድ አባል የለም።",
+
+    "errors": {
+      "fullNameRequired": "ሙሉ ስም ያስፈልጋል።",
+      "connection": "ከ backend server ጋር መገናኘት አልተቻለም።",
+      "server": "የሰርቨር ስህተት: {{status}} - {{statusText}}",
+      "unexpected": "ስህተት: {{message}}"
+    }
+  },
+    "contributions": {
+    "title": "ማበርከቻዎች",
+    "description": "የሻባብ ሳምንታዊ ማበርከቻዎችን ይመዝግቡ እና ያስተዳድሩ።",
+
+    "form": {
+      "title": "ማበርከቻ መዝግብ",
+      "weeklyAmount": "የሳምንታዊ ማበርከቻ መጠን:",
+      "member": "አባል",
+      "selectMember": "አባል ይምረጡ",
+      "amount": "መጠን (ETB)",
+      "date": "የማበርከቻ ቀን",
+      "saving": "በመቀመጥ ላይ...",
+      "record": "ማበርከቻ መዝግብ"
+    },
+
+    "status": {
+      "title": "የዓርብ ክፍያ ሁኔታ",
+      "description": "የክፍያ ሁኔታ ለ",
+      "loading": "በመጫን ላይ...",
+      "refresh": "አድስ",
+      "loadingMembers": "የክፍያ ሁኔታን በመጫን ላይ...",
+      "paid": "ከፍሏል",
+      "unpaid": "አልከፈለም",
+      "recording": "በመመዝገብ ላይ...",
+      "recordAmount": "{{amount}} ETB መዝግብ",
+      "noMembers": "የክፍያ ሁኔታ መዝገብ አልተገኘም።",
+      "table": {
+        "member": "አባል",
+        "phone": "ስልክ",
+        "status": "ሁኔታ",
+        "action": "ተግባር"
+      }
+    },
+
+    "recent": {
+      "title": "የቅርብ ጊዜ ማበርከቻዎች",
+      "count": "{{count}} መዝገቦች",
+      "loading": "ማበርከቻዎችን በመጫን ላይ...",
+      "empty": "ምንም ማበርከቻ አልተገኘም።",
+      "memberFallback": "አባል #{{id}}",
+      "table": {
+        "member": "አባል",
+        "amount": "መጠን",
+        "date": "ቀን"
+      }
+    },
+
+    "messages": {
+      "recorded": "ማበርከቻው በተሳካ ሁኔታ ተመዝግቧል።",
+      "memberRecorded": "{{name}} እንደከፈለ በተሳካ ሁኔታ ተመዝግቧል።"
+    },
+
+    "errors": {
+      "loadMembers": "አባላትን መጫን አልተቻለም።",
+      "loadContributions": "ማበርከቻዎችን መጫን አልተቻለም።",
+      "loadAmount": "የማበርከቻ መጠንን መጫን አልተቻለም።",
+      "loadStatus": "የክፍያ ሁኔታን መጫን አልተቻለም።",
+      "invalidMember": "ልክ ያልሆነ አባል ተመርጧል።",
+      "selectMember": "እባክዎ አባል ይምረጡ።",
+      "invalidAmount": "እባክዎ ትክክለኛ መጠን ያስገቡ።",
+      "selectDate": "እባክዎ ቀን ይምረጡ።",
+      "duplicate": "ይህ አባል በዚህ ቀን ላይ አስቀድሞ አበርክቷል።",
+      "duplicateMember": "{{name}} በዚህ ቀን አስቀድሞ ከፍሏል።",
+      "recordContribution": "ማበርከቻን መመዝገብ አልተቻለም።",
+      "connection": "ከ backend server ጋር መገናኘት አልተቻለም።",
+      "unexpected": "ስህተት: {{message}}"
+    }
+  },
+    "gallery": {
+    "kicker": "የሻባብ የፎቶ ማዕከል",
+    "title": "ትዝታዎች፣ እንቅስቃሴዎች እና የማህበረሰብ ጊዜያት",
+    "description": "የመስጂዱል-ፈትዋ ሻባብ እንቅስቃሴዎችን፣ ፕሮግራሞችን እና የማይረሱ ጊዜያትን የሚያሳዩ የፎቶ ስብስብ።",
+    "loading": "የፎቶ ማዕከሉ በመጫን ላይ...",
+    "loadingDescription": "የማህበረሰባችንን ፎቶዎች ስንጭን እባክዎ ይጠብቁ።",
+    "comingSoonBadge": "የፎቶ ማዕከሉ በቅርቡ ይመጣል",
+    "emptyTitle": "ፎቶዎቻችን በቅርቡ እዚህ ይገኛሉ",
+    "emptyDescription": "ከሻባብ እንቅስቃሴዎች፣ ስብሰባዎች፣ ፕሮግራሞች እና የማህበረሰብ ስብሰባዎች የሚመጡ ፎቶዎች በቅርቡ እዚህ ይጨመራሉ።",
+    "note": "የማህበረሰብ እንቅስቃሴዎችና የማይረሱ ጊዜያት እዚህ ይታያሉ።",
+    "defaultAlt": "መስጂዱል-ፈትዋ ሻባብ"
+  },
+    "adminGallery": {
+    "kicker": "የይዘት አስተዳደር",
+    "title": "የፎቶ ማዕከል",
+    "description": "የመስጂዱል-ፈትዋ ሻባብ የማህበረሰብ ፎቶዎችን ይጫኑ እና ያስተዳድሩ።",
+    "totalPhotos": "ጠቅላላ ፎቶዎች",
+    "loading": "የፎቶ ማዕከሉን በመጫን ላይ...",
+    "emptyTitle": "እስካሁን ፎቶዎች የሉም",
+    "emptyDescription": "የፎቶ ማዕከልዎ ዝግጁ ነው። ፎቶ ሲኖርዎት ያክሉ።",
+    "defaultAlt": "መስጂዱል-ፈትዋ ሻባብ",
+
+    "actions": {
+      "addPhoto": "ፎቶ ጨምር",
+      "addFirstPhoto": "የመጀመሪያ ፎቶ ጨምር",
+      "editPhoto": "ፎቶ አርም",
+      "deletePhoto": "ፎቶ ሰርዝ"
+    },
+
+    "form": {
+      "addTitle": "ፎቶ ጨምር",
+      "editTitle": "ፎቶ አርም",
+      "addDescription": "የማህበረሰብ ፎቶ ይጫኑ።",
+      "editDescription": "የፎቶ መረጃን ያዘምኑ።",
+      "close": "ዝጋ",
+      "titleLabel": "ርዕስ",
+      "titlePlaceholder": "የዓርብ ሻባብ ፕሮግራም",
+      "descriptionLabel": "መግለጫ",
+      "descriptionPlaceholder": "ይህን የማህበረሰብ ጊዜ ይግለጹ...",
+      "photoLabel": "ፎቶ",
+      "fileHelp": "JPG, PNG, WEBP እና ሌሎች የምስል ቅርጸቶች። ከፍተኛው 10 MB።",
+      "preview": "ቅድመ እይታ",
+      "previewAlt": "የፎቶ ቅድመ እይታ",
+      "cancel": "ሰርዝ",
+      "saving": "በመስቀል ላይ...",
+      "saveChanges": "ለውጦችን አስቀምጥ",
+      "uploadPhoto": "ፎቶ ስቀል"
+    },
+
+    "messages": {
+      "uploaded": "ፎቶው በተሳካ ሁኔታ ተሰቅሏል።",
+      "updated": "ፎቶው በተሳካ ሁኔታ ተዘምኗል።",
+      "deleted": "ፎቶው በተሳካ ሁኔታ ተሰርዟል።"
+    },
+
+    "errors": {
+      "load": "የፎቶ ማዕከሉን መጫን አልተቻለም።",
+      "save": "ፎቶውን ማስቀመጥ አልተቻለም።",
+      "delete": "ፎቶውን መሰረዝ አልተቻለም።",
+      "invalidImage": "እባክዎ ትክክለኛ የምስል ፋይል ይምረጡ።",
+      "fileTooLarge": "የምስሉ መጠን 10 MB ወይም ከዚያ በታች መሆን አለበት።",
+      "titleRequired": "እባክዎ የፎቶውን ርዕስ ያስገቡ።",
+      "photoRequired": "እባክዎ ፎቶ ይምረጡ።",
+      "connection": "ከ backend server ጋር መገናኘት አልተቻለም።",
+      "unexpected": "ስህተት: {{message}}"
+    },
+
+    "deleteConfirm": "ይህን ፎቶ መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?"
+  },
+    "adminManagement": {
+    "kicker": "አስተዳደር",
+    "title": "የአስተዳዳሪ አስተዳደር",
+    "description": "አስተዳዳሪዎችን እና የስርዓቱን የመዳረሻ ፈቃዳቸውን ያስተዳድሩ።",
+    "you": "እርስዎ",
+    "loading": "አስተዳዳሪዎችን በመጫን ላይ...",
+
+    "actions": {
+      "add": "አስተዳዳሪ ጨምር",
+      "refresh": "አድስ",
+      "edit": "አርም",
+      "activate": "ንቁ አድርግ",
+      "deactivate": "ንቁነትን አሰናክል"
+    },
+
+    "stats": {
+      "total": "ጠቅላላ አስተዳዳሪዎች",
+      "active": "ንቁ",
+      "superAdmins": "ዋና አስተዳዳሪዎች"
+    },
+
+    "table": {
+      "title": "አስተዳዳሪዎች",
+      "description": "የአስተዳዳሪ መለያዎችን እና ፈቃዶችን ያስተዳድሩ።",
+      "administrator": "አስተዳዳሪ",
+      "username": "የተጠቃሚ ስም",
+      "role": "ሚና",
+      "status": "ሁኔታ",
+      "created": "የተፈጠረ",
+      "actions": "ተግባራት"
+    },
+
+    "roles": {
+      "admin": "አስተዳዳሪ",
+      "superAdmin": "ዋና አስተዳዳሪ"
+    },
+
+    "status": {
+      "active": "ንቁ",
+      "inactive": "ንቁ አይደለም",
+      "updating": "በማዘመን ላይ..."
+    },
+
+    "empty": {
+      "title": "ምንም አስተዳዳሪ አልተገኘም",
+      "description": "ለመጀመር አስተዳዳሪ ይጨምሩ።"
+    },
+
+    "confirm": {
+      "activate": "\"{{name}}\"ን ንቁ ማድረግ እንደሚፈልጉ እርግጠኛ ነዎት?",
+      "deactivate": "\"{{name}}\"ን ንቁነት ማሰናከል እንደሚፈልጉ እርግጠኛ ነዎት?"
+    },
+
+    "tooltips": {
+      "selfStatus": "የራስዎን መለያ ሁኔታ መቀየር አይችሉም",
+      "updating": "በማዘመን ላይ...",
+      "deactivate": "ይህን አስተዳዳሪ ንቁነቱን ያሰናክሉ",
+      "activate": "ይህን አስተዳዳሪ ንቁ ያድርጉ"
+    },
+
+    "form": {
+      "addTitle": "አስተዳዳሪ ጨምር",
+      "editTitle": "አስተዳዳሪ አርም",
+      "addDescription": "አዲስ የአስተዳዳሪ መለያ ይፍጠሩ።",
+      "editDescription": "የአስተዳዳሪ መለያ ዝርዝሮችን ያዘምኑ።",
+      "close": "ዝጋ",
+      "fullName": "ሙሉ ስም",
+      "fullNamePlaceholder": "ሙሉ ስም ያስገቡ",
+      "username": "የተጠቃሚ ስም",
+      "usernamePlaceholder": "የተጠቃሚ ስም ያስገቡ",
+      "password": "የይለፍ ቃል",
+      "passwordPlaceholder": "የይለፍ ቃል ያስገቡ",
+      "passwordEditPlaceholder": "የአሁኑን የይለፍ ቃል ለማስቀጠል ባዶ ይተዉት",
+      "optional": "አማራጭ",
+      "passwordNote": "የይለፍ ቃሉ ቢያንስ 6 ቁምፊዎች ሊኖሩት ይገባል።",
+      "passwordEditNote": "የይለፍ ቃሉን መቀየር ከፈለጉ ብቻ አዲስ የይለፍ ቃል ያስገቡ።",
+      "role": "ሚና",
+      "selfRoleNote": "የራስዎን ሚና መቀየር አይችሉም።",
+      "cancel": "ሰርዝ",
+      "saving": "በማስቀመጥ ላይ...",
+      "saveChanges": "ለውጦችን አስቀምጥ",
+      "create": "አስተዳዳሪ ፍጠር"
+    },
+
+    "messages": {
+      "created": "አስተዳዳሪው በተሳካ ሁኔታ ተፈጥሯል።",
+      "updated": "አስተዳዳሪው በተሳካ ሁኔታ ተዘምኗል።"
+    },
+
+    "errors": {
+      "load": "አስተዳዳሪዎችን መጫን አልተቻለም።",
+      "fullNameRequired": "ሙሉ ስም ያስፈልጋል።",
+      "usernameRequired": "የተጠቃሚ ስም ያስፈልጋል።",
+      "passwordMin": "የይለፍ ቃሉ ቢያንስ 6 ቁምፊዎች ሊኖሩት ይገባል።",
+      "newPasswordMin": "አዲሱ የይለፍ ቃል ቢያንስ 6 ቁምፊዎች ሊኖሩት ይገባል።",
+      "operation": "ሂደቱ አልተሳካም።",
+      "save": "አስተዳዳሪውን ማስቀመጥ አልተቻለም።",
+      "selfStatus": "የራስዎን መለያ ማሰናከል ወይም ሁኔታውን መቀየር አይችሉም።",
+      "statusUpdate": "የአስተዳዳሪውን ሁኔታ ማዘመን አልተቻለም።"
+    }
+  },
+  "loading": "የቅንብሮች መረጃን በመጫን ላይ...",
+
+"account": {
+  "title": "የመለያ ቅንብሮች",
+  "description": "የአስተዳዳሪ የተጠቃሚ ስምዎን እና የይለፍ ቃልዎን ያዘምኑ።",
+  "username": "የተጠቃሚ ስም",
+  "usernamePlaceholder": "የተጠቃሚ ስም ያስገቡ",
+  "newPassword": "አዲስ የይለፍ ቃል",
+  "newPasswordPlaceholder": "አዲስ የይለፍ ቃል ያስገቡ",
+  "confirmPassword": "አዲሱን የይለፍ ቃል ያረጋግጡ",
+  "confirmPasswordPlaceholder": "አዲሱን የይለፍ ቃል እንደገና ያስገቡ",
+  "showPassword": "የይለፍ ቃል አሳይ",
+  "hidePassword": "የይለፍ ቃል ደብቅ",
+  "passwordHelp": "የተጠቃሚ ስም ብቻ መቀየር ከፈለጉ ይህን ቦታ ባዶ ይተዉት።",
+  "updateButton": "መለያን አዘምን",
+
+  "messages": {
+    "updated": "የመለያ ቅንብሮች በተሳካ ሁኔታ ተዘምነዋል።"
+  },
+
+  "errors": {
+    "usernameRequired": "የተጠቃሚ ስም ያስፈልጋል።",
+    "passwordMin": "አዲሱ የይለፍ ቃል ቢያንስ 6 ቁምፊዎች ሊኖሩት ይገባል።",
+    "passwordMismatch": "አዲሱ የይለፍ ቃል እና የማረጋገጫ የይለፍ ቃል አይዛመዱም።",
+    "accountNotFound": "የመለያዎ መረጃ ሊገኝ አልቻለም። እባክዎ እንደገና ይግቡ።",
+    "update": "የመለያ ቅንብሮችን ማዘመን አልተቻለም።"
+  }
+}
+}

@@ -1,7 +1,11 @@
+
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 function Members() {
+  const { t } = useTranslation();
+
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -11,13 +15,16 @@ function Members() {
   // Search
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [sortOption, setSortOption] = useState("name-asc");
+  // Sort
+  const [sortOption, setSortOption] =
+    useState("name-asc");
 
   // Add/Edit form visibility
   const [showForm, setShowForm] = useState(false);
 
-  // Know whether we are adding or editing
-  const [editingMember, setEditingMember] = useState(null);
+  // Current member being edited
+  const [editingMember, setEditingMember] =
+    useState(null);
 
   // Form data
   const [formData, setFormData] = useState({
@@ -28,47 +35,99 @@ function Members() {
 
   const [saving, setSaving] = useState(false);
 
-  // Get members
+  // ============================================================
+  // GET MEMBERS
+  // ============================================================
+
   const getMembers = async () => {
     try {
       setLoading(true);
       setError("");
 
-      const response = await axios.get("/api/members");
+      const response = await axios.get(
+        "/api/members"
+      );
 
-      setMembers(response.data.data || response.data);
+      const data =
+        response.data?.data ||
+        response.data?.members ||
+        response.data;
+
+      setMembers(
+        Array.isArray(data)
+          ? data
+          : []
+      );
     } catch (err) {
-      console.error("Members error:", err);
+      console.error(
+        "Members error:",
+        err
+      );
 
       if (err.response) {
         setError(
-          `Server error: ${err.response.status} - ${err.response.statusText}`
+          t(
+            "members.errors.server",
+            {
+              status:
+                err.response.status,
+              statusText:
+                err.response.statusText,
+            }
+          )
         );
       } else if (err.request) {
-        setError("Cannot connect to the backend server.");
+        setError(
+          t(
+            "members.errors.connection"
+          )
+        );
       } else {
-        setError(`Error: ${err.message}`);
+        setError(
+          t(
+            "members.errors.unexpected",
+            {
+              message:
+                err.message,
+            }
+          )
+        );
       }
     } finally {
       setLoading(false);
     }
   };
 
+  // ============================================================
+  // LOAD MEMBERS ON PAGE OPEN
+  // ============================================================
+
   useEffect(() => {
     getMembers();
   }, []);
 
-  // Handle input changes
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  // ============================================================
+  // HANDLE INPUT CHANGES
+  // ============================================================
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const handleChange = (event) => {
+    const {
+      name,
+      value,
+    } = event.target;
+
+    setFormData(
+      (previous) => ({
+        ...previous,
+        [name]: value,
+      })
+    );
   };
 
-  // Open Add Member form
+  // ============================================================
+  // OPEN ADD MEMBER FORM
+  // ============================================================
+
   const openAddForm = () => {
     setEditingMember(null);
 
@@ -84,14 +143,20 @@ function Members() {
     setShowForm(true);
   };
 
-  // Open Edit Member form
+  // ============================================================
+  // OPEN EDIT MEMBER FORM
+  // ============================================================
+
   const openEditForm = (member) => {
     setEditingMember(member);
 
     setFormData({
-      full_name: member.full_name || "",
-      phone: member.phone || "",
-      telegram_username: member.telegram_username || "",
+      full_name:
+        member.full_name || "",
+      phone:
+        member.phone || "",
+      telegram_username:
+        member.telegram_username || "",
     });
 
     setError("");
@@ -100,12 +165,23 @@ function Members() {
     setShowForm(true);
   };
 
-  // Save member
+  // ============================================================
+  // SAVE MEMBER
+  // ============================================================
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!formData.full_name.trim()) {
-      setError("Full name is required.");
+    const fullName =
+      formData.full_name.trim();
+
+    if (!fullName) {
+      setError(
+        t(
+          "members.errors.fullNameRequired"
+        )
+      );
+
       return;
     }
 
@@ -114,26 +190,56 @@ function Members() {
       setError("");
       setSuccess("");
 
-      // EDIT MEMBER
-      if (editingMember) {
-        await axios.put(`/api/members/${editingMember.id}`, {
-          full_name: formData.full_name.trim(),
-          phone: formData.phone.trim(),
-          telegram_username: formData.telegram_username.trim(),
-        });
+      // --------------------------------------------------------
+      // UPDATE MEMBER
+      // --------------------------------------------------------
 
-        setSuccess("Member updated successfully.");
+      if (editingMember) {
+        await axios.put(
+          `/api/members/${editingMember.id}`,
+          {
+            full_name:
+              fullName,
+
+            phone:
+              formData.phone.trim(),
+
+            telegram_username:
+              formData.telegram_username.trim(),
+          }
+        );
+
+        setSuccess(
+          t(
+            "members.messages.updated"
+          )
+        );
       }
 
+      // --------------------------------------------------------
       // ADD MEMBER
-      else {
-        await axios.post("/api/members", {
-          full_name: formData.full_name.trim(),
-          phone: formData.phone.trim(),
-          telegram_username: formData.telegram_username.trim(),
-        });
+      // --------------------------------------------------------
 
-        setSuccess("Member added successfully.");
+      else {
+        await axios.post(
+          "/api/members",
+          {
+            full_name:
+              fullName,
+
+            phone:
+              formData.phone.trim(),
+
+            telegram_username:
+              formData.telegram_username.trim(),
+          }
+        );
+
+        setSuccess(
+          t(
+            "members.messages.added"
+          )
+        );
       }
 
       // Reset form
@@ -149,24 +255,50 @@ function Members() {
       // Reload members
       await getMembers();
     } catch (err) {
-      console.error("Save member error:", err);
+      console.error(
+        "Save member error:",
+        err
+      );
 
       if (err.response) {
         setError(
           err.response.data?.message ||
-            `Server error: ${err.response.status}`
+            t(
+              "members.errors.server",
+              {
+                status:
+                  err.response.status,
+                statusText:
+                  err.response.statusText,
+              }
+            )
         );
       } else if (err.request) {
-        setError("Cannot connect to the backend server.");
+        setError(
+          t(
+            "members.errors.connection"
+          )
+        );
       } else {
-        setError(`Error: ${err.message}`);
+        setError(
+          t(
+            "members.errors.unexpected",
+            {
+              message:
+                err.message,
+            }
+          )
+        );
       }
     } finally {
       setSaving(false);
     }
   };
 
-  // Cancel form
+  // ============================================================
+  // CANCEL FORM
+  // ============================================================
+
   const handleCancel = () => {
     setShowForm(false);
     setEditingMember(null);
@@ -178,19 +310,39 @@ function Members() {
     });
 
     setError("");
+    setSuccess("");
   };
 
-  // Change member status
-  const toggleMemberStatus = async (member) => {
+  // ============================================================
+  // CHANGE MEMBER STATUS
+  // ============================================================
+
+  const toggleMemberStatus = async (
+    member
+  ) => {
     const newStatus =
-      member.status === "active" ? "inactive" : "active";
+      member.status === "active"
+        ? "inactive"
+        : "active";
 
-    const action =
-      newStatus === "active" ? "activate" : "deactivate";
-
-    const confirmed = window.confirm(
-      `Are you sure you want to ${action} ${member.full_name}?`
-    );
+    const confirmed =
+      window.confirm(
+        newStatus === "active"
+          ? t(
+              "members.confirm.activate",
+              {
+                name:
+                  member.full_name,
+              }
+            )
+          : t(
+              "members.confirm.deactivate",
+              {
+                name:
+                  member.full_name,
+              }
+            )
+      );
 
     if (!confirmed) {
       return;
@@ -200,95 +352,205 @@ function Members() {
       setError("");
       setSuccess("");
 
-      await axios.patch(`/api/members/${member.id}/status`, {
-        status: newStatus,
-      });
-
-      setSuccess(
-        `${member.full_name} has been ${newStatus}.`
+      await axios.patch(
+        `/api/members/${member.id}/status`,
+        {
+          status: newStatus,
+        }
       );
 
-      // Reload members
+      setSuccess(
+        newStatus === "active"
+          ? t(
+              "members.messages.activated",
+              {
+                name:
+                  member.full_name,
+              }
+            )
+          : t(
+              "members.messages.deactivated",
+              {
+                name:
+                  member.full_name,
+              }
+            )
+      );
+
       await getMembers();
     } catch (err) {
-      console.error("Status update error:", err);
+      console.error(
+        "Status update error:",
+        err
+      );
 
       if (err.response) {
         setError(
           err.response.data?.message ||
-            `Server error: ${err.response.status}`
+            t(
+              "members.errors.server",
+              {
+                status:
+                  err.response.status,
+                statusText:
+                  err.response.statusText,
+              }
+            )
         );
       } else if (err.request) {
-        setError("Cannot connect to the backend server.");
+        setError(
+          t(
+            "members.errors.connection"
+          )
+        );
       } else {
-        setError(`Error: ${err.message}`);
+        setError(
+          t(
+            "members.errors.unexpected",
+            {
+              message:
+                err.message,
+            }
+          )
+        );
       }
     }
   };
 
-  // Member statistics
-const totalMembers = members.length;
+  // ============================================================
+  // MEMBER STATISTICS
+  // ============================================================
 
-const activeMembers = members.filter(
-  (member) => member.status === "active"
-).length;
+  const totalMembers =
+    members.length;
 
-const inactiveMembers = members.filter(
-  (member) => member.status !== "active"
-).length;
+  const activeMembers =
+    members.filter(
+      (member) =>
+        member.status === "active"
+    ).length;
 
-  // Filter members based on search
-  const filteredMembers = members.filter((member) => {
-    const search = searchTerm.toLowerCase().trim();
+  const inactiveMembers =
+    members.filter(
+      (member) =>
+        member.status !== "active"
+    ).length;
 
-    if (!search) {
-      return true;
-    }
+  // ============================================================
+  // SEARCH
+  // ============================================================
 
-    return (
-      (member.full_name || "").toLowerCase().includes(search) ||
-      (member.phone || "").toLowerCase().includes(search) ||
-      (member.telegram_username || "")
-        .toLowerCase()
-        .includes(search)
+  const filteredMembers =
+    members.filter((member) => {
+      const search =
+        searchTerm
+          .toLowerCase()
+          .trim();
+
+      if (!search) {
+        return true;
+      }
+
+      return (
+        (member.full_name || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        (member.phone || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        (
+          member.telegram_username ||
+          ""
+        )
+          .toLowerCase()
+          .includes(search)
+      );
+    });
+
+  // ============================================================
+  // SORT
+  // ============================================================
+
+  const sortedMembers =
+    [...filteredMembers].sort(
+      (a, b) => {
+        if (
+          sortOption ===
+          "name-asc"
+        ) {
+          return (
+            a.full_name || ""
+          ).localeCompare(
+            b.full_name || ""
+          );
+        }
+
+        if (
+          sortOption ===
+          "name-desc"
+        ) {
+          return (
+            b.full_name || ""
+          ).localeCompare(
+            a.full_name || ""
+          );
+        }
+
+        if (
+          sortOption ===
+          "newest"
+        ) {
+          return (
+            new Date(
+              b.created_at || 0
+            ) -
+            new Date(
+              a.created_at || 0
+            )
+          );
+        }
+
+        if (
+          sortOption ===
+          "oldest"
+        ) {
+          return (
+            new Date(
+              a.created_at || 0
+            ) -
+            new Date(
+              b.created_at || 0
+            )
+          );
+        }
+
+        return 0;
+      }
     );
-  });
 
-  const sortedMembers = [...filteredMembers].sort((a, b) => {
-  if (sortOption === "name-asc") {
-    return (a.full_name || "").localeCompare(
-      b.full_name || ""
-    );
-  }
-
-  if (sortOption === "name-desc") {
-    return (b.full_name || "").localeCompare(
-      a.full_name || ""
-    );
-  }
-
-  if (sortOption === "newest") {
-    return new Date(b.created_at || 0) - new Date(a.created_at || 0);
-  }
-
-  if (sortOption === "oldest") {
-    return new Date(a.created_at || 0) - new Date(b.created_at || 0);
-  }
-
-  return 0;
-});
+  // ============================================================
+  // PAGE
+  // ============================================================
 
   return (
     <div className="members-page">
 
-      {/* Page Header */}
-      <div className="members-header">
+      {/* ======================================================
+          PAGE HEADER
+      ====================================================== */}
 
+      <div className="members-header">
         <div>
-          <h1>Members</h1>
+          <h1>
+            {t("members.title")}
+          </h1>
 
           <p>
-            Manage Masjidul-Fatwa Shabab members.
+            {t(
+              "members.description"
+            )}
           </p>
         </div>
 
@@ -296,113 +558,151 @@ const inactiveMembers = members.filter(
           className="add-button"
           onClick={openAddForm}
         >
-          + Add Member
+          + {t("members.addMember")}
         </button>
-
       </div>
 
-      {/* Success */}
+      {/* ======================================================
+          SUCCESS
+      ====================================================== */}
+
       {success && (
         <div className="success-message">
           {success}
         </div>
       )}
 
-      {/* Error */}
+      {/* ======================================================
+          ERROR
+      ====================================================== */}
+
       {error && (
         <div className="error-message">
           {error}
         </div>
       )}
 
-      {/* Add / Edit Form */}
+      {/* ======================================================
+          ADD / EDIT FORM
+      ====================================================== */}
+
       {showForm && (
         <div className="form-card">
 
           <div className="form-header">
-
             <div>
-
               <h2>
                 {editingMember
-                  ? "Edit Member"
-                  : "Add New Member"}
+                  ? t(
+                      "members.form.editTitle"
+                    )
+                  : t(
+                      "members.form.addTitle"
+                    )}
               </h2>
 
               <p>
                 {editingMember
-                  ? "Update the member information below."
-                  : "Enter the member information below."}
+                  ? t(
+                      "members.form.editDescription"
+                    )
+                  : t(
+                      "members.form.addDescription"
+                    )}
               </p>
-
             </div>
-
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+          >
 
             {/* Full Name */}
-            <div className="form-group">
 
+            <div className="form-group">
               <label>
-                Full Name
+                {t(
+                  "members.form.fullName"
+                )}
               </label>
 
               <input
                 type="text"
                 name="full_name"
-                value={formData.full_name}
-                onChange={handleChange}
-                placeholder="Enter full name"
+                value={
+                  formData.full_name
+                }
+                onChange={
+                  handleChange
+                }
+                placeholder={t(
+                  "members.form.fullNamePlaceholder"
+                )}
                 required
               />
-
             </div>
 
             {/* Phone */}
-            <div className="form-group">
 
+            <div className="form-group">
               <label>
-                Phone Number
+                {t(
+                  "members.form.phone"
+                )}
               </label>
 
               <input
                 type="text"
                 name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Enter phone number"
+                value={
+                  formData.phone
+                }
+                onChange={
+                  handleChange
+                }
+                placeholder={t(
+                  "members.form.phonePlaceholder"
+                )}
               />
-
             </div>
 
             {/* Telegram */}
-            <div className="form-group">
 
+            <div className="form-group">
               <label>
-                Telegram Username
+                {t(
+                  "members.form.telegram"
+                )}
               </label>
 
               <input
                 type="text"
                 name="telegram_username"
-                value={formData.telegram_username}
-                onChange={handleChange}
+                value={
+                  formData.telegram_username
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="@username"
               />
-
             </div>
 
             {/* Buttons */}
+
             <div className="form-actions">
 
               <button
                 type="button"
                 className="cancel-button"
-                onClick={handleCancel}
+                onClick={
+                  handleCancel
+                }
                 disabled={saving}
               >
-                Cancel
+                {t(
+                  "members.form.cancel"
+                )}
               </button>
 
               <button
@@ -411,107 +711,196 @@ const inactiveMembers = members.filter(
                 disabled={saving}
               >
                 {saving
-                  ? "Saving..."
+                  ? t(
+                      "members.form.saving"
+                    )
                   : editingMember
-                    ? "Update Member"
-                    : "Save Member"}
+                  ? t(
+                      "members.form.update"
+                    )
+                  : t(
+                      "members.form.save"
+                    )}
               </button>
 
             </div>
 
           </form>
-
         </div>
       )}
 
-      {/* Member Statistics */}
-<div className="member-stats-grid">
+      {/* ======================================================
+          MEMBER STATISTICS
+      ====================================================== */}
 
-  <div className="member-stat-card">
-    <div className="member-stat-icon total">
-      👥
-    </div>
+      <div className="member-stats-grid">
 
-    <div className="member-stat-content">
-      <span>Total Members</span>
-      <strong>{totalMembers}</strong>
-    </div>
-  </div>
+        <div className="member-stat-card">
+          <div className="member-stat-icon total">
+            {"\u{1F465}"}
+          </div>
 
-  <div className="member-stat-card">
-    <div className="member-stat-icon active">
-      ✓
-    </div>
+          <div className="member-stat-content">
+            <span>
+              {t(
+                "members.statistics.total"
+              )}
+            </span>
 
-    <div className="member-stat-content">
-      <span>Active Members</span>
-      <strong>{activeMembers}</strong>
-    </div>
-  </div>
+            <strong>
+              {totalMembers}
+            </strong>
+          </div>
+        </div>
 
-  <div className="member-stat-card">
-    <div className="member-stat-icon inactive">
-      ○
-    </div>
+        <div className="member-stat-card">
+          <div className="member-stat-icon active">
+            {"\u{2713}"}
+          </div>
 
-    <div className="member-stat-content">
-      <span>Inactive Members</span>
-      <strong>{inactiveMembers}</strong>
-    </div>
-  </div>
+          <div className="member-stat-content">
+            <span>
+              {t(
+                "members.statistics.active"
+              )}
+            </span>
 
-</div>
+            <strong>
+              {activeMembers}
+            </strong>
+          </div>
+        </div>
 
-      {/* Members Card */}
+        <div className="member-stat-card">
+          <div className="member-stat-icon inactive">
+            {"\u{25CB}"}
+          </div>
+
+          <div className="member-stat-content">
+            <span>
+              {t(
+                "members.statistics.inactive"
+              )}
+            </span>
+
+            <strong>
+              {inactiveMembers}
+            </strong>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ======================================================
+          MEMBERS CARD
+      ====================================================== */}
+
       <div className="members-card">
 
         <div className="members-card-header">
 
           <div>
-            <h2>All Members</h2>
+            <h2>
+              {t(
+                "members.list.title"
+              )}
+            </h2>
 
             <span>
-              {filteredMembers.length} of {members.length} members
+              {t(
+                "members.list.count",
+                {
+                  visible:
+                    filteredMembers.length,
+                  total:
+                    members.length,
+                }
+              )}
             </span>
           </div>
 
-          {/* Search */}
-          <div className="member-sort">
-  <label htmlFor="member-sort-select">Sort</label>
+          {/* Sort */}
 
-  <select
-    id="member-sort-select"
-    value={sortOption}
-    onChange={(event) => setSortOption(event.target.value)}
-  >
-    <option value="name-asc">Name A → Z</option>
-    <option value="name-desc">Name Z → A</option>
-    <option value="newest">Newest</option>
-    <option value="oldest">Oldest</option>
-  </select>
-</div>
+          <div className="member-sort">
+            <label htmlFor="member-sort-select">
+              {t(
+                "members.sort.label"
+              )}
+            </label>
+
+            <select
+              id="member-sort-select"
+              value={sortOption}
+              onChange={(
+                event
+              ) =>
+                setSortOption(
+                  event.target.value
+                )
+              }
+            >
+              <option value="name-asc">
+                {t(
+                  "members.sort.nameAsc"
+                )}
+              </option>
+
+              <option value="name-desc">
+                {t(
+                  "members.sort.nameDesc"
+                )}
+              </option>
+
+              <option value="newest">
+                {t(
+                  "members.sort.newest"
+                )}
+              </option>
+
+              <option value="oldest">
+                {t(
+                  "members.sort.oldest"
+                )}
+              </option>
+            </select>
+          </div>
+
+          {/* Search */}
+
           <div className="member-search">
 
             <span className="search-icon">
-              🔎
+              {"\u{1F50E}"}
             </span>
 
             <input
               type="text"
               value={searchTerm}
-              onChange={(event) =>
-                setSearchTerm(event.target.value)
+              onChange={(
+                event
+              ) =>
+                setSearchTerm(
+                  event.target.value
+                )
               }
-              placeholder="Search members..."
-              aria-label="Search members"
+              placeholder={t(
+                "members.search.placeholder"
+              )}
+              aria-label={t(
+                "members.search.ariaLabel"
+              )}
             />
 
             {searchTerm && (
               <button
                 type="button"
                 className="clear-search"
-                onClick={() => setSearchTerm("")}
-                aria-label="Clear search"
+                onClick={() =>
+                  setSearchTerm("")
+                }
+                aria-label={t(
+                  "members.search.clear"
+                )}
               >
                 ×
               </button>
@@ -521,18 +910,32 @@ const inactiveMembers = members.filter(
 
         </div>
 
+        {/* ====================================================
+            LOADING
+        ==================================================== */}
+
         {loading ? (
           <div className="loading">
-            Loading members...
+            {t(
+              "members.loading"
+            )}
           </div>
         ) : members.length === 0 ? (
+
           <div className="empty">
-            No members found.
+            {t(
+              "members.empty"
+            )}
           </div>
+
         ) : filteredMembers.length === 0 ? (
+
           <div className="empty">
-            No members match your search.
+            {t(
+              "members.noSearchResults"
+            )}
           </div>
+
         ) : (
 
           <div className="table-container">
@@ -540,104 +943,158 @@ const inactiveMembers = members.filter(
             <table>
 
               <thead>
-
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Telegram</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
 
+                  <th>
+                    {t(
+                      "members.table.name"
+                    )}
+                  </th>
+
+                  <th>
+                    {t(
+                      "members.table.phone"
+                    )}
+                  </th>
+
+                  <th>
+                    {t(
+                      "members.table.telegram"
+                    )}
+                  </th>
+
+                  <th>
+                    {t(
+                      "members.table.status"
+                    )}
+                  </th>
+
+                  <th>
+                    {t(
+                      "members.table.actions"
+                    )}
+                  </th>
+                </tr>
               </thead>
 
               <tbody>
 
-                {sortedMembers.map((member, index) => (
+                {sortedMembers.map(
+                  (
+                    member,
+                    index
+                  ) => (
 
-                  <tr key={member.id}>
+                    <tr
+                      key={member.id}
+                    >
 
-                    <td>
-                      {index + 1}
-                    </td>
+                      <td>
+                        {index + 1}
+                      </td>
 
-                    <td>
-                      <strong>
-                        {member.full_name}
-                      </strong>
-                    </td>
+                      <td>
+                        <strong>
+                          {
+                            member.full_name
+                          }
+                        </strong>
+                      </td>
 
-                    <td>
-                      {member.phone || "-"}
-                    </td>
-
-                    <td>
-                      {member.telegram_username || "-"}
-                    </td>
-
-                    <td>
-
-                      <span
-                        className={
-                          member.status === "active"
-                            ? "status-active"
-                            : "status-inactive"
+                      <td>
+                        {
+                          member.phone ||
+                          "-"
                         }
-                      >
-                        {member.status}
-                      </span>
+                      </td>
 
-                    </td>
+                      <td>
+                        {
+                          member.telegram_username ||
+                          "-"
+                        }
+                      </td>
 
-                    <td>
-
-                      <div className="member-actions">
-
-                        <button
-                          className="edit-button"
-                          onClick={() =>
-                            openEditForm(member)
-                          }
-                        >
-                          Edit
-                        </button>
-
-                        <button
+                      <td>
+                        <span
                           className={
-                            member.status === "active"
-                              ? "deactivate-button"
-                              : "activate-button"
-                          }
-                          onClick={() =>
-                            toggleMemberStatus(member)
+                            member.status ===
+                            "active"
+                              ? "status-active"
+                              : "status-inactive"
                           }
                         >
-                          {member.status === "active"
-                            ? "Deactivate"
-                            : "Activate"}
-                        </button>
+                          {member.status ===
+                          "active"
+                            ? t(
+                                "members.status.active"
+                              )
+                            : t(
+                                "members.status.inactive"
+                              )}
+                        </span>
+                      </td>
 
-                      </div>
+                      <td>
 
-                    </td>
+                        <div className="member-actions">
 
-                  </tr>
+                          <button
+                            className="edit-button"
+                            onClick={() =>
+                              openEditForm(
+                                member
+                              )
+                            }
+                          >
+                            {t(
+                              "members.actions.edit"
+                            )}
+                          </button>
 
-                ))}
+                          <button
+                            className={
+                              member.status ===
+                              "active"
+                                ? "deactivate-button"
+                                : "activate-button"
+                            }
+                            onClick={() =>
+                              toggleMemberStatus(
+                                member
+                              )
+                            }
+                          >
+                            {member.status ===
+                            "active"
+                              ? t(
+                                  "members.actions.deactivate"
+                                )
+                              : t(
+                                  "members.actions.activate"
+                                )}
+                          </button>
+
+                        </div>
+
+                      </td>
+
+                    </tr>
+                  )
+                )}
 
               </tbody>
 
             </table>
 
           </div>
-
         )}
 
       </div>
-
     </div>
   );
 }
 
 export default Members;
+

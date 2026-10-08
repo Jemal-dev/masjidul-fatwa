@@ -1,0 +1,768 @@
+﻿{
+  "nav": {
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "services": "الخدمات",
+    "activities": "الأنشطة",
+    "gallery": "معرض الصور",
+    "contact": "اتصل بنا",
+    "adminLogin": "دخول المسؤول",
+    "dashboard": "لوحة التحكم",
+    "members": "الأعضاء",
+    "contributions": "المساهمات",
+    "reports": "التقارير",
+    "admins": "المسؤولون",
+    "settings": "الإعدادات"
+  },
+
+  "language": {
+    "title": "اللغة",
+    "english": "English",
+    "oromo": "Afaan Oromoo",
+    "amharic": "አማርኛ",
+    "arabic": "العربية"
+  },
+
+  "hero": {
+    "eyebrow": "مساهمات الشباب وإدارتها",
+    "title": "بناء المجتمع",
+    "titleHighlight": "من خلال المساهمة والأثر",
+    "description": "منصة رقمية شفافة تساعد شباب مسجد الفتوى على إدارة الأعضاء وتسجيل المساهمات الأسبوعية والحفاظ على سجلات مجتمعية واضحة.",
+    "exploreServices": "استكشف خدماتنا",
+    "adminLogin": "دخول المسؤول",
+    "organizedRecords": "سجلات منظمة",
+    "transparentContributions": "مساهمات شفافة",
+    "communityFocused": "تركيز على المجتمع",
+    "systemName": "نظام مساهمات الشباب وإدارتها",
+    "activeMembers": "الأعضاء النشطون",
+    "totalCollection": "إجمالي التحصيل"
+  },
+
+  "impact": {
+    "kicker": "أثرنا الجماعي",
+    "title": "أرقام حقيقية من نظام المساهمات",
+    "activeMembers": "الأعضاء النشطون",
+    "thisWeek": "هذا الأسبوع",
+    "thisMonth": "هذا الشهر",
+    "totalCollection": "إجمالي التحصيل"
+  },
+
+  "about": {
+    "kicker": "من نحن",
+    "title": "مجتمع مبني على الثقة والمسؤولية والخدمة.",
+    "description": "مسجد الفتوى شَبَاب هو مجتمع شبابي يقدّر المساهمة المنظمة والتعاون والمساءلة. تساعد هذه المنصة على تحويل السجلات الورقية إلى نظام رقمي واضح.",
+    "points": {
+      "transparentRecords": {
+        "title": "سجلات شفافة",
+        "description": "يتم حفظ المساهمات رقمياً حتى يتمكن المسؤولون من مراجعة السجلات دون الاعتماد على الدفاتر الورقية."
+      },
+      "responsibleManagement": {
+        "title": "إدارة مسؤولة",
+        "description": "يتم تنظيم الأعضاء والمدفوعات والتقارير في نظام إداري واحد."
+      },
+      "communityImpact": {
+        "title": "أثر المجتمع",
+        "description": "تجعل السجلات الواضحة فهم المشاركة والموارد التي جمعها الشباب أسهل."
+      }
+    },
+    "label": "المجتمع • المساهمة • الأثر"
+  },
+
+  "services": {
+    "kicker": "خدماتنا",
+    "title": "كل ما يحتاجه فريق الشباب في مكان واحد.",
+    "description": "يعمل الموقع العام ونظام الإدارة معاً للحفاظ على بساطة إدارة المجتمع.",
+    "explore": "استكشف",
+    "items": {
+      "memberManagement": {
+        "title": "إدارة الأعضاء",
+        "description": "إضافة وتعديل وتفعيل وإدارة معلومات أعضاء الشباب."
+      },
+      "contributionRecording": {
+        "title": "تسجيل المساهمات",
+        "description": "تسجيل المساهمات الأسبوعية ومنع السجلات المكررة."
+      },
+      "weeklyReports": {
+        "title": "التقارير الأسبوعية",
+        "description": "عرض الأعضاء الذين دفعوا والذين لم يدفعوا وإجمالي تحصيل الأسبوع."
+      },
+      "monthlyReports": {
+        "title": "التقارير الشهرية",
+        "description": "مراجعة سجلات المساهمات الشهرية وإجماليات الأعضاء."
+      },
+      "telegramBot": {
+        "title": "روبوت تيليجرام",
+        "description": "إدارة مهام المساهمات والتقارير من خلال روبوت تيليجرام الخاص بالشباب."
+      },
+      "printableReports": {
+        "title": "التقارير القابلة للطباعة",
+        "description": "إنشاء تقارير واضحة مناسبة للحفظ والطباعة."
+      }
+    }
+  },
+
+  "achievements": {
+    "kicker": "إنجازاتنا",
+    "title": "يعكس النظام عمل مجتمعنا.",
+    "activeMembers": "أعضاء الشباب النشطون",
+    "totalCollection": "إجمالي التحصيل المسجل",
+    "weeklyCollection": "التحصيل الأسبوعي الحالي",
+    "monthlyCollection": "التحصيل الشهري الحالي"
+  },
+
+  "why": {
+    "kicker": "لماذا هذه المنصة",
+    "title": "مصممة لجعل إدارة المساهمات أكثر وضوحاً.",
+    "items": {
+      "simpleRecords": {
+        "title": "حفظ سجلات بسيط",
+        "description": "نقل السجلات الأسبوعية من الورق إلى قاعدة بيانات رقمية منظمة."
+      },
+      "accountability": {
+        "title": "مساءلة أفضل",
+        "description": "تجعل التقارير نشاط المساهمات أسهل للمراجعة من قبل المسؤولين."
+      },
+      "duplicates": {
+        "title": "سجلات مكررة أقل",
+        "description": "يتحقق سير عمل المساهمات من وجود سجلات مكررة للتاريخ نفسه."
+      },
+      "accessible": {
+        "title": "معلومات سهلة الوصول",
+        "description": "يمكن للمسؤولين المصرح لهم استخدام الموقع أو روبوت تيليجرام."
+      }
+    }
+  },
+
+  "events": {
+    "kicker": "الأنشطة المجتمعية",
+    "title": "الحفاظ على ترابط الشباب وتنظيمهم.",
+    "weekly": "أسبوعي",
+    "monthly": "شهري",
+    "community": "مجتمعي",
+    "friday": "الجمعة",
+    "report": "تقرير",
+    "shabab": "الشباب",
+    "fridayContribution": "مساهمة الجمعة",
+    "fridayDescription": "نشاط المساهمة الأسبوعية وتسجيل مدفوعات أعضاء الشباب.",
+    "manageContributions": "إدارة المساهمات",
+    "monthlyReview": "المراجعة الشهرية",
+    "monthlyDescription": "مراجعة سجلات المساهمات الشهرية وفهم المبلغ المحصل.",
+    "viewReports": "عرض التقارير",
+    "shababActivities": "أنشطة الشباب",
+    "activitiesDescription": "استخدم المنصة كأساس لأنشطة شبابية مجتمعية منظمة.",
+    "openSystem": "فتح النظام",
+    "viewGallery": "عرض معرض الصور"
+  },
+
+  "membership": {
+    "kicker": "من يمكنه أن يكون عضواً؟",
+    "title": "مكان للشباب الذين يريدون المساهمة والخدمة.",
+    "items": {
+      "members": {
+        "title": "أعضاء الشباب",
+        "description": "الأعضاء المشاركون في المجتمع وأنشطة المساهمة الأسبوعية."
+      },
+      "volunteers": {
+        "title": "متطوعو المجتمع",
+        "description": "الأشخاص الذين يدعمون البرامج المجتمعية والأنشطة المنظمة."
+      },
+      "administrators": {
+        "title": "المسؤولون",
+        "description": "الأشخاص المصرح لهم بإدارة السجلات والتقارير."
+      },
+      "supporters": {
+        "title": "داعموا المجتمع",
+        "description": "الداعمون الذين يريدون تعزيز المبادرات المجتمعية الإيجابية."
+      }
+    }
+  },
+
+  "commitment": {
+    "kicker": "التزامنا",
+    "title": "ننمو معاً من خلال المساهمة المنظمة.",
+    "description": "كل مساهمة مهمة. هدف هذا النظام هو جعل عملية التسجيل والمراجعة والإدارة أسهل مع إبقاء المجتمع في المركز.",
+    "button": "الدخول إلى نظام الإدارة"
+  },
+
+  "contact": {
+    "kicker": "تواصل معنا",
+    "title": "تواصل مع شباب مسجد الفتوى.",
+    "description": "يمكن إضافة معلومات الاتصال هنا عندما تصبح بيانات الهاتف والبريد الإلكتروني وقناة تيليجرام والموقع الرسمية للشباب جاهزة.",
+    "location": "الموقع",
+    "locationDescription": "مجتمع مسجد الفتوى",
+    "telegram": "تيليجرام",
+    "telegramDescription": "التواصل الرسمي لشباب تيليجرام",
+    "email": "البريد الإلكتروني",
+    "emailDescription": "يمكن إضافة بيانات الاتصال الرسمية هنا"
+  },
+
+  "footer": {
+    "systemName": "نظام مساهمات الشباب وإدارتها",
+    "description": "بناء مجتمع أقوى من خلال التنظيم والمساهمة والخدمة المسؤولة.",
+    "quickLinks": "روابط سريعة",
+    "system": "النظام",
+    "members": "الأعضاء",
+    "reports": "التقارير",
+    "contributions": "المساهمات",
+    "copyright": "شباب مسجد الفتوى. جميع الحقوق محفوظة.",
+    "builtBy": "Built by Jemal Seid"
+  },
+
+  "login": {
+    "title": "دخول المسؤول",
+    "description": "سجّل الدخول لإدارة نظام مساهمات الشباب.",
+    "username": "اسم المستخدم",
+    "usernamePlaceholder": "أدخل اسم المستخدم",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "signingIn": "جارٍ تسجيل الدخول...",
+    "signIn": "تسجيل الدخول",
+    "backToWebsite": "العودة إلى الموقع",
+    "errors": {
+      "required": "يرجى إدخال اسم المستخدم وكلمة المرور.",
+      "invalidCredentials": "اسم المستخدم أو كلمة المرور غير صحيحة.",
+      "inactive": "حساب المسؤول الخاص بك غير نشط.",
+      "loginFailed": "فشل تسجيل الدخول.",
+      "server": "تعذر الاتصال بالخادم.",
+      "unexpected": "حدث خطأ غير متوقع."
+    }
+  },
+
+  "admin": {
+    "shababSystem": "نظام الشباب",
+    "management": "الإدارة",
+    "website": "الموقع",
+    "publicWebsite": "الموقع العام",
+    "superAdministrator": "المسؤول الرئيسي",
+    "administrator": "المسؤول",
+    "logout": "تسجيل الخروج",
+    "closeMenu": "إغلاق القائمة",
+    "openNavigation": "فتح قائمة التنقل"
+  },
+
+  "dashboard": {
+    "managementOverview": "نظرة عامة على الإدارة",
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً بك في نظام مساهمات شباب مسجد الفتوى.",
+    "addContribution": "إضافة مساهمة",
+    "activeMembers": "الأعضاء النشطون",
+    "totalCollection": "إجمالي التحصيل",
+    "thisWeek": "هذا الأسبوع",
+    "thisMonth": "هذا الشهر",
+    "collectionTrend": "اتجاه التحصيل",
+    "collectionTrendDescription": "التحصيل الأسبوعي للمساهمات خلال الأسابيع الستة الماضية.",
+    "loadingCollectionTrend": "جارٍ تحميل اتجاه التحصيل...",
+    "collection": "التحصيل",
+    "weekOf": "أسبوع",
+    "noCollectionData": "لا توجد بيانات تحصيل متاحة حتى الآن.",
+    "weeklyPaymentStatus": "حالة الدفع الأسبوعية",
+    "weeklyPaymentDescription": "حالة مساهمات الأعضاء للأسبوع الحالي.",
+    "paidMembers": "الأعضاء الذين دفعوا",
+    "unpaidMembers": "الأعضاء الذين لم يدفعوا",
+    "quickActions": "إجراءات سريعة",
+    "quickActionsDescription": "الانتقال مباشرة إلى المهام الشائعة.",
+    "recordContribution": "تسجيل مساهمة",
+    "manageMembers": "إدارة الأعضاء",
+    "generateReports": "إنشاء التقارير",
+    "recentContributions": "أحدث المساهمات",
+    "recentContributionsDescription": "أحدث سجلات المساهمات.",
+    "viewAll": "عرض الكل",
+    "loadingContributions": "جارٍ تحميل المساهمات...",
+    "noContributions": "لم يتم تسجيل أي مساهمات حتى الآن."
+  },
+
+  "reports": {
+    "title": "التقارير",
+    "description": "عرض وإدارة تقارير مساهمات الشباب.",
+
+    "common": {
+      "loading": "جارٍ التحميل...",
+      "print": "طباعة التقرير",
+      "date": "التاريخ",
+      "month": "الشهر",
+      "unknownMember": "عضو غير معروف"
+    },
+
+    "weekly": {
+      "title": "تقرير المساهمات الأسبوعية",
+      "description": "حدد تاريخاً لعرض حالة الدفع.",
+      "date": "تاريخ التقرير",
+      "generate": "إنشاء التقرير",
+      "resultTitle": "التقرير الأسبوعي",
+      "totalMembers": "إجمالي الأعضاء",
+      "paid": "دفع",
+      "unpaid": "لم يدفع",
+      "totalCollection": "إجمالي التحصيل",
+      "paidMembers": "الأعضاء الذين دفعوا",
+      "unpaidMembers": "الأعضاء الذين لم يدفعوا",
+      "noPaidMembers": "لم يتم العثور على أعضاء قاموا بالدفع.",
+      "allPaid": "جميع الأعضاء قاموا بالدفع."
+    },
+
+    "monthly": {
+      "title": "تقرير المساهمات الشهرية",
+      "description": "عرض سجلات المساهمات للشهر المحدد.",
+      "month": "شهر التقرير",
+      "generate": "إنشاء التقرير الشهري",
+      "resultTitle": "التقرير الشهري",
+      "contributions": "المساهمات",
+      "totalCollection": "إجمالي التحصيل",
+      "records": "سجلات المساهمات",
+      "noRecords": "لم يتم العثور على مساهمات لهذا الشهر."
+    },
+
+    "member": {
+      "title": "تقرير العضو",
+      "description": "عرض سجل مساهمات عضو معين.",
+      "selectMember": "اختر عضواً",
+      "chooseMember": "اختر عضواً",
+      "generate": "إنشاء تقرير العضو",
+      "resultTitle": "تقرير العضو",
+      "selected": "العضو",
+      "contributions": "المساهمات",
+      "totalCollection": "إجمالي التحصيل",
+      "memberInformation": "معلومات العضو",
+      "fullName": "الاسم الكامل",
+      "phone": "الهاتف",
+      "telegram": "تيليجرام",
+      "status": "الحالة",
+      "history": "سجل المساهمات",
+      "noHistory": "لم يتم العثور على سجل مساهمات."
+    },
+
+    "table": {
+      "member": "العضو",
+      "phone": "الهاتف",
+      "amount": "المبلغ",
+      "date": "التاريخ",
+      "status": "الحالة"
+    },
+
+    "print": {
+      "systemName": "شباب مسجد الفتوى",
+      "weeklyTitle": "تقرير المساهمات الأسبوعية",
+      "monthlyTitle": "تقرير المساهمات الشهرية",
+      "memberTitle": "تقرير مساهمات العضو",
+      "generatedDate": "تاريخ الإنشاء",
+      "administrator": "المسؤول",
+      "treasurer": "أمين الصندوق",
+      "shababRepresentative": "ممثل الشباب"
+    },
+
+    "errors": {
+      "loadMembers": "تعذر تحميل الأعضاء.",
+      "weekly": "تعذر تحميل التقرير الأسبوعي.",
+      "monthly": "تعذر تحميل التقرير الشهري.",
+      "member": "تعذر تحميل تقرير العضو.",
+      "selectMember": "يرجى اختيار عضو."
+    }
+  },
+
+  "settings": {
+    "title": "الإعدادات",
+    "description": "إدارة إعدادات نظام مساهمات الشباب.",
+
+    "common": {
+      "saving": "جارٍ الحفظ...",
+      "saveChanges": "حفظ التغييرات",
+      "cancel": "إلغاء"
+    },
+
+    "contribution": {
+      "title": "إعدادات المساهمة",
+      "description": "حدد المبلغ الافتراضي للمساهمة الأسبوعية.",
+      "amountLabel": "مبلغ المساهمة",
+      "amountPlaceholder": "أدخل مبلغ المساهمة",
+      "amountHelp": "سيتم استخدام هذا المبلغ عند تسجيل المساهمات."
+    },
+
+    "danger": {
+      "title": "منطقة الخطر",
+      "superAdminOnly": "للمسؤول الرئيسي فقط",
+      "description": "الإجراءات التالية تؤثر على بيانات المساهمات الموجودة.",
+      "warningTitle": "مسح جميع المساهمات",
+      "warningDescription": "سيؤدي هذا الإجراء إلى حذف جميع سجلات المساهمات. لا يمكن التراجع عن هذا الإجراء.",
+      "clearButton": "مسح جميع المساهمات",
+      "irreversible": "هذا الإجراء لا يمكن التراجع عنه.",
+      "lastCleared": "تم مسح {{count}} من سجلات المساهمات."
+    },
+
+    "modal": {
+      "title": "مسح جميع المساهمات؟",
+      "description": "أنت على وشك حذف جميع سجلات المساهمات من النظام.",
+      "warningTitle": "تحذير",
+      "warningDescription": "سيتم حذف جميع سجلات المساهمات بشكل نهائي. تأكد من أنك تريد المتابعة.",
+      "clearing": "جارٍ المسح...",
+      "confirm": "نعم، مسح جميع المساهمات"
+    },
+
+    "messages": {
+      "amountUpdated": "تم تحديث مبلغ المساهمة بنجاح.",
+      "contributionsCleared": "تم مسح {{count}} من سجلات المساهمات."
+    },
+
+    "errors": {
+      "load": "تعذر تحميل إعدادات النظام.",
+      "invalidAmount": "يرجى إدخال مبلغ مساهمة صالح.",
+      "save": "تعذر حفظ إعدادات المساهمة.",
+      "clearContributions": "تعذر مسح سجلات المساهمات."
+    }
+  },
+
+  "members": {
+    "title": "الأعضاء",
+    "description": "إدارة أعضاء شباب مسجد الفتوى.",
+    "addMember": "إضافة عضو",
+
+    "statistics": {
+      "total": "إجمالي الأعضاء",
+      "active": "الأعضاء النشطون",
+      "inactive": "الأعضاء غير النشطين"
+    },
+
+    "list": {
+      "title": "جميع الأعضاء",
+      "count": "{{visible}} من أصل {{total}} أعضاء"
+    },
+
+    "sort": {
+      "label": "ترتيب",
+      "nameAsc": "الاسم A → Z",
+      "nameDesc": "الاسم Z → A",
+      "newest": "الأحدث",
+      "oldest": "الأقدم"
+    },
+
+    "search": {
+      "placeholder": "البحث عن الأعضاء...",
+      "ariaLabel": "البحث عن الأعضاء",
+      "clear": "مسح البحث"
+    },
+
+    "form": {
+      "addTitle": "إضافة عضو جديد",
+      "editTitle": "تعديل العضو",
+      "addDescription": "أدخل معلومات العضو أدناه.",
+      "editDescription": "حدّث معلومات العضو أدناه.",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل الاسم الكامل",
+      "phone": "رقم الهاتف",
+      "phonePlaceholder": "أدخل رقم الهاتف",
+      "telegram": "اسم مستخدم تيليجرام",
+      "cancel": "إلغاء",
+      "saving": "جارٍ الحفظ...",
+      "save": "حفظ العضو",
+      "update": "تحديث العضو"
+    },
+
+    "table": {
+      "name": "الاسم",
+      "phone": "الهاتف",
+      "telegram": "تيليجرام",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+
+    "actions": {
+      "edit": "تعديل",
+      "activate": "تفعيل",
+      "deactivate": "إلغاء التفعيل"
+    },
+
+    "confirm": {
+      "activate": "هل أنت متأكد من تفعيل {{name}}؟",
+      "deactivate": "هل أنت متأكد من إلغاء تفعيل {{name}}؟"
+    },
+
+    "messages": {
+      "added": "تمت إضافة العضو بنجاح.",
+      "updated": "تم تحديث العضو بنجاح.",
+      "activated": "تم تفعيل {{name}}.",
+      "deactivated": "تم إلغاء تفعيل {{name}}."
+    },
+
+    "loading": "جارٍ تحميل الأعضاء...",
+    "empty": "لم يتم العثور على أعضاء.",
+    "noSearchResults": "لا يوجد أعضاء مطابقون لبحثك.",
+
+    "errors": {
+      "fullNameRequired": "الاسم الكامل مطلوب.",
+      "connection": "تعذر الاتصال بخادم الواجهة الخلفية.",
+      "server": "خطأ في الخادم: {{status}} - {{statusText}}",
+      "unexpected": "خطأ: {{message}}"
+    }
+  },
+    "contributions": {
+    "title": "المساهمات",
+    "description": "تسجيل وإدارة المساهمات الأسبوعية لشباب مسجد الفتوى.",
+
+    "form": {
+      "title": "تسجيل مساهمة",
+      "weeklyAmount": "مبلغ المساهمة الأسبوعية:",
+      "member": "العضو",
+      "selectMember": "اختر عضوًا",
+      "amount": "المبلغ (ETB)",
+      "date": "تاريخ المساهمة",
+      "saving": "جارٍ الحفظ...",
+      "record": "تسجيل المساهمة"
+    },
+
+    "status": {
+      "title": "حالة دفع الجمعة",
+      "description": "حالة الدفع بتاريخ",
+      "loading": "جارٍ التحميل...",
+      "refresh": "تحديث",
+      "loadingMembers": "جارٍ تحميل حالة الدفع...",
+      "paid": "دفع",
+      "unpaid": "لم يدفع",
+      "recording": "جارٍ التسجيل...",
+      "recordAmount": "تسجيل {{amount}} ETB",
+      "noMembers": "لم يتم العثور على سجلات لحالة الدفع.",
+      "table": {
+        "member": "العضو",
+        "phone": "الهاتف",
+        "status": "الحالة",
+        "action": "الإجراء"
+      }
+    },
+
+    "recent": {
+      "title": "المساهمات الأخيرة",
+      "count": "{{count}} سجل",
+      "loading": "جارٍ تحميل المساهمات...",
+      "empty": "لم يتم العثور على مساهمات.",
+      "memberFallback": "العضو #{{id}}",
+      "table": {
+        "member": "العضو",
+        "amount": "المبلغ",
+        "date": "التاريخ"
+      }
+    },
+
+    "messages": {
+      "recorded": "تم تسجيل المساهمة بنجاح.",
+      "memberRecorded": "تم تسجيل {{name}} على أنه دفع بنجاح."
+    },
+
+    "errors": {
+      "loadMembers": "تعذر تحميل الأعضاء.",
+      "loadContributions": "تعذر تحميل المساهمات.",
+      "loadAmount": "تعذر تحميل مبلغ المساهمة.",
+      "loadStatus": "تعذر تحميل حالة الدفع.",
+      "invalidMember": "تم اختيار عضو غير صالح.",
+      "selectMember": "يرجى اختيار عضو.",
+      "invalidAmount": "يرجى إدخال مبلغ صالح.",
+      "selectDate": "يرجى اختيار تاريخ.",
+      "duplicate": "لقد قام هذا العضو بالمساهمة بالفعل في هذا التاريخ.",
+      "duplicateMember": "لقد دفع {{name}} بالفعل في هذا التاريخ.",
+      "recordContribution": "تعذر تسجيل المساهمة.",
+      "connection": "تعذر الاتصال بخادم الواجهة الخلفية.",
+      "unexpected": "خطأ: {{message}}"
+    }
+  },
+    "gallery": {
+    "kicker": "معرض صور شباب مسجد الفتوى",
+    "title": "ذكريات وأنشطة ولحظات مجتمعية",
+    "description": "مجموعة من الصور التي توثق أنشطة وبرامج ولحظات لا تُنسى لشباب مسجد الفتوى.",
+    "loading": "جارٍ تحميل معرض الصور...",
+    "loadingDescription": "يرجى الانتظار بينما نقوم بتحميل صور مجتمعنا.",
+    "comingSoonBadge": "معرض الصور قريبًا",
+    "emptyTitle": "ستكون صورنا هنا قريبًا",
+    "emptyDescription": "ستتم إضافة صور أنشطة الشباب والاجتماعات والبرامج والتجمعات المجتمعية هنا قريبًا.",
+    "note": "ستظهر هنا أنشطة المجتمع واللحظات التي لا تُنسى.",
+    "defaultAlt": "شباب مسجد الفتوى"
+  },
+    "adminGallery": {
+    "kicker": "إدارة المحتوى",
+    "title": "معرض الصور",
+    "description": "رفع وإدارة صور مجتمع شباب مسجد الفتوى.",
+    "totalPhotos": "إجمالي الصور",
+    "loading": "جارٍ تحميل معرض الصور...",
+    "emptyTitle": "لا توجد صور حتى الآن",
+    "emptyDescription": "معرض الصور جاهز. أضف صورة عندما تتوفر لديك.",
+    "defaultAlt": "شباب مسجد الفتوى",
+
+    "actions": {
+      "addPhoto": "إضافة صورة",
+      "addFirstPhoto": "إضافة أول صورة",
+      "editPhoto": "تعديل الصورة",
+      "deletePhoto": "حذف الصورة"
+    },
+
+    "form": {
+      "addTitle": "إضافة صورة",
+      "editTitle": "تعديل الصورة",
+      "addDescription": "رفع صورة للمجتمع.",
+      "editDescription": "تحديث تفاصيل الصورة.",
+      "close": "إغلاق",
+      "titleLabel": "العنوان",
+      "titlePlaceholder": "برنامج شباب الجمعة",
+      "descriptionLabel": "الوصف",
+      "descriptionPlaceholder": "صف هذه اللحظة المجتمعية...",
+      "photoLabel": "الصورة",
+      "fileHelp": "JPG وPNG وWEBP وغيرها من صيغ الصور. الحد الأقصى 10 ميغابايت.",
+      "preview": "معاينة",
+      "previewAlt": "معاينة الصورة",
+      "cancel": "إلغاء",
+      "saving": "جارٍ الرفع...",
+      "saveChanges": "حفظ التغييرات",
+      "uploadPhoto": "رفع الصورة"
+    },
+
+    "messages": {
+      "uploaded": "تم رفع الصورة بنجاح.",
+      "updated": "تم تحديث الصورة بنجاح.",
+      "deleted": "تم حذف الصورة بنجاح."
+    },
+
+    "errors": {
+      "load": "تعذر تحميل معرض الصور.",
+      "save": "تعذر حفظ الصورة.",
+      "delete": "تعذر حذف الصورة.",
+      "invalidImage": "يرجى اختيار ملف صورة صالح.",
+      "fileTooLarge": "يجب ألا يتجاوز حجم الصورة 10 ميغابايت.",
+      "titleRequired": "يرجى إدخال عنوان للصورة.",
+      "photoRequired": "يرجى اختيار صورة.",
+      "connection": "تعذر الاتصال بخادم الواجهة الخلفية.",
+      "unexpected": "خطأ: {{message}}"
+    },
+
+    "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذه الصورة؟"
+  },
+    "adminManagement": {
+    "kicker": "الإدارة",
+    "title": "إدارة المسؤولين",
+    "description": "إدارة المسؤولين وصلاحيات الوصول إلى النظام.",
+    "you": "أنت",
+    "loading": "جارٍ تحميل المسؤولين...",
+
+    "actions": {
+      "add": "إضافة مسؤول",
+      "refresh": "تحديث",
+      "edit": "تعديل",
+      "activate": "تفعيل",
+      "deactivate": "إلغاء التفعيل"
+    },
+
+    "stats": {
+      "total": "إجمالي المسؤولين",
+      "active": "النشطون",
+      "superAdmins": "المسؤولون الرئيسيون"
+    },
+
+    "table": {
+      "title": "المسؤولون",
+      "description": "إدارة حسابات المسؤولين وصلاحياتهم.",
+      "administrator": "المسؤول",
+      "username": "اسم المستخدم",
+      "role": "الدور",
+      "status": "الحالة",
+      "created": "تاريخ الإنشاء",
+      "actions": "الإجراءات"
+    },
+
+    "roles": {
+      "admin": "مسؤول",
+      "superAdmin": "مسؤول رئيسي"
+    },
+
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "updating": "جارٍ التحديث..."
+    },
+
+    "empty": {
+      "title": "لم يتم العثور على مسؤولين",
+      "description": "أضف مسؤولًا للبدء."
+    },
+
+    "confirm": {
+      "activate": "هل أنت متأكد أنك تريد تفعيل \"{{name}}\"؟",
+      "deactivate": "هل أنت متأكد أنك تريد إلغاء تفعيل \"{{name}}\"؟"
+    },
+
+    "tooltips": {
+      "selfStatus": "لا يمكنك تغيير حالة حسابك الخاص",
+      "updating": "جارٍ التحديث...",
+      "deactivate": "إلغاء تفعيل هذا المسؤول",
+      "activate": "تفعيل هذا المسؤول"
+    },
+
+    "form": {
+      "addTitle": "إضافة مسؤول",
+      "editTitle": "تعديل المسؤول",
+      "addDescription": "إنشاء حساب مسؤول جديد.",
+      "editDescription": "تحديث تفاصيل حساب المسؤول.",
+      "close": "إغلاق",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل الاسم الكامل",
+      "username": "اسم المستخدم",
+      "usernamePlaceholder": "أدخل اسم المستخدم",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "passwordEditPlaceholder": "اترك الحقل فارغًا للإبقاء على كلمة المرور الحالية",
+      "optional": "اختياري",
+      "passwordNote": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.",
+      "passwordEditNote": "أدخل كلمة مرور جديدة فقط إذا كنت تريد تغييرها.",
+      "role": "الدور",
+      "selfRoleNote": "لا يمكنك تغيير دور حسابك الخاص.",
+      "cancel": "إلغاء",
+      "saving": "جارٍ الحفظ...",
+      "saveChanges": "حفظ التغييرات",
+      "create": "إنشاء مسؤول"
+    },
+
+    "messages": {
+      "created": "تم إنشاء المسؤول بنجاح.",
+      "updated": "تم تحديث المسؤول بنجاح."
+    },
+
+    "errors": {
+      "load": "تعذر تحميل المسؤولين.",
+      "fullNameRequired": "الاسم الكامل مطلوب.",
+      "usernameRequired": "اسم المستخدم مطلوب.",
+      "passwordMin": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.",
+      "newPasswordMin": "يجب أن تتكون كلمة المرور الجديدة من 6 أحرف على الأقل.",
+      "operation": "فشلت العملية.",
+      "save": "تعذر حفظ المسؤول.",
+      "selfStatus": "لا يمكنك إلغاء تفعيل حسابك الخاص أو تغيير حالته.",
+      "statusUpdate": "تعذر تحديث حالة المسؤول."
+    }
+  },
+  "loading": "جارٍ تحميل الإعدادات...",
+
+"account": {
+  "title": "إعدادات الحساب",
+  "description": "حدّث اسم مستخدم المسؤول وكلمة المرور.",
+  "username": "اسم المستخدم",
+  "usernamePlaceholder": "أدخل اسم المستخدم",
+  "newPassword": "كلمة مرور جديدة",
+  "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+  "confirmPassword": "تأكيد كلمة المرور الجديدة",
+  "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور الجديدة",
+  "showPassword": "إظهار كلمة المرور",
+  "hidePassword": "إخفاء كلمة المرور",
+  "passwordHelp": "اترك هذا الحقل فارغًا إذا كنت تريد تغيير اسم المستخدم فقط.",
+  "updateButton": "تحديث الحساب",
+
+  "messages": {
+    "updated": "تم تحديث إعدادات الحساب بنجاح."
+  },
+
+  "errors": {
+    "usernameRequired": "اسم المستخدم مطلوب.",
+    "passwordMin": "يجب أن تتكون كلمة المرور الجديدة من 6 أحرف على الأقل.",
+    "passwordMismatch": "كلمة المرور الجديدة وتأكيد كلمة المرور غير متطابقين.",
+    "accountNotFound": "تعذر العثور على معلومات حسابك. يرجى تسجيل الدخول مرة أخرى.",
+    "update": "تعذر تحديث إعدادات الحساب."
+  }
+}
+}

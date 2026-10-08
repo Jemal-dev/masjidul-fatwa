@@ -1,88 +1,163 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const API_BASE_URL = import.meta.env.PROD
   ? "https://masjidul-fatwa-l6ao.vercel.app"
   : "http://localhost:5000";
 
 function Gallery() {
+  const { t, i18n } = useTranslation();
+
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchGallery();
-  }, []);
+  // ==========================================
+  // GET PUBLIC GALLERY
+  // ==========================================
 
   const fetchGallery = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/gallery`);
+      const response = await axios.get(
+        `${API_BASE_URL}/api/gallery`
+      );
 
-      if (response.data?.success) {
-        setPhotos(response.data.photos || []);
+      const data = response.data;
+
+      if (data?.success) {
+        setPhotos(
+          Array.isArray(data.photos)
+            ? data.photos
+            : []
+        );
+      } else {
+        setPhotos([]);
       }
     } catch (error) {
-      console.error("Failed to load gallery:", error);
+      console.error(
+        "Failed to load gallery:",
+        error
+      );
+
+      setPhotos([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // ==========================================
+  // LOAD GALLERY
+  // ==========================================
+
+  useEffect(() => {
+    fetchGallery();
+  }, []);
+
+  // ==========================================
+  // DATE LOCALE
+  // ==========================================
+
+  const getDateLocale = () => {
+    const language = i18n.language || "en";
+
+    const localeMap = {
+      en: "en-US",
+      om: "om-ET",
+      am: "am-ET",
+      ar: "ar",
+    };
+
+    return localeMap[language] || "en-US";
+  };
+
+  // ==========================================
+  // PAGE
+  // ==========================================
+
   return (
-    <section className="shabab-gallery-section" id="gallery">
+    <section
+      className="shabab-gallery-section"
+      id="gallery"
+    >
       <div className="section-heading">
-        <span className="section-kicker">Shabab Gallery</span>
+        <span className="section-kicker">
+          {t("gallery.kicker")}
+        </span>
 
-        <h2>Memories, Activities & Community Moments</h2>
+        <h2>{t("gallery.title")}</h2>
 
-        <p>
-          A visual collection of the activities, programs, and memorable
-          moments of Masjidul-Fatwa Shabab.
-        </p>
+        <p>{t("gallery.description")}</p>
       </div>
 
       {loading ? (
         <div className="gallery-empty-state">
-          <div className="gallery-empty-icon">📷</div>
-          <h3>Loading Gallery...</h3>
-          <p>Please wait while we load our community photos.</p>
+          <div
+            className="gallery-empty-icon"
+            aria-hidden="true"
+          >
+            {"\u{1F4F7}"}
+          </div>
+
+          <h3>{t("gallery.loading")}</h3>
+
+          <p>
+            {t("gallery.loadingDescription")}
+          </p>
         </div>
       ) : photos.length === 0 ? (
         <div className="gallery-empty-state">
-          <div className="gallery-empty-icon">📷</div>
+          <div
+            className="gallery-empty-icon"
+            aria-hidden="true"
+          >
+            {"\u{1F4F7}"}
+          </div>
 
           <span className="gallery-coming-soon-badge">
-            Gallery Coming Soon
+            {t("gallery.comingSoonBadge")}
           </span>
 
-          <h3>Our Photos Will Be Here Soon</h3>
+          <h3>
+            {t("gallery.emptyTitle")}
+          </h3>
 
           <p>
-            Photos from our Shabab activities, meetings, programs, and
-            community gatherings will be added here soon.
+            {t("gallery.emptyDescription")}
           </p>
 
           <div className="gallery-coming-soon-note">
-            <span>🤝</span>
+            <span aria-hidden="true">
+              {"\u{1F91D}"}
+            </span>
+
             <span>
-              Community activities and memorable moments will appear here.
+              {t("gallery.note")}
             </span>
           </div>
         </div>
       ) : (
         <div className="gallery-grid">
           {photos.map((photo) => (
-            <article className="gallery-card" key={photo.id}>
+            <article
+              className="gallery-card"
+              key={photo.id}
+            >
               <div className="gallery-image-wrapper">
                 <img
                   src={photo.image_url}
-                  alt={photo.title || "Masjidul-Fatwa Shabab"}
+                  alt={
+                    photo.title ||
+                    t("gallery.defaultAlt")
+                  }
                   className="gallery-image"
                   loading="lazy"
                 />
               </div>
 
               <div className="gallery-card-content">
-                {photo.title && <h3>{photo.title}</h3>}
+                {photo.title && (
+                  <h3>{photo.title}</h3>
+                )}
 
                 {photo.description && (
                   <p>{photo.description}</p>
@@ -90,7 +165,11 @@ function Gallery() {
 
                 {photo.created_at && (
                   <small>
-                    {new Date(photo.created_at).toLocaleDateString()}
+                    {new Date(
+                      photo.created_at
+                    ).toLocaleDateString(
+                      getDateLocale()
+                    )}
                   </small>
                 )}
               </div>

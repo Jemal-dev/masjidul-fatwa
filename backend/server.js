@@ -590,6 +590,42 @@ app.get(
     }
 );
 
+// Clear all contribution records
+// SUPER ADMIN ONLY
+app.delete(
+    "/api/contributions/clear",
+    authenticateToken,
+    requireSuperAdmin,
+    async (req, res) => {
+        try {
+            const [result] = await db.query(
+                "DELETE FROM contributions"
+            );
+
+            res.json({
+                success: true,
+                message:
+                    `${result.affectedRows} contribution record(s) cleared successfully.`,
+                deleted_count:
+                    result.affectedRows
+            });
+
+        } catch (error) {
+            console.error(
+                "Error clearing contributions:",
+                error.message
+            );
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Failed to clear contribution records",
+                error: error.message
+            });
+        }
+    }
+);
+
 /* =========================================================
    REPORTS
 ========================================================= */

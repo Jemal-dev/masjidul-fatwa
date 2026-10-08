@@ -1,650 +1,707 @@
-
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "./AdminGallery.css";
 
 function AdminGallery() {
-    const [photos, setPhotos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
+  const { t, i18n } = useTranslation();
 
-    const [showForm, setShowForm] = useState(false);
-    const [editingId, setEditingId] = useState(null);
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
 
-    const fileInputRef = useRef(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-    /* =========================================================
-       LOAD GALLERY
-    ========================================================= */
+  const fileInputRef = useRef(null);
+  const previewObjectUrlRef = useRef("");
 
-    const loadGallery = async () => {
-        try {
-            setLoading(true);
-            setError("");
+  // ==========================================
+  // DATE LOCALE
+  // ==========================================
 
-            const response = await axios.get(
-                "/api/gallery"
-            );
+  const getDateLocale = () => {
+    const language = i18n.language || "en";
 
-            if (response.data?.success) {
-                setPhotos(
-                    response.data.data || []
-                );
-            } else {
-                setPhotos([]);
-            }
-
-        } catch (err) {
-            console.error(
-                "Gallery loading error:",
-                err
-            );
-
-            setError(
-                err.response?.data?.message ||
-                "Failed to load gallery."
-            );
-        } finally {
-            setLoading(false);
-        }
+    const localeMap = {
+      en: "en-US",
+      om: "om-ET",
+      am: "am-ET",
+      ar: "ar",
     };
 
-    useEffect(() => {
-        loadGallery();
-    }, []);
+    return localeMap[language] || "en-US";
+  };
 
-    /* =========================================================
-       RESET FORM
-    ========================================================= */
+  // ==========================================
+  // CLEAN PREVIEW URL
+  // ==========================================
 
-    const resetForm = () => {
-        setEditingId(null);
-        setTitle("");
-        setDescription("");
-        setSelectedFile(null);
-        setPreviewUrl("");
-        setError("");
+  const clearPreviewObjectUrl = () => {
+    if (previewObjectUrlRef.current) {
+      URL.revokeObjectURL(
+        previewObjectUrlRef.current
+      );
 
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
+      previewObjectUrlRef.current = "";
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      clearPreviewObjectUrl();
     };
+  }, []);
 
-    /* =========================================================
-       OPEN ADD
-    ========================================================= */
+  // ==========================================
+  // LOAD GALLERY
+  // ==========================================
 
-    const openAddForm = () => {
-        resetForm();
-        setSuccess("");
-        setShowForm(true);
-    };
+  const loadGallery = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-    /* =========================================================
-       OPEN EDIT
-    ========================================================= */
+      const response = await axios.get(
+        "/api/gallery"
+      );
 
-    const openEditForm = (photo) => {
-        setEditingId(photo.id);
-        setTitle(photo.title || "");
-        setDescription(
-            photo.description || ""
+      if (response.data?.success) {
+        const galleryData =
+          response.data.data ||
+          response.data.photos ||
+          [];
+
+        setPhotos(
+          Array.isArray(galleryData)
+            ? galleryData
+            : []
         );
-        setSelectedFile(null);
+      } else {
+        setPhotos([]);
+      }
+    } catch (err) {
+      console.error(
+        "Gallery loading error:",
+        err
+      );
+
+      setError(
+        err.response?.data?.message ||
+          t("adminGallery.errors.load")
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadGallery();
+  }, []);
+
+  // ==========================================
+  // RESET FORM
+  // ==========================================
+
+  const resetForm = () => {
+    setEditingId(null);
+    setTitle("");
+    setDescription("");
+    setSelectedFile(null);
+    setPreviewUrl("");
+    setError("");
+
+    clearPreviewObjectUrl();
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // ==========================================
+  // OPEN ADD
+  // ==========================================
+
+  const openAddForm = () => {
+    resetForm();
+    setSuccess("");
+    setShowForm(true);
+  };
+
+  // ==========================================
+  // OPEN EDIT
+  // ==========================================
+
+  const openEditForm = (photo) => {
+    clearPreviewObjectUrl();
+
+    setEditingId(photo.id);
+    setTitle(photo.title || "");
+    setDescription(photo.description || "");
+    setSelectedFile(null);
+    setPreviewUrl(photo.image_url || "");
+    setError("");
+    setSuccess("");
+    setShowForm(true);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // ==========================================
+  // CLOSE FORM
+  // ==========================================
+
+  const closeForm = () => {
+    if (saving) {
+      return;
+    }
+
+    setShowForm(false);
+    resetForm();
+  };
+
+  // ==========================================
+  // FILE SELECT
+  // ==========================================
+
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      setSelectedFile(null);
+
+      if (editingId) {
+        clearPreviewObjectUrl();
+
+        const currentPhoto = photos.find(
+          (photo) => photo.id === editingId
+        );
+
         setPreviewUrl(
-            photo.image_url || ""
+          currentPhoto?.image_url || ""
         );
-        setError("");
-        setSuccess("");
-        setShowForm(true);
+      } else {
+        setPreviewUrl("");
+      }
 
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
-    };
+      return;
+    }
 
-    /* =========================================================
-       CLOSE FORM
-    ========================================================= */
+    if (!file.type.startsWith("image/")) {
+      setError(
+        t("adminGallery.errors.invalidImage")
+      );
 
-    const closeForm = () => {
-        if (saving) return;
+      setSelectedFile(null);
+      return;
+    }
 
-        setShowForm(false);
-        resetForm();
-    };
+    if (file.size > 10 * 1024 * 1024) {
+      setError(
+        t("adminGallery.errors.fileTooLarge")
+      );
 
-    /* =========================================================
-       FILE SELECT
-    ========================================================= */
+      setSelectedFile(null);
+      return;
+    }
 
-    const handleFileChange = (event) => {
-        const file =
-            event.target.files?.[0];
+    setError("");
+    setSelectedFile(file);
 
-        if (!file) {
-            setSelectedFile(null);
-            return;
-        }
+    clearPreviewObjectUrl();
 
-        if (!file.type.startsWith("image/")) {
-            setError(
-                "Please select a valid image file."
-            );
-            setSelectedFile(null);
-            return;
-        }
+    const localUrl = URL.createObjectURL(file);
 
-        if (
-            file.size >
-            10 * 1024 * 1024
-        ) {
-            setError(
-                "Image must be 10 MB or smaller."
-            );
-            setSelectedFile(null);
-            return;
-        }
+    previewObjectUrlRef.current = localUrl;
+    setPreviewUrl(localUrl);
+  };
 
-        setError("");
-        setSelectedFile(file);
+  // ==========================================
+  // SUBMIT
+  // ==========================================
 
-        const localUrl =
-            URL.createObjectURL(file);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-        setPreviewUrl(localUrl);
-    };
+    setError("");
+    setSuccess("");
 
-    /* =========================================================
-       SUBMIT
-    ========================================================= */
+    if (!title.trim()) {
+      setError(
+        t("adminGallery.errors.titleRequired")
+      );
+      return;
+    }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    if (!editingId && !selectedFile) {
+      setError(
+        t("adminGallery.errors.photoRequired")
+      );
+      return;
+    }
 
-        setError("");
-        setSuccess("");
+    try {
+      setSaving(true);
 
-        if (!title.trim()) {
-            setError(
-                "Please enter a photo title."
-            );
-            return;
-        }
+      const formData = new FormData();
 
-        if (
-            !editingId &&
-            !selectedFile
-        ) {
-            setError(
-                "Please choose a photo."
-            );
-            return;
-        }
+      formData.append(
+        "title",
+        title.trim()
+      );
 
-        try {
-            setSaving(true);
+      formData.append(
+        "description",
+        description.trim()
+      );
 
-            const formData =
-                new FormData();
+      if (selectedFile) {
+        formData.append(
+          "image",
+          selectedFile
+        );
+      }
 
-            formData.append(
-                "title",
-                title.trim()
-            );
+      if (editingId) {
+        await axios.put(
+          `/api/gallery/${editingId}`,
+          formData
+        );
 
-            formData.append(
-                "description",
-                description.trim()
-            );
+        setSuccess(
+          t("adminGallery.messages.updated")
+        );
+      } else {
+        await axios.post(
+          "/api/gallery",
+          formData
+        );
 
-            if (selectedFile) {
-                formData.append(
-                    "image",
-                    selectedFile
-                );
-            }
+        setSuccess(
+          t("adminGallery.messages.uploaded")
+        );
+      }
 
-            if (editingId) {
-                await axios.put(
-                    `/api/gallery/${editingId}`,
-                    formData
-                );
+      await loadGallery();
 
-                setSuccess(
-                    "Photo updated successfully."
-                );
-            } else {
-                await axios.post(
-                    "/api/gallery",
-                    formData
-                );
+      setShowForm(false);
+      resetForm();
+    } catch (err) {
+      console.error(
+        "Gallery save error:",
+        err
+      );
 
-                setSuccess(
-                    "Photo uploaded successfully."
-                );
-            }
+      setError(
+        err.response?.data?.message ||
+          t("adminGallery.errors.save")
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
-            await loadGallery();
+  // ==========================================
+  // DELETE
+  // ==========================================
 
-            setShowForm(false);
-            resetForm();
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm(
+      t("adminGallery.deleteConfirm")
+    );
 
-        } catch (err) {
-            console.error(
-                "Gallery save error:",
-                err
-            );
+    if (!confirmed) {
+      return;
+    }
 
-            setError(
-                err.response?.data?.message ||
-                "Failed to save photo."
-            );
-        } finally {
-            setSaving(false);
-        }
-    };
+    try {
+      setError("");
+      setSuccess("");
 
-    /* =========================================================
-       DELETE
-    ========================================================= */
+      await axios.delete(
+        `/api/gallery/${id}`
+      );
 
-    const handleDelete = async (id) => {
-        const confirmed =
-            window.confirm(
-                "Are you sure you want to delete this photo?"
-            );
+      setPhotos((current) =>
+        current.filter(
+          (photo) => photo.id !== id
+        )
+      );
 
-        if (!confirmed) {
-            return;
-        }
+      setSuccess(
+        t("adminGallery.messages.deleted")
+      );
+    } catch (err) {
+      console.error(
+        "Gallery delete error:",
+        err
+      );
 
-        try {
-            setError("");
-            setSuccess("");
+      setError(
+        err.response?.data?.message ||
+          t("adminGallery.errors.delete")
+      );
+    }
+  };
 
-            await axios.delete(
-                `/api/gallery/${id}`
-            );
+  // ==========================================
+  // PAGE
+  // ==========================================
 
-            setPhotos(
-                (current) =>
-                    current.filter(
-                        (photo) =>
-                            photo.id !== id
-                    )
-            );
+  return (
+    <div className="admin-gallery-page">
+      {/* HEADER */}
 
-            setSuccess(
-                "Photo deleted successfully."
-            );
+      <div className="admin-gallery-header">
+        <div>
+          <span className="section-kicker">
+            {t("adminGallery.kicker")}
+          </span>
 
-        } catch (err) {
-            console.error(
-                "Gallery delete error:",
-                err
-            );
+          <h1>
+            {t("adminGallery.title")}
+          </h1>
 
-            setError(
-                err.response?.data?.message ||
-                "Failed to delete photo."
-            );
-        }
-    };
+          <p>
+            {t("adminGallery.description")}
+          </p>
+        </div>
 
-    return (
-        <div className="admin-gallery-page">
+        <button
+          type="button"
+          className="admin-gallery-add-btn"
+          onClick={openAddForm}
+        >
+          {"\uFF0B"}{" "}
+          {t("adminGallery.actions.addPhoto")}
+        </button>
+      </div>
 
-            {/* HEADER */}
+      {/* MESSAGES */}
 
-            <div className="admin-gallery-header">
-                <div>
-                    <span className="section-kicker">
-                        Content Management
-                    </span>
+      {success && (
+        <div className="gallery-admin-message success">
+          {"\u2713"} {success}
+        </div>
+      )}
 
-                    <h1>Gallery</h1>
+      {error && !showForm && (
+        <div className="gallery-admin-message error">
+          {"!"} {error}
+        </div>
+      )}
 
-                    <p>
-                        Upload and manage
-                        Masjidul-Fatwa Shabab
-                        community photos.
-                    </p>
+      {/* STAT */}
+
+      <div className="admin-gallery-stat">
+        <span aria-hidden="true">
+          {"\u{1F5BC}\uFE0F"}
+        </span>
+
+        <div>
+          <small>
+            {t("adminGallery.totalPhotos")}
+          </small>
+
+          <strong>{photos.length}</strong>
+        </div>
+      </div>
+
+      {/* CONTENT */}
+
+      {loading ? (
+        <div className="admin-gallery-empty">
+          <div className="admin-gallery-spinner" />
+
+          <p>
+            {t("adminGallery.loading")}
+          </p>
+        </div>
+      ) : photos.length === 0 ? (
+        <div className="admin-gallery-empty">
+          <div
+            className="admin-gallery-empty-icon"
+            aria-hidden="true"
+          >
+            {"\u{1F5BC}\uFE0F"}
+          </div>
+
+          <h2>
+            {t("adminGallery.emptyTitle")}
+          </h2>
+
+          <p>
+            {t(
+              "adminGallery.emptyDescription"
+            )}
+          </p>
+
+          <button
+            type="button"
+            className="admin-gallery-empty-btn"
+            onClick={openAddForm}
+          >
+            {"\uFF0B"}{" "}
+            {t("adminGallery.actions.addFirstPhoto")}
+          </button>
+        </div>
+      ) : (
+        <div className="admin-gallery-grid">
+          {photos.map((photo) => (
+            <article
+              className="admin-gallery-card"
+              key={photo.id}
+            >
+              <div className="admin-gallery-image">
+                <img
+                  src={photo.image_url}
+                  alt={
+                    photo.title ||
+                    t("adminGallery.defaultAlt")
+                  }
+                />
+
+                <div className="admin-gallery-card-actions">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      openEditForm(photo)
+                    }
+                    title={t(
+                      "adminGallery.actions.editPhoto"
+                    )}
+                    aria-label={t(
+                      "adminGallery.actions.editPhoto"
+                    )}
+                  >
+                    {"\u270F\uFE0F"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleDelete(photo.id)
+                    }
+                    title={t(
+                      "adminGallery.actions.deletePhoto"
+                    )}
+                    aria-label={t(
+                      "adminGallery.actions.deletePhoto"
+                    )}
+                  >
+                    {"\u{1F5D1}\uFE0F"}
+                  </button>
                 </div>
+              </div>
+
+              <div className="admin-gallery-card-body">
+                <h3>{photo.title}</h3>
+
+                {photo.description && (
+                  <p>{photo.description}</p>
+                )}
+
+                <small>
+                  {photo.created_at
+                    ? new Date(
+                        photo.created_at
+                      ).toLocaleDateString(
+                        getDateLocale()
+                      )
+                    : ""}
+                </small>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {/* MODAL */}
+
+      {showForm && (
+        <div className="admin-gallery-modal-overlay">
+          <div className="admin-gallery-modal">
+            <div className="admin-gallery-modal-header">
+              <div>
+                <span aria-hidden="true">
+                  {editingId
+                    ? "\u270F\uFE0F"
+                    : "\u{1F5BC}\uFE0F"}
+                </span>
+
+                <div>
+                  <h2>
+                    {editingId
+                      ? t(
+                          "adminGallery.form.editTitle"
+                        )
+                      : t(
+                          "adminGallery.form.addTitle"
+                        )}
+                  </h2>
+
+                  <p>
+                    {editingId
+                      ? t(
+                          "adminGallery.form.editDescription"
+                        )
+                      : t(
+                          "adminGallery.form.addDescription"
+                        )}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="admin-gallery-close"
+                onClick={closeForm}
+                disabled={saving}
+                aria-label={t(
+                  "adminGallery.form.close"
+                )}
+              >
+                {"\u00D7"}
+              </button>
+            </div>
+
+            <form
+              className="admin-gallery-form"
+              onSubmit={handleSubmit}
+            >
+              {error && (
+                <div className="gallery-admin-message error">
+                  {"!"} {error}
+                </div>
+              )}
+
+              <label>
+                {t(
+                  "adminGallery.form.titleLabel"
+                )}
+
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(event) =>
+                    setTitle(
+                      event.target.value
+                    )
+                  }
+                  placeholder={t(
+                    "adminGallery.form.titlePlaceholder"
+                  )}
+                  maxLength={255}
+                  disabled={saving}
+                />
+              </label>
+
+              <label>
+                {t(
+                  "adminGallery.form.descriptionLabel"
+                )}
+
+                <textarea
+                  value={description}
+                  onChange={(event) =>
+                    setDescription(
+                      event.target.value
+                    )
+                  }
+                  placeholder={t(
+                    "adminGallery.form.descriptionPlaceholder"
+                  )}
+                  rows="4"
+                  disabled={saving}
+                />
+              </label>
+
+              <label>
+                {t(
+                  "adminGallery.form.photoLabel"
+                )}
+
+                <div className="admin-gallery-file-box">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    disabled={saving}
+                  />
+
+                  <small>
+                    {t(
+                      "adminGallery.form.fileHelp"
+                    )}
+                  </small>
+                </div>
+              </label>
+
+              {previewUrl && (
+                <div className="admin-gallery-preview">
+                  <small>
+                    {t(
+                      "adminGallery.form.preview"
+                    )}
+                  </small>
+
+                  <img
+                    src={previewUrl}
+                    alt={t(
+                      "adminGallery.form.previewAlt"
+                    )}
+                  />
+                </div>
+              )}
+
+              <div className="admin-gallery-form-actions">
+                <button
+                  type="button"
+                  className="admin-gallery-cancel"
+                  onClick={closeForm}
+                  disabled={saving}
+                >
+                  {t(
+                    "adminGallery.form.cancel"
+                  )}
+                </button>
 
                 <button
-                    type="button"
-                    className="admin-gallery-add-btn"
-                    onClick={openAddForm}
+                  type="submit"
+                  className="admin-gallery-save"
+                  disabled={saving}
                 >
-                    ＋ Add Photo
+                  {saving
+                    ? t(
+                        "adminGallery.form.saving"
+                      )
+                    : editingId
+                    ? t(
+                        "adminGallery.form.saveChanges"
+                      )
+                    : t(
+                        "adminGallery.form.uploadPhoto"
+                      )}
                 </button>
-            </div>
-
-            {/* MESSAGES */}
-
-            {success && (
-                <div className="gallery-admin-message success">
-                    ✓ {success}
-                </div>
-            )}
-
-            {error && !showForm && (
-                <div className="gallery-admin-message error">
-                    ! {error}
-                </div>
-            )}
-
-            {/* STAT */}
-
-            <div className="admin-gallery-stat">
-                <span>🖼️</span>
-
-                <div>
-                    <small>Total Photos</small>
-
-                    <strong>
-                        {photos.length}
-                    </strong>
-                </div>
-            </div>
-
-            {/* CONTENT */}
-
-            {loading ? (
-                <div className="admin-gallery-empty">
-                    <div className="admin-gallery-spinner" />
-                    <p>Loading gallery...</p>
-                </div>
-            ) : photos.length === 0 ? (
-                <div className="admin-gallery-empty">
-
-                    <div className="admin-gallery-empty-icon">
-                        🖼️
-                    </div>
-
-                    <h2>No Photos Yet</h2>
-
-                    <p>
-                        Your gallery is ready.
-                        Add a photo whenever
-                        you have one.
-                    </p>
-
-                    <button
-                        type="button"
-                        className="admin-gallery-empty-btn"
-                        onClick={openAddForm}
-                    >
-                        ＋ Add First Photo
-                    </button>
-
-                </div>
-            ) : (
-                <div className="admin-gallery-grid">
-
-                    {photos.map((photo) => (
-                        <article
-                            className="admin-gallery-card"
-                            key={photo.id}
-                        >
-
-                            <div className="admin-gallery-image">
-
-                                <img
-                                    src={photo.image_url}
-                                    alt={
-                                        photo.title
-                                    }
-                                />
-
-                                <div className="admin-gallery-card-actions">
-
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            openEditForm(
-                                                photo
-                                            )
-                                        }
-                                        title="Edit photo"
-                                    >
-                                        ✏️
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            handleDelete(
-                                                photo.id
-                                            )
-                                        }
-                                        title="Delete photo"
-                                    >
-                                        🗑️
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                            <div className="admin-gallery-card-body">
-
-                                <h3>
-                                    {photo.title}
-                                </h3>
-
-                                {photo.description && (
-                                    <p>
-                                        {
-                                            photo.description
-                                        }
-                                    </p>
-                                )}
-
-                                <small>
-                                    {photo.created_at
-                                        ? new Date(
-                                              photo.created_at
-                                          ).toLocaleDateString()
-                                        : ""}
-                                </small>
-
-                            </div>
-
-                        </article>
-                    ))}
-
-                </div>
-            )}
-
-            {/* MODAL */}
-
-            {showForm && (
-                <div className="admin-gallery-modal-overlay">
-
-                    <div className="admin-gallery-modal">
-
-                        <div className="admin-gallery-modal-header">
-
-                            <div>
-                                <span>
-                                    {editingId
-                                        ? "✏️"
-                                        : "🖼️"}
-                                </span>
-
-                                <div>
-                                    <h2>
-                                        {editingId
-                                            ? "Edit Photo"
-                                            : "Add Photo"}
-                                    </h2>
-
-                                    <p>
-                                        {editingId
-                                            ? "Update photo details."
-                                            : "Upload a community photo."}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <button
-                                type="button"
-                                className="admin-gallery-close"
-                                onClick={closeForm}
-                                disabled={saving}
-                            >
-                                ×
-                            </button>
-
-                        </div>
-
-                        <form
-                            className="admin-gallery-form"
-                            onSubmit={
-                                handleSubmit
-                            }
-                        >
-
-                            {error && (
-                                <div className="gallery-admin-message error">
-                                    ! {error}
-                                </div>
-                            )}
-
-                            <label>
-                                Title
-
-                                <input
-                                    type="text"
-                                    value={title}
-                                    onChange={(
-                                        event
-                                    ) =>
-                                        setTitle(
-                                            event
-                                                .target
-                                                .value
-                                        )
-                                    }
-                                    placeholder="Friday Shabab Program"
-                                    maxLength={255}
-                                    disabled={saving}
-                                />
-                            </label>
-
-                            <label>
-                                Description
-
-                                <textarea
-                                    value={
-                                        description
-                                    }
-                                    onChange={(
-                                        event
-                                    ) =>
-                                        setDescription(
-                                            event
-                                                .target
-                                                .value
-                                        )
-                                    }
-                                    placeholder="Describe this community moment..."
-                                    rows="4"
-                                    disabled={saving}
-                                />
-                            </label>
-
-                            <label>
-                                Photo
-
-                                <div className="admin-gallery-file-box">
-
-                                    <input
-                                        ref={
-                                            fileInputRef
-                                        }
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={
-                                            handleFileChange
-                                        }
-                                        disabled={saving}
-                                    />
-
-                                    <small>
-                                        JPG, PNG, WEBP
-                                        and other image
-                                        formats. Maximum
-                                        10 MB.
-                                    </small>
-
-                                </div>
-                            </label>
-
-                            {previewUrl && (
-                                <div className="admin-gallery-preview">
-
-                                    <small>
-                                        Preview
-                                    </small>
-
-                                    <img
-                                        src={
-                                            previewUrl
-                                        }
-                                        alt="Preview"
-                                    />
-
-                                </div>
-                            )}
-
-                            <div className="admin-gallery-form-actions">
-
-                                <button
-                                    type="button"
-                                    className="admin-gallery-cancel"
-                                    onClick={
-                                        closeForm
-                                    }
-                                    disabled={saving}
-                                >
-                                    Cancel
-                                </button>
-
-                                <button
-                                    type="submit"
-                                    className="admin-gallery-save"
-                                    disabled={saving}
-                                >
-                                    {saving
-                                        ? "Uploading..."
-                                        : editingId
-                                        ? "Save Changes"
-                                        : "Upload Photo"}
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                </div>
-            )}
+              </div>
+            </form>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
 export default AdminGallery;
-
