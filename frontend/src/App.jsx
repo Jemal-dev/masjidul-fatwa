@@ -501,7 +501,11 @@ AUTH LOADING
 
 if (authChecking) {
 return ( <div className="auth-loading"> <div className="auth-loading-card"> <div className="login-logo">
-{"\u{262A}"} </div>
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt="Masjidul-Fatwa logo"
+  />
+</div>
 
 
       <p>Loading...</p>
