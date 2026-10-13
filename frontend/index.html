@@ -1,82 +1,138 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
 
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
 
-    <!-- Website title -->
-    <title>Masjidul-Fatwa Shabab | Youth Community in Shalla, Ethiopia</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
 
-    <!-- Search engine description -->
-    <meta
-      name="description"
-      content="Discover Masjidul-Fatwa Shabab, a youth community in Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia. Learn about membership, community activities, and Friday contributions."
-    />
+<!-- Website title -->
+<title>
+  Masjidul-Fatwa Shabab | Community & Youth Activities in Shalla, Ethiopia
+</title>
 
-    <!-- Search engine indexing -->
-    <meta
-      name="robots"
-      content="index, follow"
-    />
+<!-- Search engine description -->
+<meta
+  name="description"
+  content="Learn about Masjidul-Fatwa Shabab in Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia. Explore our community activities, Shabab membership, and Friday contributions."
+/>
 
-    <!-- Preferred website URL -->
-    <link
-      rel="canonical"
-      href="https://masjidul-fatwa.vercel.app/"
-    />
+<!-- Search engine indexing -->
+<meta
+  name="robots"
+  content="index, follow"
+/>
 
-    <!-- Masjidul-Fatwa Shabab browser-tab logo -->
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/masjidul-fatwa-logo.svg?v=1"
-    />
+<!-- Preferred website URL -->
+<link
+  rel="canonical"
+  href="https://masjidul-fatwa.vercel.app/"
+/>
 
-    <!-- Browser theme color -->
-    <meta
-      name="theme-color"
-      content="#166534"
-    />
+<!-- Browser-tab logo -->
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href="/masjidul-fatwa-logo.svg?v=1"
+/>
 
-    <!-- Social sharing metadata -->
-    <meta
-      property="og:type"
-      content="website"
-    />
+<!-- Browser theme color -->
+<meta
+  name="theme-color"
+  content="#166534"
+/>
 
-    <meta
-      property="og:site_name"
-      content="Masjidul-Fatwa Shabab"
-    />
+<!-- Open Graph: Facebook and other social platforms -->
+<meta
+  property="og:type"
+  content="website"
+/>
 
-    <meta
-      property="og:title"
-      content="Masjidul-Fatwa Shabab | Youth Community in Shalla, Ethiopia"
-    />
+<meta
+  property="og:site_name"
+  content="Masjidul-Fatwa Shabab"
+/>
 
-    <meta
-      property="og:description"
-      content="Discover Masjidul-Fatwa Shabab, its community activities, membership information, and Friday contribution management."
-    />
+<meta
+  property="og:title"
+  content="Masjidul-Fatwa Shabab | Community & Youth Activities in Shalla, Ethiopia"
+/>
 
-    <meta
-      property="og:url"
-      content="https://masjidul-fatwa.vercel.app/"
-    />
+<meta
+  property="og:description"
+  content="Discover Masjidul-Fatwa Shabab, our community activities, youth membership, and Friday contributions in Awara Gema, Shalla, Oromia, Ethiopia."
+/>
 
-    <!-- Organization information for search engines -->
-    <script type="application/ld+json">
+<meta
+  property="og:url"
+  content="https://masjidul-fatwa.vercel.app/"
+/>
+
+<meta
+  property="og:image"
+  content="https://masjidul-fatwa.vercel.app/masjidul-fatwa-social.png"
+/>
+
+<meta
+  property="og:image:alt"
+  content="Masjidul-Fatwa Shabab — Building Community Through Contribution & Impact"
+/>
+
+<meta
+  property="og:image:type"
+  content="image/png"
+/>
+
+<!-- Twitter/X social sharing -->
+<meta
+  name="twitter:card"
+  content="summary_large_image"
+/>
+
+<meta
+  name="twitter:title"
+  content="Masjidul-Fatwa Shabab | Community & Youth Activities"
+/>
+
+<meta
+  name="twitter:description"
+  content="Learn about Masjidul-Fatwa Shabab, our community activities, youth membership, and Friday contributions in Shalla, Ethiopia."
+/>
+
+<meta
+  name="twitter:image"
+  content="https://masjidul-fatwa.vercel.app/masjidul-fatwa-social.png"
+/>
+
+<meta
+  name="twitter:image:alt"
+  content="Masjidul-Fatwa Shabab — Building Community Through Contribution & Impact"
+/>
+
+<!-- Website and organization structured data -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
       {
-        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://masjidul-fatwa.vercel.app/#website",
+        "url": "https://masjidul-fatwa.vercel.app/",
+        "name": "Masjidul-Fatwa Shabab",
+        "alternateName": "Masjidul-Fatwa"
+      },
+      {
         "@type": "Organization",
+        "@id": "https://masjidul-fatwa.vercel.app/#organization",
         "name": "Masjidul-Fatwa Shabab",
         "url": "https://masjidul-fatwa.vercel.app/",
         "logo": "https://masjidul-fatwa.vercel.app/masjidul-fatwa-logo.svg",
-        "description": "Masjidul-Fatwa Shabab is a youth community based in Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia. Its website provides information about community activities, Shabab membership, and Friday contribution management.",
+        "image": "https://masjidul-fatwa.vercel.app/masjidul-fatwa-social.png",
+        "description": "Masjidul-Fatwa Shabab is a youth community based in Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia. Its website provides information about community activities, Shabab membership, and Friday contributions.",
         "email": "masjidulfatwa@gmail.com",
         "telephone": "+251919543806",
         "address": {
@@ -87,15 +143,22 @@
           "addressCountry": "ET"
         }
       }
-    </script>
+    ]
+  }
+</script>
+
+
   </head>
 
   <body>
     <div id="root"></div>
 
-    <script
-      type="module"
-      src="/src/main.jsx"
-    ></script>
+
+<script
+  type="module"
+  src="/src/main.jsx"
+></script>
+
+
   </body>
 </html>
