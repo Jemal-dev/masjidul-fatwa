@@ -8001,3 +8001,26 @@ html[dir="rtl"] .password-toggle {
   height: 100%;
   object-fit: contain;
 }
+
+/* Admin Login: show the official SVG logo */
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-logo::before,
+.login-logo::after {
+  content: none !important;
+  display: none !important;
+}
+
+.login-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  visibility: visible;
+  opacity: 1;
+}
