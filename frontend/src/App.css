@@ -7991,3 +7991,13 @@ html[dir="rtl"] .password-toggle {
     white-space: nowrap;
   }
 }
+
+
+/* Admin Login — Official Masjidul-Fatwa Logo */
+
+.login-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
