@@ -197,10 +197,24 @@
     "emailDescription": "Odeeffannoon qunnamtii mootummaa as irratti dabalama"
   },
 
+    "newsletter": {
+    "eyebrow": "ODEEFFANNOO HAARAA",
+    "title": "Odeeffannoo Haaraa Argadhu",
+    "description": "Oduu fi sagantaalee haaraa Masjidul-Fatwa Shabab irraa gara teessoo imeelii keetti argadhu.",
+    "emailPlaceholder": "Teessoo imeelii kee",
+    "subscribe": "Galmaa'i"
+  },
+
   "footer": {
     "systemName": "Sirna Gumaacha fi Bulchiinsa Dargaggootaa",
     "description": "Qindoomina, gumaacha fi tajaajila itti gaafatamummaa qabuun hawaasa jabaa ijaaraa.",
     "quickLinks": "Geessituuwwan Saffisaa",
+        "programsHeading": "SAGANTAALEE",
+    "contactHeading": "NU QUUNNAMAA",
+    "shababMembership": "Miseensummaa Shabab",
+    "communityMembership": "Miseensummaa hawaasaa",
+    "fridayContribution": "Gumaacha Jimaataa",
+    "weeklyContribution": "Gumaacha hawaasaa torban torbaniin",
     "system": "Sirna",
     "members": "Miseensota",
     "reports": "Gabaasota",
@@ -361,50 +375,84 @@
     }
   },
 
-  "settings": {
-    "title": "Qindaa'ina",
-    "description": "Qindaa'ina sirna gumaacha dargaggootaa bulchi.",
-    "common": {
-      "saving": "Olkaa'aa jira...",
-      "saveChanges": "Jijjiirama Olkaa'i",
-      "cancel": "Haqi"
-    },
-    "contribution": {
-      "title": "Qindaa'ina Gumaachaa",
-      "description": "Hanga gumaacha torbanii durtii murteessi.",
-      "amountLabel": "Hanga Gumaachaa",
-      "amountPlaceholder": "Hanga gumaachaa galchi",
-      "amountHelp": "Hangi kun yeroo gumaacha galmeessitu ni fayyada."
-    },
-    "danger": {
-      "title": "Naannoo Balaa",
-      "superAdminOnly": "Bulchaa Olaanaa Qofaaf",
-      "description": "Tarkaanfiiwwan armaan gadii daataa gumaachaa jiru irratti dhiibbaa qabu.",
-      "warningTitle": "Gumaachawwan Hunda Haqi",
-      "warningDescription": "Tarkaanfiin kun galmeewwan gumaachaa hunda ni haqa. Tarkaanfiin kun deebifamuu hin danda'u.",
-      "clearButton": "Gumaachawwan Hunda Haqi",
-      "irreversible": "Tarkaanfiin kun deebifamuu hin danda'u.",
-      "lastCleared": "Galmeewwan gumaachaa {{count}} haqamaniiru."
-    },
-    "modal": {
-      "title": "Gumaachawwan Hunda Haquu?",
-      "description": "Galmeewwan gumaachaa hunda sirna keessaa haquuf jetta.",
-      "warningTitle": "Akeekkachiisa",
-      "warningDescription": "Galmeewwan gumaachaa hunda dhaabbataadhaan ni haqamu. Itti fufuu akka barbaaddu mirkaneeffadhu.",
-      "clearing": "Haqaa jira...",
-      "confirm": "Eeyyee, Gumaachawwan Hunda Haqi"
-    },
+ "settings": {
+  "loading": "Qindaa'inoonni fe'amaa jiru...",
+  "title": "Qindaa'inoota",
+  "description": "Nageenya herregaa, qindaa'inoota gumaachaa fi bulchiinsa sirnaa kee to'adhu.",
+
+  "account": {
+    "title": "Nageenya Herregaa",
+    "description": "Maqaa fayyadamaa fi jecha darbii bulchaa kee nageenyaan fooyyessi.",
+    "username": "Maqaa Fayyadamaa Bulchaa",
+    "usernamePlaceholder": "Maqaa fayyadamaa galchi",
+    "newPassword": "Jecha Darbii Haaraa",
+    "newPasswordPlaceholder": "Jecha darbii haaraa galchi",
+    "confirmPassword": "Jecha Darbii Haaraa Mirkaneessi",
+    "confirmPasswordPlaceholder": "Jecha darbii haaraa irra deebi'i",
+    "showPassword": "Jecha darbii agarsiisi",
+    "hidePassword": "Jecha darbii dhoksi",
+    "passwordHelp": "Maqaa fayyadamaa qofa jijjiiruu yoo barbaadde dirreewwan jecha darbii duwwaa dhiisi.",
+    "updateButton": "Herrega Fooyyessi",
+
     "messages": {
-      "amountUpdated": "Hangi gumaachaa milkaa'inaan haaromfame.",
-      "contributionsCleared": "Galmeewwan gumaachaa {{count}} haqamaniiru."
+      "updated": "Qindaa'inoonni herregaa milkaa'inaan fooyya'aniiru."
     },
+
     "errors": {
-      "load": "Qindaa'ina sirnaa fe'uun hin danda'amne.",
-      "invalidAmount": "Mee hanga gumaachaa sirrii galchi.",
-      "save": "Qindaa'ina gumaachaa olkaa'uun hin danda'amne.",
-      "clearContributions": "Galmeewwan gumaachaa haquun hin danda'amne."
+      "usernameRequired": "Maqaan fayyadamaa barbaachisa.",
+      "passwordMin": "Jecha darbii haaraan yoo xiqqaate arfiilee 6 qabaachuu qaba.",
+      "passwordMismatch": "Jecha darbii haaraa fi mirkaneessan wal hin simu.",
+      "accountNotFound": "Odeeffannoon herrega kee hin argamne. Maaloo irra deebi'ii seeni.",
+      "update": "Qindaa'inoota herregaa fooyyessuun hin milkoofne."
     }
   },
+
+  "contribution": {
+    "title": "Qindaa'inoota Gumaachaa",
+    "description": "Hanga gumaacha Jimaataa miseensota Shabab qindeessi.",
+    "amountLabel": "Hanga Gumaacha Jimaataa",
+    "amountPlaceholder": "Hanga gumaachaa galchi",
+    "amountHelp": "Hanga gumaachaa Birrii Itoophiyaa (ETB) tiin galchi."
+  },
+
+  "common": {
+    "saveChanges": "Jijjiirama Olkaa'i",
+    "saving": "Olkaa'amaa jira...",
+    "cancel": "Dhiisi"
+  },
+
+  "danger": {
+    "title": "Naannoo Balaa",
+    "superAdminOnly": "Eeyyamni bulchaa olaanaa barbaachisa",
+    "description": "Tarkaanfiiwwan galmee gumaachaa irratti dhiibbaa dhaabbataa geessisan bulchi.",
+    "warningTitle": "Tarkaanfii Dhaabbataa",
+    "warningDescription": "Galmee gumaachaa haqachuun seenaa gumaachaa kuufame dhaabbataan ni haqa. Osoo itti hin fufin gabaasota barbaachisan olkaa'adhu.",
+    "irreversible": "Tarkaanfiin kun deebi'ee sirreeffamuu hin danda'u.",
+    "clearButton": "Galmee Gumaachaa Hunda Haqi"
+  },
+
+  "messages": {
+    "amountUpdated": "Hangi gumaacha Jimaataa milkaa'inaan fooyya'eera.",
+    "contributionsCleared": "Galmeen gumaachaa hundi milkaa'inaan haqameera."
+  },
+
+  "errors": {
+    "load": "Qindaa'inoota fe'uun hin milkoofne. Maaloo irra deebi'ii yaali.",
+    "invalidAmount": "Maaloo hanga gumaachaa sirrii zeeroo caalu galchi.",
+    "save": "Qindaa'inoota gumaachaa olkaa'uun hin milkoofne.",
+    "clearContributions": "Galmee gumaachaa haqachuun hin milkoofne."
+  },
+
+  "modal": {
+    "title": "Galmee Gumaachaa Hunda Haquu?",
+    "description": "Galmee gumaachaa sirna keessatti kuufame haquuf jetta.",
+    "warningTitle": "Akeekkachiisa Barbaachisaa",
+    "warningDescription": "Tarkaanfiin kun deebi'ee sirreeffamuu hin danda'u. Osoo itti hin fufin gabaasota barbaachisan olkaa'adhu.",
+    "cancel": "Dhiisi",
+    "clearing": "Galmeen haqamaa jira...",
+    "confirm": "Eeyyee, Galmee Haqi"
+  }
+},
 
   "members": {
     "title": "Miseensota",

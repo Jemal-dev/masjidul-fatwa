@@ -1,3 +1,17 @@
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+  FaTelegramPlane,
+} from "react-icons/fa";
+
+import { FaXTwitter } from "react-icons/fa6";
+
+import {
+  FiMail,
+  FiPhone,
+  FiMapPin,
+} from "react-icons/fi";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
@@ -410,36 +424,76 @@ PUBLIC WEBSITE NAVIGATION
 ===================================================== */
 
 const scrollToSection = (id) => {
+  setMobileOpen(false);
+
+  // Navigate to the Contact page.
   if (id === "contact") {
-    setCurrentPage("contact");
-    setMobileOpen(false);
+    if (currentPage !== "contact") {
+      setCurrentPage("contact");
+    }
 
     window.scrollTo({
       top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+
+    return;
+  }
+
+  // Return to Home when navigating from another page.
+  if (currentPage !== "home") {
+    setCurrentPage("home");
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (id === "home") {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "instant",
+          });
+
+          return;
+        }
+
+        const target = document.getElementById(id);
+
+        if (target) {
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    });
+
+    return;
+  }
+
+  // Scroll to the top of Home.
+  if (id === "home") {
+    window.scrollTo({
+      top: 0,
+      left: 0,
       behavior: "smooth",
     });
 
     return;
   }
 
-  if (currentPage !== "home") {
-    setCurrentPage("home");
+  // Scroll to the selected Home section.
+  const target = document.getElementById(id);
 
-    setTimeout(() => {
-      document
-        .getElementById(id)
-        ?.scrollIntoView({
-          behavior: "smooth",
-        });
-    }, 50);
-  } else {
-    document
-      .getElementById(id)
-      ?.scrollIntoView({
-        behavior: "smooth",
-      });
+  if (target) {
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
 };
+
+
 
 /* =====================================================
 AUTH LOADING
@@ -574,8 +628,12 @@ function PublicHome({
           }
         >
           <span className="brand-mark">
-            {"\u{262A}"}
-          </span>
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt=""
+    aria-hidden="true"
+  />
+</span>
 
           <span>
             <strong>
@@ -981,8 +1039,12 @@ function PublicHome({
 
             <div className="community-card main-community-card">
               <div className="community-icon">
-                {"\u{1F54C}"}
-              </div>
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt=""
+    aria-hidden="true"
+  />
+</div>
 
               <div>
                 <span>
@@ -1152,8 +1214,11 @@ function PublicHome({
           <div className="about-grid">
             <div className="about-visual">
               <div className="about-emblem">
-                {"\u{262A}"}
-              </div>
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt="Masjidul-Fatwa Shabab emblem"
+  />
+</div>
 
               <div className="about-label">
                 {t("about.label")}
@@ -1677,141 +1742,309 @@ function PublicHome({
 
        
       </main>
-
       {/* =================================================
-          FOOTER
-      ================================================= */}
+    NEWSLETTER SECTION
+================================================= */}
 
-      <footer className="public-footer">
-        <div className="footer-main">
-          <div>
-            <div className="footer-brand">
-              <span className="brand-mark">
-                {"\u{262A}"}
-              </span>
+<section className="stay-updated-section">
+  <div className="stay-updated-inner">
 
-              <div>
-                <strong>
-                  MASJIDUL-FATWA SHABAB
-                </strong>
+    <div className="stay-updated-content">
 
-                <small>
-                  {t(
-                    "footer.systemName"
-                  )}
-                </small>
-              </div>
-            </div>
+      <span className="section-kicker">
+        {t("newsletter.eyebrow")}
+      </span>
 
-            <p>
-              {t(
-                "footer.description"
-              )}
-            </p>
-          </div>
+      <h2>
+        {t("newsletter.title")}
+      </h2>
 
-          <div>
-            <h4>
-              {t(
-                "footer.quickLinks"
-              )}
-            </h4>
+      <p>
+        {t("newsletter.description")}
+      </p>
 
-            <button
-              onClick={() =>
-                handlePublicNavigate(
-                  "home"
-                )
-              }
-            >
-              {t("nav.home")}
-            </button>
+    </div>
 
-            <button
-              onClick={() =>
-                handlePublicNavigate(
-                  "about"
-                )
-              }
-            >
-              {t("nav.about")}
-            </button>
+    <form
+      className="newsletter-form"
+      onSubmit={(event) => event.preventDefault()}
+    >
+      <input
+        type="email"
+        name="email"
+        placeholder={t("newsletter.emailPlaceholder")}
+        aria-label={t("newsletter.emailPlaceholder")}
+        required
+      />
 
-            <button
-              onClick={() =>
-                handlePublicNavigate(
-                  "services"
-                )
-              }
-            >
-              {t("nav.services")}
-            </button>
+      <button type="submit">
+        {t("newsletter.subscribe")}
+      </button>
 
-            <button
-              onClick={() =>
-                handlePublicNavigate(
-                  "gallery"
-                )
-              }
-            >
-              {t("nav.gallery")}
-            </button>
+    </form>
 
-            <button
-              onClick={() =>
-                handlePublicNavigate(
-                  "contact"
-                )
-              }
-            >
-              {t("nav.contact")}
-            </button>
-          </div>
+  </div>
+</section>
 
-          <div>
-            <h4>
-              {t("footer.system")}
-            </h4>
+{/* =================================================
+    PUBLIC FOOTER
+================================================= */}
 
-            <button onClick={onAdmin}>
-              {t("nav.adminLogin")}
-            </button>
+<footer className="public-footer">
 
-            <button onClick={onAdmin}>
-              {t("footer.members")}
-            </button>
+  <div className="footer-main">
 
-            <button onClick={onAdmin}>
-              {t("footer.reports")}
-            </button>
+    {/* BRAND COLUMN */}
 
-            <button onClick={onAdmin}>
-              {t(
-                "footer.contributions"
-              )}
-            </button>
-          </div>
+    <div className="footer-column footer-brand-column">
+
+      <div className="footer-brand">
+
+        <span className="brand-mark">
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt=""
+    aria-hidden="true"
+  />
+</span>
+
+        <div>
+          <strong>
+            MASJIDUL-FATWA SHABAB
+          </strong>
+
+          <small>
+            {t("footer.systemName")}
+          </small>
         </div>
 
-        <div className="footer-bottom">
-          <span>
-            {"\u{00A9}"}{" "}
-            {new Date().getFullYear()}{" "}
-            {t("footer.copyright")}
-          </span>
+      </div>
 
-          <span>
-            <a
-              href="https://jemal-dev.github.io/jemal-portfolio/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="footer-credit-link"
-            >
-              {t("footer.builtBy")}
-            </a>
-          </span>
-        </div>
-      </footer>
+      <p>
+        {t("footer.description")}
+      </p>
+
+      {/* SOCIAL LINKS */}
+
+      <div className="footer-social-links">
+
+        <span
+          className="footer-social-link"
+          role="img"
+          aria-label="Facebook"
+        >
+          <FaFacebookF />
+        </span>
+
+        <span
+          className="footer-social-link"
+          role="img"
+          aria-label="X"
+        >
+          <FaXTwitter />
+        </span>
+
+        <span
+          className="footer-social-link"
+          role="img"
+          aria-label="Instagram"
+        >
+          <FaInstagram />
+        </span>
+
+        <span
+          className="footer-social-link"
+          role="img"
+          aria-label="YouTube"
+        >
+          <FaYoutube />
+        </span>
+
+        <span
+          className="footer-social-link"
+          role="img"
+          aria-label="Telegram"
+        >
+          <FaTelegramPlane />
+        </span>
+
+      </div>
+
+    </div>
+    {/* QUICK LINKS COLUMN */}
+
+    <div className="footer-column">
+
+      <h4>
+        {t("footer.quickLinks")}
+      </h4>
+
+      <div className="footer-quick-links">
+
+        <button
+          onClick={() => handlePublicNavigate("home")}
+        >
+          {t("nav.home")}
+        </button>
+
+        <button
+          onClick={() => handlePublicNavigate("about")}
+        >
+          {t("nav.about")}
+        </button>
+
+        <button
+          onClick={() => handlePublicNavigate("services")}
+        >
+          {t("nav.services")}
+        </button>
+
+        <button
+          onClick={() => handlePublicNavigate("events")}
+        >
+          {t("nav.activities")}
+        </button>
+
+        <button
+          onClick={() => handlePublicNavigate("gallery")}
+        >
+          {t("nav.gallery")}
+        </button>
+
+        <button
+          onClick={() => handlePublicNavigate("contact")}
+        >
+          {t("nav.contact")}
+        </button>
+
+      </div>
+
+    </div>
+
+
+    {/* PROGRAMS COLUMN */}
+
+    <div className="footer-column">
+
+      <h4>
+        {t("footer.programsHeading")}
+      </h4>
+
+      <div className="footer-program">
+
+        <strong>
+          {t("footer.shababMembership")}
+        </strong>
+
+        <span>
+          {t("footer.communityMembership")}
+        </span>
+
+      </div>
+
+      <div className="footer-program">
+
+        <strong>
+          {t("footer.fridayContribution")}
+        </strong>
+
+        <span>
+          {t("footer.weeklyContribution")}
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    {/* CONTACT COLUMN */}
+
+    <div className="footer-column">
+
+      <h4>
+  {t("footer.contactHeading")}
+</h4>
+
+      <a
+        href="mailto:masjidulfatwa@gmail.com"
+        className="footer-contact-item"
+      >
+
+        <span className="footer-contact-icon">
+          <FiMail />
+        </span>
+
+        <span className="footer-contact-text">
+          masjidulfatwa@gmail.com
+        </span>
+
+      </a>
+
+
+      <a
+        href="tel:+251919543806"
+        className="footer-contact-item"
+      >
+
+        <span className="footer-contact-icon">
+          <FiPhone />
+        </span>
+
+        <span className="footer-contact-text">
+          +251 919 543 806
+        </span>
+
+      </a>
+
+
+      <a
+        href="https://www.google.com/maps/search/?api=1&query=7.2876966,38.4336369"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="footer-contact-item"
+      >
+
+        <span className="footer-contact-icon">
+          <FiMapPin />
+        </span>
+
+        <span className="footer-contact-text">
+          Masjidul-Fatwa, Awara Gema, Shalla,
+          West Arsi Zone, Oromia, Ethiopia
+        </span>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  {/* COPYRIGHT AND CREDIT */}
+
+  <div className="footer-bottom">
+
+    <span>
+      {"\u{00A9}"}{" "}
+      {new Date().getFullYear()}{" "}
+      {t("footer.copyright")}
+    </span>
+
+    <span>
+      <a
+        href="https://jemal-dev.github.io/jemal-portfolio/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="footer-credit-link"
+      >
+        {t("footer.builtBy")}
+      </a>
+    </span>
+
+  </div>
+
+</footer>
     </div>
   );
 }
@@ -1887,8 +2120,12 @@ function AdminLayout({
       >
         <div className="logo">
           <div className="logo-icon">
-            {"\u{262A}"}
-          </div>
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt=""
+    aria-hidden="true"
+  />
+</div>
 
           <div>
             <h2>

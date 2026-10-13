@@ -195,11 +195,24 @@
     "email": "Email",
     "emailDescription": "Official contact details can be added here"
   },
+    "newsletter": {
+    "eyebrow": "STAY UPDATED",
+    "title": "Stay Updated",
+    "description": "Get the latest news and events from Masjidul-Fatwa Shabab delivered to your inbox.",
+    "emailPlaceholder": "Your email address",
+    "subscribe": "Subscribe"
+  },
 
-  "footer": {
+   "footer": {
     "systemName": "Youth Contribution & Management System",
     "description": "Building a stronger community through organization, contribution and responsible service.",
     "quickLinks": "Quick Links",
+    "programsHeading": "PROGRAMS",
+    "contactHeading": "CONTACT",
+    "shababMembership": "Shabab Membership",
+    "communityMembership": "Community membership",
+    "fridayContribution": "Friday Contribution",
+    "weeklyContribution": "Weekly community contribution",
     "system": "System",
     "members": "Members",
     "reports": "Reports",
@@ -686,32 +699,83 @@
       "statusUpdate": "Failed to update administrator status."
     }
   },
-  "loading": "Loading settings...",
+    "loading": "Loading settings...",
 
-"account": {
-  "title": "Account Settings",
-  "description": "Update your administrator username and password.",
-  "username": "Username",
-  "usernamePlaceholder": "Enter username",
-  "newPassword": "New Password",
-  "newPasswordPlaceholder": "Enter new password",
-  "confirmPassword": "Confirm New Password",
-  "confirmPasswordPlaceholder": "Confirm new password",
-  "showPassword": "Show password",
-  "hidePassword": "Hide password",
-  "passwordHelp": "Leave blank if you only want to change the username.",
-  "updateButton": "Update Account",
+  "settings": {
+    "loading": "Loading settings...",
+    "title": "Settings",
+    "description": "Manage your account security, contribution settings, and system maintenance.",
 
-  "messages": {
-    "updated": "Account settings updated successfully."
-  },
+    "account": {
+      "title": "Account Security",
+      "description": "Manage your administrator username and password securely.",
+      "username": "Administrator Username",
+      "usernamePlaceholder": "Enter username",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm New Password",
+      "confirmPasswordPlaceholder": "Confirm your new password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "passwordHelp": "Leave the password fields empty if you only want to change your username.",
+      "updateButton": "Update Account",
 
-  "errors": {
-    "usernameRequired": "Username is required.",
-    "passwordMin": "New password must be at least 6 characters.",
-    "passwordMismatch": "New password and confirmation password do not match.",
-    "accountNotFound": "Your account information could not be found. Please log in again.",
-    "update": "Failed to update account settings."
-  }
+      "messages": {
+        "updated": "Account settings updated successfully."
+      },
+
+      "errors": {
+        "usernameRequired": "Username is required.",
+        "passwordMin": "New password must be at least 6 characters.",
+        "passwordMismatch": "New password and confirmation password do not match.",
+        "accountNotFound": "Your account information could not be found. Please log in again.",
+        "update": "Failed to update account settings."
+      }
+    },
+
+    "contribution": {
+  "title": "Contribution Settings",
+  "description": "Configure the standard Friday contribution amount for Shabab members.",
+  "amountLabel": "Friday Contribution Amount",
+  "amountPlaceholder": "Enter contribution amount",
+  "amountHelp": "Enter the contribution amount in Ethiopian birr (ETB)."
+},
+
+    "common": {
+  "saveChanges": "Save Changes",
+  "saving": "Saving...",
+  "cancel": "Cancel"
+},
+
+    "danger": {
+      "title": "Danger Zone",
+      "superAdminOnly": "Super administrator access required",
+      "description": "Manage actions that permanently affect contribution records.",
+      "warningTitle": "Permanent Action",
+      "warningDescription": "Clearing contribution records permanently removes saved contribution history. Export any reports you need before proceeding.",
+      "irreversible": "This action cannot be undone.",
+      "clearButton": "Clear Contribution Records"
+    },
+    "messages": {
+  "amountUpdated": "Friday contribution amount updated successfully.",
+  "contributionsCleared": "All contribution records have been cleared successfully."
+},
+
+"errors": {
+  "load": "Failed to load settings. Please try again.",
+  "invalidAmount": "Please enter a valid contribution amount greater than zero.",
+  "save": "Failed to save contribution settings.",
+  "clearContributions": "Failed to clear contribution records."
+},
+
+"modal": {
+  "title": "Clear All Contribution Records?",
+  "description": "You are about to delete the saved contribution records from the system.",
+  "warningTitle": "Important Warning",
+  "warningDescription": "This action cannot be undone. Export any reports you need before proceeding.",
+  "cancel": "Cancel",
+  "clearing": "Clearing records...",
+  "confirm": "Yes, Clear Records"
 }
+  }
 }

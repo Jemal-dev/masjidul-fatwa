@@ -196,10 +196,24 @@
     "emailDescription": "የኦፊሴላዊ ግንኙነት መረጃ እዚህ ሊጨመር ይችላል"
   },
 
+    "newsletter": {
+    "eyebrow": "አዳዲስ መረጃዎች",
+    "title": "አዳዲስ መረጃዎችን ያግኙ",
+    "description": "ከመስጂዱል-ፈትዋ ሻባብ የቅርብ ጊዜ ዜናዎችንና ዝግጅቶችን በኢሜይልዎ ያግኙ።",
+    "emailPlaceholder": "የኢሜይል አድራሻዎ",
+    "subscribe": "ይመዝገቡ"
+  },
+
   "footer": {
     "systemName": "የወጣቶች አስተዋጽኦ እና አስተዳደር ስርዓት",
     "description": "በድርጅታዊ አቀራረብ፣ በአስተዋጽኦ እና በኃላፊነት ያለው አገልግሎት ጠንካራ ማህበረሰብ መገንባት።",
     "quickLinks": "ፈጣን አገናኞች",
+        "programsHeading": "ፕሮግራሞች",
+    "contactHeading": "ያግኙን",
+    "shababMembership": "የሸባብ አባልነት",
+    "communityMembership": "የማህበረሰብ አባልነት",
+    "fridayContribution": "የዓርብ መዋጮ",
+    "weeklyContribution": "ሳምንታዊ የማህበረሰብ መዋጮ",
     "system": "ስርዓት",
     "members": "አባላት",
     "reports": "ሪፖርቶች",
@@ -354,50 +368,83 @@
   },
 
   "settings": {
-    "title": "ቅንብሮች",
-    "description": "የሻባብ መዋጮ ስርዓት ቅንብሮችን ያስተዳድሩ።",
-    "common": {
-      "saving": "በማስቀመጥ ላይ...",
-      "saveChanges": "ለውጦችን አስቀምጥ",
-      "cancel": "ሰርዝ"
-    },
-    "contribution": {
-      "title": "የመዋጮ ቅንብር",
-      "description": "የአንድ የዓርብ መዋጮ መጠን ያዘጋጁ።",
-      "amountLabel": "የመዋጮ መጠን",
-      "amountPlaceholder": "የመዋጮ መጠን ያስገቡ",
-      "amountHelp": "ይህ መጠን ለአዲስ የዓርብ መዋጮ መዝገቦች ይጠቀማል።"
-    },
-    "danger": {
-      "title": "አደገኛ አማራጮች",
-      "superAdminOnly": "ይህ ክፍል ለዋና አስተዳዳሪ ብቻ ነው።",
-      "description": "ከፍተኛ ጥንቃቄ የሚፈልጉ የስርዓት ተግባራት።",
-      "warningTitle": "ሁሉንም የመዋጮ መዝገቦች አጥፋ",
-      "warningDescription": "ይህ ተግባር የተመዘገቡ የመዋጮ መረጃዎችን በሙሉ ያጠፋል። ይህ ተግባር መመለስ አይችልም።",
-      "clearButton": "የድሮ መዋጮዎችን አጥፋ",
-      "irreversible": "ይህ ተግባር መመለስ አይችልም።",
-      "lastCleared": "በመጨረሻ {{count}} የመዋጮ መዝገቦች ተጠፍተዋል።"
-    },
-    "modal": {
-      "title": "የመዋጮ መዝገቦችን ማጥፋት",
-      "description": "ሁሉንም የተመዘገቡ የመዋጮ መረጃዎች ሊያጠፉ ነው።",
-      "warningTitle": "ይህ ተግባር መመለስ አይችልም።",
-      "warningDescription": "ሁሉም የመዋጮ መዝገቦች በቋሚነት ይጠፋሉ።",
-      "clearing": "በማጥፋት ላይ...",
-      "confirm": "ሁሉንም መዋጮዎች አጥፋ"
-    },
+  "loading": "ቅንብሮች በመጫን ላይ...",
+  "title": "ቅንብሮች",
+  "description": "የመለያዎን ደህንነት፣ የመዋጮ ቅንብሮች እና የስርዓት አስተዳደር ይቆጣጠሩ።",
+
+  "account": {
+    "title": "የመለያ ደህንነት",
+    "description": "የአስተዳዳሪዎን የተጠቃሚ ስም እና የይለፍ ቃል በደህንነት ያዘምኑ።",
+    "username": "የአስተዳዳሪ የተጠቃሚ ስም",
+    "usernamePlaceholder": "የተጠቃሚ ስም ያስገቡ",
+    "newPassword": "አዲስ የይለፍ ቃል",
+    "newPasswordPlaceholder": "አዲስ የይለፍ ቃል ያስገቡ",
+    "confirmPassword": "አዲሱን የይለፍ ቃል ያረጋግጡ",
+    "confirmPasswordPlaceholder": "አዲሱን የይለፍ ቃል እንደገና ያስገቡ",
+    "showPassword": "የይለፍ ቃል አሳይ",
+    "hidePassword": "የይለፍ ቃል ደብቅ",
+    "passwordHelp": "የተጠቃሚ ስም ብቻ መቀየር ከፈለጉ የይለፍ ቃል መስኮችን ባዶ ይተዉ።",
+    "updateButton": "መለያን ያዘምኑ",
+
     "messages": {
-      "amountUpdated": "የመዋጮ መጠን በተሳካ ሁኔታ ተዘምኗል።",
-      "contributionsCleared": "{{count}} የመዋጮ መዝገቦች በተሳካ ሁኔታ ጠፍተዋል።"
+      "updated": "የመለያ ቅንብሮች በተሳካ ሁኔታ ተዘምነዋል።"
     },
+
     "errors": {
-      "load": "የቅንብሮች መረጃን መጫን አልተቻለም።",
-      "invalidAmount": "እባክዎ ትክክለኛ የመዋጮ መጠን ያስገቡ።",
-      "save": "የመዋጮ መጠንን ማስቀመጥ አልተቻለም።",
-      "clearContributions": "የመዋጮ መዝገቦችን ማጥፋት አልተቻለም።"
+      "usernameRequired": "የተጠቃሚ ስም ያስፈልጋል።",
+      "passwordMin": "አዲሱ የይለፍ ቃል ቢያንስ 6 ቁምፊዎች ሊኖሩት ይገባል።",
+      "passwordMismatch": "አዲሱ የይለፍ ቃል እና የማረጋገጫ የይለፍ ቃል አይዛመዱም።",
+      "accountNotFound": "የመለያዎ መረጃ ሊገኝ አልቻለም። እባክዎ እንደገና ይግቡ።",
+      "update": "የመለያ ቅንብሮችን ማዘመን አልተሳካም።"
     }
   },
 
+  "contribution": {
+    "title": "የመዋጮ ቅንብሮች",
+    "description": "ለሻባብ አባላት መደበኛውን የዓርብ መዋጮ መጠን ያዘጋጁ።",
+    "amountLabel": "የዓርብ መዋጮ መጠን",
+    "amountPlaceholder": "የመዋጮ መጠን ያስገቡ",
+    "amountHelp": "የመዋጮውን መጠን በኢትዮጵያ ብር (ETB) ያስገቡ።"
+  },
+
+  "common": {
+    "saveChanges": "ለውጦችን አስቀምጥ",
+    "saving": "በማስቀመጥ ላይ...",
+    "cancel": "ሰርዝ"
+  },
+
+  "danger": {
+    "title": "አደገኛ ክፍል",
+    "superAdminOnly": "የከፍተኛ አስተዳዳሪ ፈቃድ ያስፈልጋል",
+    "description": "በመዋጮ መዝገቦች ላይ ዘላቂ ተጽእኖ የሚያሳድሩ እርምጃዎችን ያስተዳድሩ።",
+    "warningTitle": "ዘላቂ እርምጃ",
+    "warningDescription": "የመዋጮ መዝገቦችን ማጥፋት የተቀመጠውን የመዋጮ ታሪክ በቋሚነት ያስወግዳል። ከመቀጠልዎ በፊት የሚያስፈልጉዎትን ሪፖርቶች ያስቀምጡ።",
+    "irreversible": "ይህ እርምጃ ሊመለስ አይችልም።",
+    "clearButton": "ሁሉንም የመዋጮ መዝገቦች አጥፋ"
+  },
+
+  "messages": {
+    "amountUpdated": "የዓርብ መዋጮ መጠን በተሳካ ሁኔታ ተዘምኗል።",
+    "contributionsCleared": "ሁሉም የመዋጮ መዝገቦች በተሳካ ሁኔታ ተሰርዘዋል።"
+  },
+
+  "errors": {
+    "load": "ቅንብሮችን መጫን አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+    "invalidAmount": "እባክዎ ከዜሮ የሚበልጥ ትክክለኛ የመዋጮ መጠን ያስገቡ።",
+    "save": "የመዋጮ ቅንብሮችን ማስቀመጥ አልተሳካም።",
+    "clearContributions": "የመዋጮ መዝገቦችን ማጥፋት አልተሳካም።"
+  },
+
+  "modal": {
+    "title": "ሁሉንም የመዋጮ መዝገቦች ያጥፉ?",
+    "description": "በስርዓቱ ውስጥ የተቀመጡትን የመዋጮ መዝገቦች ሊያጠፉ ነው።",
+    "warningTitle": "አስፈላጊ ማስጠንቀቂያ",
+    "warningDescription": "ይህ እርምጃ ሊመለስ አይችልም። ከመቀጠልዎ በፊት የሚያስፈልጉዎትን ሪፖርቶች ያስቀምጡ።",
+    "cancel": "ሰርዝ",
+    "clearing": "መዝገቦችን በማጥፋት ላይ...",
+    "confirm": "አዎ፣ መዝገቦችን አጥፋ"
+  }
+},
   "members": {
     "title": "አባላት",
     "description": "የመስጂዱል-ፈትዋ ሻባብ አባላትን ያስተዳድሩ።",

@@ -503,9 +503,12 @@ function Contact({ onNavigate, onAdmin }) {
           onClick={() => onNavigate("home")}
         >
           <span className="brand-mark">
-            {"\u{262A}"}
-          </span>
-
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt=""
+    aria-hidden="true"
+  />
+</span>
           <span>
             <strong>
               MASJIDUL-FATWA
@@ -1187,8 +1190,12 @@ function Contact({ onNavigate, onAdmin }) {
             <div className="footer-brand">
 
               <span className="brand-mark">
-                {"\u{262A}"}
-              </span>
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt=""
+    aria-hidden="true"
+  />
+</span>
 
               <div>
                 <strong>
