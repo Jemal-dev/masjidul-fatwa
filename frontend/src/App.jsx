@@ -40,6 +40,7 @@ import Contact from "./Contact";
 import AboutPage from "./AboutPage";
 import ServicesPage from "./ServicesPage";
 import ActivitiesPage from "./ActivitiesPage";
+import GalleryPage from "./GalleryPage";
 
 
 
