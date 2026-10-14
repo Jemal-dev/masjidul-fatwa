@@ -41,6 +41,9 @@ import AboutPage from "./AboutPage";
 import ServicesPage from "./ServicesPage";
 import ActivitiesPage from "./ActivitiesPage";
 
+
+
+
 /* =========================================================
 AXIOS BASE URL
 ========================================================= */
@@ -249,7 +252,8 @@ useEffect(() => {
   if (
   path === "/about" ||
   path === "/services" ||
-  path === "/activities"
+  path === "/activities" ||
+  path === "/gallery"
 ) {
   setCurrentPage("home");
   setMobileOpen(false);
@@ -771,6 +775,9 @@ function PublicHome({
 const isActivitiesRoute =
   (routeLocation.pathname.replace(/\/+$/, "") || "/") ===
   "/activities";
+  const isGalleryRoute =
+  (routeLocation.pathname.replace(/\/+$/, "") || "/") ===
+  "/gallery";
   const [publicMenuOpen, setPublicMenuOpen] =
     useState(false);
 
@@ -1168,6 +1175,8 @@ const isActivitiesRoute =
     onNavigate={handlePublicNavigate}
     onAdmin={handleAdminFromMenu}
   />
+) : isGalleryRoute ? (
+  <GalleryPage />
 ) : (
   <>
         

@@ -12,4 +12,10 @@
   <url>
     <loc>https://masjidul-fatwa.vercel.app/activities</loc>
   </url>
+  <url>
+    <loc>https://masjidul-fatwa.vercel.app/gallery</loc>
+  </url>
+  <url>
+    <loc>https://masjidul-fatwa.vercel.app/contact</loc>
+  </url>
 </urlset>
