@@ -8104,3 +8104,57 @@ html[dir="rtl"] .password-toggle {
     font-size: 14px;
   }
 }
+
+/* =========================================================
+   STANDALONE SERVICES PAGE
+========================================================= */
+
+.services-page-content .services-page-title {
+  margin: 0 0 16px;
+  color: var(--navy, #102b45);
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.services-page-section .service-grid {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto 0;
+}
+
+.services-page-content .service-card h2 {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.services-page-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 720px;
+  margin: 48px auto 0;
+  text-align: center;
+}
+
+.services-page-contact h2 {
+  margin: 0;
+  color: var(--navy, #102b45);
+  font-size: 25px;
+}
+
+.services-page-contact p {
+  margin: 0;
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .services-page-contact {
+    margin-top: 32px;
+  }
+
+  .services-page-contact h2 {
+    font-size: 22px;
+  }
+}

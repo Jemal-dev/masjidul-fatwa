@@ -37,6 +37,8 @@ import AdminManagement from "./AdminManagement";
 import Gallery from "./Gallery";
 import AdminGallery from "./AdminGallery";
 import Contact from "./Contact";
+import AboutPage from "./AboutPage";
+import ServicesPage from "./ServicesPage";
 
 /* =========================================================
 AXIOS BASE URL
@@ -242,6 +244,19 @@ useEffect(() => {
 
     return;
   }
+  
+  if (path === "/about" || path === "/services") {
+  setCurrentPage("home");
+  setMobileOpen(false);
+
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "auto",
+  });
+
+  return;
+}
 
   if (path === "/" || sectionRoutes[path]) {
     setCurrentPage("home");
@@ -739,6 +754,15 @@ function PublicHome({
   onNavigate,
 }) {
   const { t, i18n } = useTranslation();
+    const routeLocation = useLocation();
+
+  const isAboutRoute =
+    (routeLocation.pathname.replace(/\/+$/, "") || "/") ===
+    "/about";
+
+    const isServicesRoute =
+  (routeLocation.pathname.replace(/\/+$/, "") || "/") ===
+  "/services";
 
   const [publicMenuOpen, setPublicMenuOpen] =
     useState(false);
@@ -1127,6 +1151,18 @@ function PublicHome({
       </aside>
 
       <main>
+
+{isAboutRoute ? (
+  <AboutPage onNavigate={handlePublicNavigate} />
+) : isServicesRoute ? (
+  <ServicesPage onNavigate={handlePublicNavigate} />
+) : (
+  <>
+        
+
+        
+  
+        
         {/* =================================================
             HERO
         ================================================= */}
@@ -1912,7 +1948,8 @@ function PublicHome({
             </article>
           </div>
         </section>
-
+</>
+)}
        
       </main>
       {/* =================================================
