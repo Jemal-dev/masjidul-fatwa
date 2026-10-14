@@ -8158,3 +8158,63 @@ html[dir="rtl"] .password-toggle {
     font-size: 22px;
   }
 }
+
+/* =========================================================
+   STANDALONE ACTIVITIES PAGE
+========================================================= */
+
+.activities-page-content .activities-page-title {
+  margin: 0 0 16px;
+  color: var(--navy, #102b45);
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.activities-page-content .activities-page-intro {
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.activities-page-section .event-grid {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto 0;
+}
+
+.activities-page-content .event-body h2 {
+  font-size: 19px;
+  line-height: 1.4;
+}
+
+.activities-page-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 720px;
+  margin: 48px auto 0;
+  text-align: center;
+}
+
+.activities-page-contact h2 {
+  margin: 0;
+  color: var(--navy, #102b45);
+  font-size: 25px;
+}
+
+.activities-page-contact p {
+  margin: 0;
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .activities-page-contact {
+    margin-top: 32px;
+  }
+
+  .activities-page-contact h2 {
+    font-size: 22px;
+  }
+}

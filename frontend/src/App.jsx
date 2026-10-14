@@ -39,6 +39,7 @@ import AdminGallery from "./AdminGallery";
 import Contact from "./Contact";
 import AboutPage from "./AboutPage";
 import ServicesPage from "./ServicesPage";
+import ActivitiesPage from "./ActivitiesPage";
 
 /* =========================================================
 AXIOS BASE URL
@@ -245,7 +246,11 @@ useEffect(() => {
     return;
   }
   
-  if (path === "/about" || path === "/services") {
+  if (
+  path === "/about" ||
+  path === "/services" ||
+  path === "/activities"
+) {
   setCurrentPage("home");
   setMobileOpen(false);
 
@@ -763,7 +768,9 @@ function PublicHome({
     const isServicesRoute =
   (routeLocation.pathname.replace(/\/+$/, "") || "/") ===
   "/services";
-
+const isActivitiesRoute =
+  (routeLocation.pathname.replace(/\/+$/, "") || "/") ===
+  "/activities";
   const [publicMenuOpen, setPublicMenuOpen] =
     useState(false);
 
@@ -1156,6 +1163,11 @@ function PublicHome({
   <AboutPage onNavigate={handlePublicNavigate} />
 ) : isServicesRoute ? (
   <ServicesPage onNavigate={handlePublicNavigate} />
+) : isActivitiesRoute ? (
+  <ActivitiesPage
+    onNavigate={handlePublicNavigate}
+    onAdmin={handleAdminFromMenu}
+  />
 ) : (
   <>
         
