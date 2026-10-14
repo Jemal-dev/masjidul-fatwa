@@ -276,6 +276,134 @@ useEffect(() => {
 }, [location.pathname]);
 
 /* =====================================================
+   SEO METADATA FOR PUBLIC ROUTES
+===================================================== */
+
+useEffect(() => {
+  const path =
+    location.pathname.replace(/\/+$/, "") || "/";
+
+  const pages = {
+    "/": {
+      title:
+        "Masjidul-Fatwa Shabab | Youth Community in Shalla, Ethiopia",
+      description:
+        "Discover Masjidul-Fatwa Shabab in Awara Gema, Shalla, Oromia, Ethiopia. Explore community activities, youth membership, and Friday contributions.",
+    },
+
+    "/about": {
+      title:
+        "About Our Community | Masjidul-Fatwa Shabab",
+      description:
+        "Learn about Masjidul-Fatwa Shabab, our community mission, responsible management, transparent records, and commitment to community service in Shalla, Ethiopia.",
+    },
+
+    "/services": {
+      title:
+        "Community Services | Masjidul-Fatwa Shabab",
+      description:
+        "Explore the Masjidul-Fatwa Shabab management system for membership records, Friday contributions, and community collection reports.",
+    },
+
+    "/activities": {
+      title:
+        "Community Activities | Masjidul-Fatwa Shabab",
+      description:
+        "Explore community activities, Friday contributions, and youth initiatives at Masjidul-Fatwa Shabab in Shalla, Oromia, Ethiopia.",
+    },
+
+    "/gallery": {
+      title:
+        "Community Gallery | Masjidul-Fatwa Shabab",
+      description:
+        "Visit the Masjidul-Fatwa Shabab community gallery for available images and updates about community activities in Shalla, Ethiopia.",
+    },
+
+    "/contact": {
+      title:
+        "Contact Us | Masjidul-Fatwa Shabab, Shalla",
+      description:
+        "Contact Masjidul-Fatwa Shabab in Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia, for community questions and support.",
+    },
+  };
+
+  const page = pages[path] || pages["/"];
+
+  // Update the browser title.
+  document.title = page.title;
+
+  // Update an existing meta tag or create it if missing.
+  const updateMeta = (selector, attributes, content) => {
+    let element = document.head.querySelector(selector);
+
+    if (!element) {
+      element = document.createElement("meta");
+
+      Object.entries(attributes).forEach(([key, value]) => {
+        element.setAttribute(key, value);
+      });
+
+      document.head.appendChild(element);
+    }
+
+    element.setAttribute("content", content);
+  };
+
+  // Update the search description.
+  updateMeta(
+    'meta[name="description"]',
+    { name: "description" },
+    page.description
+  );
+
+  // Update social sharing titles and descriptions.
+  updateMeta(
+    'meta[property="og:title"]',
+    { property: "og:title" },
+    page.title
+  );
+
+  updateMeta(
+    'meta[property="og:description"]',
+    { property: "og:description" },
+    page.description
+  );
+
+  updateMeta(
+    'meta[name="twitter:title"]',
+    { name: "twitter:title" },
+    page.title
+  );
+
+  updateMeta(
+    'meta[name="twitter:description"]',
+    { name: "twitter:description" },
+    page.description
+  );
+
+  // Keep the canonical URL aligned with the current public route.
+  const canonicalUrl =
+    `https://masjidul-fatwa.vercel.app${path}`;
+
+  let canonical =
+    document.head.querySelector('link[rel="canonical"]');
+
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.setAttribute("rel", "canonical");
+    document.head.appendChild(canonical);
+  }
+
+  canonical.setAttribute("href", canonicalUrl);
+
+  updateMeta(
+    'meta[property="og:url"]',
+    { property: "og:url" },
+    canonicalUrl
+  );
+}, [location.pathname]);
+
+/* =====================================================
 CHECK SAVED LOGIN
 ===================================================== */
 
