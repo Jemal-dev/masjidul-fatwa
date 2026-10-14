@@ -109,38 +109,51 @@ function AboutPage({ onNavigate }) {
 
   <h2>Key Information About Masjidul-Fatwa Shabab</h2>
 
-  <ul className="about-page-facts">
-    <li>
-      <strong>Location:</strong>{" "}
-      Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia.
-    </li>
+  <h2>Our Community Activities</h2>
 
-    <li>
-      <strong>Youth Membership:</strong>{" "}
-      The community maintains membership records to support
-      organized community management.
-    </li>
+<p>
+  Masjidul-Fatwa Shabab is a youth community based in
+  Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia.
+  Its activities include youth education, mosque activities,
+  charitable support, community meetings, community development,
+  and organized Friday contributions.
+</p>
 
-    <li>
-      <strong>Friday Contributions:</strong>{" "}
-      The Masjidul-Fatwa Shabab management system supports
-      recording and managing weekly community contributions.
-    </li>
+<ul className="about-page-facts">
+  <li>
+    <strong>Youth Education:</strong>{" "}
+    Supports youth education and learning activities.
+  </li>
 
-    <li>
-      <strong>Contribution Reports:</strong>{" "}
-      Authorized administrators can review contribution
-      records and generate reports to support responsible
-      financial recordkeeping.
-    </li>
+  <li>
+    <strong>Mosque Activities:</strong>{" "}
+    Participates in mosque activities and supports community
+    religious life.
+  </li>
 
-    <li>
-      <strong>Community Information:</strong>{" "}
-      Visitors can explore information about the community,
-      its activities, and how to contact its representatives
-      through the official website.
-    </li>
-  </ul>
+  <li>
+    <strong>Charitable Support:</strong>{" "}
+    Provides charitable support for people in need.
+  </li>
+
+  <li>
+    <strong>Community Meetings:</strong>{" "}
+    Brings young people and community members together
+    to discuss concerns and coordinate activities.
+  </li>
+
+  <li>
+    <strong>Community Development:</strong>{" "}
+    Participates in projects intended to support community
+    development.
+  </li>
+
+  <li>
+    <strong>Friday Contributions:</strong>{" "}
+    Supports the recording and management of weekly
+    contributions and organized financial records.
+  </li>
+</ul>
 
   <h2>Contact Masjidul-Fatwa Shabab</h2>
 
