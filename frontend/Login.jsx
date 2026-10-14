@@ -55,9 +55,12 @@ function Login({ onLogin, onBack }) {
       <div className="login-card">
 
         {/* Logo */}
-        <div className="login-logo">
-          ☪
-        </div>
+       <div className="login-logo">
+  <img
+    src="/masjidul-fatwa-logo.svg"
+    alt="Masjidul-Fatwa logo"
+  />
+</div>
 
         {/* Brand */}
         <div className="login-brand">

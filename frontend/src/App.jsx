@@ -13,6 +13,7 @@ import {
   FiMapPin,
 } from "react-icons/fi";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import "./i18n";
@@ -203,6 +204,8 @@ APP
 ========================================================= */
 
 function App() {
+  const navigate = useNavigate();
+const location = useLocation();
 const [dashboard, setDashboard] = useState(null);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState("");
@@ -211,6 +214,66 @@ const [mobileOpen, setMobileOpen] = useState(false);
 const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [adminUser, setAdminUser] = useState(null);
 const [authChecking, setAuthChecking] = useState(true);
+
+/* =====================================================
+   PUBLIC URL ROUTING
+===================================================== */
+
+useEffect(() => {
+  const path =
+    location.pathname.replace(/\/+$/, "") || "/";
+
+  const sectionRoutes = {
+    "/about": "about",
+    "/services": "services",
+    "/activities": "events",
+    "/gallery": "gallery",
+  };
+
+  if (path === "/contact") {
+    setCurrentPage("contact");
+    setMobileOpen(false);
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+
+    return;
+  }
+
+  if (path === "/" || sectionRoutes[path]) {
+    setCurrentPage("home");
+    setMobileOpen(false);
+
+    if (path === "/") {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+
+      return;
+    }
+
+    const sectionId = sectionRoutes[path];
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const target =
+          document.getElementById(sectionId);
+
+        if (target) {
+          target.scrollIntoView({
+            behavior: "auto",
+            block: "start",
+          });
+        }
+      });
+    });
+  }
+}, [location.pathname]);
 
 /* =====================================================
 CHECK SAVED LOGIN
@@ -420,59 +483,38 @@ window.scrollTo({
 };
 
 /* =====================================================
-PUBLIC WEBSITE NAVIGATION
+   PUBLIC WEBSITE NAVIGATION
 ===================================================== */
 
 const scrollToSection = (id) => {
   setMobileOpen(false);
 
-  // Navigate to the Contact page.
-  if (id === "contact") {
-    if (currentPage !== "contact") {
-      setCurrentPage("contact");
-    }
+  const sectionPaths = {
+    home: "/",
+    about: "/about",
+    services: "/services",
+    events: "/activities",
+    gallery: "/gallery",
+    contact: "/contact",
+  };
 
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "instant",
-    });
+  const targetPath = sectionPaths[id];
 
+  if (!targetPath) {
     return;
   }
 
-  // Return to Home when navigating from another page.
-  if (currentPage !== "home") {
-    setCurrentPage("home");
+  const currentPath =
+    location.pathname.replace(/\/+$/, "") || "/";
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (id === "home") {
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "instant",
-          });
-
-          return;
-        }
-
-        const target = document.getElementById(id);
-
-        if (target) {
-          target.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      });
-    });
-
+  if (currentPath !== targetPath) {
+    navigate(targetPath);
     return;
   }
 
-  // Scroll to the top of Home.
-  if (id === "home") {
+  if (id === "home" || id === "contact") {
+    setCurrentPage(id);
+
     window.scrollTo({
       top: 0,
       left: 0,
@@ -482,7 +524,6 @@ const scrollToSection = (id) => {
     return;
   }
 
-  // Scroll to the selected Home section.
   const target = document.getElementById(id);
 
   if (target) {
