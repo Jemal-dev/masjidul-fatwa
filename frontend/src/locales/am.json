@@ -65,7 +65,48 @@
         "description": "ግልጽ መዝገቦች የሻባብን ተሳትፎ እና የተሰበሰበውን ሀብት ለመረዳት ያቀላሉ።"
       }
     },
-    "label": "ማህበረሰብ • አስተዋጽኦ • ተፅእኖ"
+    
+        "label": "ማህበረሰብ • አስተዋጽኦ • ተፅእኖ",
+
+    "communityActivities": {
+      "aboutHeading": "ስለ መስጂዱል-ፈትዋ ሻባብ",
+
+      "intro": "መስጂዱል-ፈትዋ ሻባብ በኦዋራ ገማ የሚገኝ የወጣቶች ማህበረሰብ ነው። ማህበረሰቡ በወጣቶች አባልነት፣ በማህበረሰብ እንቅስቃሴዎችና በተደራጀ የዓርብ መዋጮ ላይ ያተኩራል።",
+
+      "keyInformationHeading": "ስለ መስጂዱል-ፈትዋ ሻባብ ዋና መረጃዎች",
+
+      "activitiesHeading": "የማህበረሰብ እንቅስቃሴዎቻችን",
+
+      "activitiesIntro": "መስጂዱል-ፈትዋ ሻባብ የወጣቶች ትምህርትን፣ የመስጊድ እንቅስቃሴዎችን፣ የበጎ አድራጎት ድጋፍን፣ የማህበረሰብ ስብሰባዎችን፣ የማህበረሰብ ልማትንና የተደራጁ የዓርብ መዋጮዎችን ይደግፋል።",
+
+      "facts": {
+        "youthEducationLabel": "የወጣቶች ትምህርት",
+        "youthEducation": "የወጣቶችን ትምህርትና የመማር እንቅስቃሴዎችን ይደግፋል።",
+
+        "mosqueActivitiesLabel": "የመስጊድ እንቅስቃሴዎች",
+        "mosqueActivities": "በመስጊድ እንቅስቃሴዎች ይሳተፋል እና የማህበረሰቡን ሃይማኖታዊ ሕይወት ይደግፋል።",
+
+        "charitableSupportLabel": "የበጎ አድራጎት ድጋፍ",
+        "charitableSupport": "ድጋፍ ለሚያስፈልጋቸው ሰዎች የበጎ አድራጎት እገዛ ይሰጣል።",
+
+        "communityMeetingsLabel": "የማህበረሰብ ስብሰባዎች",
+        "communityMeetings": "ወጣቶችንና የማህበረሰቡን አባላት ለውይይትና ለእንቅስቃሴዎች ቅንጅት ያሰባስባል።",
+
+        "communityDevelopmentLabel": "የማህበረሰብ ልማት",
+        "communityDevelopment": "የማህበረሰብ ልማትን ለመደገፍ በሚያገለግሉ ፕሮጀክቶች ይሳተፋል።",
+
+        "fridayContributionsLabel": "የዓርብ መዋጮዎች",
+        "fridayContributions": "የሳምንታዊ መዋጮዎችን መመዝገብና ማስተዳደር እንዲሁም የተደራጁ የገንዘብ መዝገቦችን መያዝ ይደግፋል።"
+      },
+
+      "contactHeading": "መስጂዱል-ፈትዋ ሻባብን ያግኙ",
+
+      "contactDescription": "ለማህበረሰብ ጥያቄዎችና ተጨማሪ መረጃ፣ እባክዎ ኦፊሴላዊውን ድረ ገጽ ይጎብኙ።",
+
+      "emailLabel": "ኢሜይል",
+
+      "phoneLabel": "ስልክ"
+    }
   },
 
   "services": {

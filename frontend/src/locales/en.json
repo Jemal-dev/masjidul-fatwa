@@ -65,8 +65,36 @@
         "description": "Clear records make it easier to understand participation and the resources collected by the Shabab."
       }
     },
-    "label": "Community • Contribution • Impact"
+   "label": "Community • Contribution • Impact",
+
+"communityActivities": {
+  "aboutHeading": "About Masjidul-Fatwa Shabab",
+  "intro": "Masjidul-Fatwa Shabab is a youth community based in Awara Gema, The community focuses on youth membership, community activities, and organized Friday contributions.",
+  "keyInformationHeading": "Key Information About Masjidul-Fatwa Shabab",
+  "activitiesHeading": "Our Community Activities",
+  "activitiesIntro": "Masjidul-Fatwa Shabab is a youth community based in Awara Gema, Its activities include youth education, mosque activities, charitable support, community meetings, community development, and organized Friday contributions.",
+
+  "facts": {
+    "youthEducationLabel": "Youth Education",
+    "youthEducation": "Supports youth education and learning activities.",
+    "mosqueActivitiesLabel": "Mosque Activities",
+    "mosqueActivities": "Participates in mosque activities and supports community religious life.",
+    "charitableSupportLabel": "Charitable Support",
+    "charitableSupport": "Provides charitable support for people in need.",
+    "communityMeetingsLabel": "Community Meetings",
+    "communityMeetings": "Brings young people and community members together to discuss concerns and coordinate activities.",
+    "communityDevelopmentLabel": "Community Development",
+    "communityDevelopment": "Participates in projects intended to support community development.",
+    "fridayContributionsLabel": "Friday Contributions",
+    "fridayContributions": "Supports the recording and management of weekly contributions and organized financial records."
   },
+
+  "contactHeading": "Contact Masjidul-Fatwa Shabab",
+  "contactDescription": "For community questions and further information, visit the official website:",
+  "emailLabel": "Email",
+  "phoneLabel": "Phone"
+}
+},
 
   "services": {
     "kicker": "Our Services",

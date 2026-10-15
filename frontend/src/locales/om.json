@@ -66,9 +66,48 @@
         "description": "Galmeewwan ifaan hirmaannaa fi qabeenya Shabab walitti qabame hubachuun salphata."
       }
     },
-    "label": "Hawaasa • Gumaacha • Bu'aa"
-  },
+        "label": "Hawaasa • Gumaacha • Bu'aa",
 
+    "communityActivities": {
+      "aboutHeading": "Waa'ee Masjidul-Fatwa Shabab",
+
+      "intro": "Masjidul-Fatwa Shabab hawaasa dargaggootaa Awara Gema keessatti argamu dha. Hawaasni kun miseensummaa dargaggootaa, hojiiwwan hawaasaa fi gumaacha Jimaataa qindaa'aa irratti xiyyeeffata.",
+
+      "keyInformationHeading": "Odeeffannoo Ijoo Waa'ee Masjidul-Fatwa Shabab",
+
+      "activitiesHeading": "Hojiiwwan Hawaasaa Keenya",
+
+      "activitiesIntro": "Masjidul-Fatwa Shabab hawaasa dargaggootaa Awara Gema, keessatti argamu dha. Hojiiwwan isaa barnoota dargaggootaa, hojiiwwan masjiidaa, deeggarsa arjoomaa, walga'ii hawaasaa, misooma hawaasaa fi gumaacha Jimaataa qindaa'aa of keessatti qabata.",
+
+      "facts": {
+        "youthEducationLabel": "Barnoota Dargaggootaa",
+        "youthEducation": "Barnootaa fi hojiiwwan barnoota dargaggootaa ni deeggara.",
+
+        "mosqueActivitiesLabel": "Hojiiwwan Masjiidaa",
+        "mosqueActivities": "Hojiiwwan masjiidaa keessatti ni hirmaata, jireenya amantii hawaasaas ni deeggara.",
+
+        "charitableSupportLabel": "Deeggarsa Arjoomaa",
+        "charitableSupport": "Namoota gargaarsa barbaadaniif deeggarsa arjoomaa ni kenna.",
+
+        "communityMeetingsLabel": "Walga'iiwwan Hawaasaa",
+        "communityMeetings": "Dargaggootaa fi miseensota hawaasaa mari'achuufi hojiiwwan qindeessuuf walitti fida.",
+
+        "communityDevelopmentLabel": "Misooma Hawaasaa",
+        "communityDevelopment": "Pirojektoota misooma hawaasaa deeggaran keessatti ni hirmaata.",
+
+        "fridayContributionsLabel": "Gumaacha Jimaataa",
+        "fridayContributions": "Galmeessuu fi bulchiinsa gumaacha torban torbaniin kennamu, akkasumas galmee maallaqaa qindaa'aa ta'e ni deeggara."
+      },
+
+      "contactHeading": "Masjidul-Fatwa Shabab Quunnamaa",
+
+      "contactDescription": "Gaaffiiwwan hawaasaa fi odeeffannoo dabalataaf marsariitii ofiisaa daawwadhaa:",
+
+      "emailLabel": "Imeelii",
+
+      "phoneLabel": "Bilbila"
+    }
+  },
   "services": {
     "kicker": "Tajaajiloota Keenya",
     "title": "Wanti gareen Shabab barbaadu hundi bakka tokko keessatti argama.",

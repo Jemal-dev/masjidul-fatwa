@@ -94,73 +94,66 @@ function AboutPage({ onNavigate }) {
           </div>
         </div>
 
-        {/* ABOUT MASJIDUL-FATWA SHABAB — ADDITIONAL INFORMATION */}
+       {/* ABOUT MASJIDUL-FATWA SHABAB — ADDITIONAL INFORMATION */}
 
 <section className="about-page-details">
+  <h2>{t("about.communityActivities.aboutHeading")}</h2>
 
-  <h2>About Masjidul-Fatwa Shabab</h2>
+  <p>{t("about.communityActivities.intro")}</p>
 
-  <p>
-    Masjidul-Fatwa Shabab is a youth community based in
-    Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia.
-    The community focuses on youth membership, community
-    activities, and organized Friday contributions.
-  </p>
+  <h2>{t("about.communityActivities.keyInformationHeading")}</h2>
 
-  <h2>Key Information About Masjidul-Fatwa Shabab</h2>
+  <h2>{t("about.communityActivities.activitiesHeading")}</h2>
 
-  <h2>Our Community Activities</h2>
+  <p>{t("about.communityActivities.activitiesIntro")}</p>
 
-<p>
-  Masjidul-Fatwa Shabab is a youth community based in
-  Awara Gema, Shalla, West Arsi Zone, Oromia, Ethiopia.
-  Its activities include youth education, mosque activities,
-  charitable support, community meetings, community development,
-  and organized Friday contributions.
-</p>
+  <ul className="about-page-facts">
+    <li>
+      <strong>
+        {t("about.communityActivities.facts.youthEducationLabel")}:
+      </strong>{" "}
+      {t("about.communityActivities.facts.youthEducation")}
+    </li>
 
-<ul className="about-page-facts">
-  <li>
-    <strong>Youth Education:</strong>{" "}
-    Supports youth education and learning activities.
-  </li>
+    <li>
+      <strong>
+        {t("about.communityActivities.facts.mosqueActivitiesLabel")}:
+      </strong>{" "}
+      {t("about.communityActivities.facts.mosqueActivities")}
+    </li>
 
-  <li>
-    <strong>Mosque Activities:</strong>{" "}
-    Participates in mosque activities and supports community
-    religious life.
-  </li>
+    <li>
+      <strong>
+        {t("about.communityActivities.facts.charitableSupportLabel")}:
+      </strong>{" "}
+      {t("about.communityActivities.facts.charitableSupport")}
+    </li>
 
-  <li>
-    <strong>Charitable Support:</strong>{" "}
-    Provides charitable support for people in need.
-  </li>
+    <li>
+      <strong>
+        {t("about.communityActivities.facts.communityMeetingsLabel")}:
+      </strong>{" "}
+      {t("about.communityActivities.facts.communityMeetings")}
+    </li>
 
-  <li>
-    <strong>Community Meetings:</strong>{" "}
-    Brings young people and community members together
-    to discuss concerns and coordinate activities.
-  </li>
+    <li>
+      <strong>
+        {t("about.communityActivities.facts.communityDevelopmentLabel")}:
+      </strong>{" "}
+      {t("about.communityActivities.facts.communityDevelopment")}
+    </li>
 
-  <li>
-    <strong>Community Development:</strong>{" "}
-    Participates in projects intended to support community
-    development.
-  </li>
+    <li>
+      <strong>
+        {t("about.communityActivities.facts.fridayContributionsLabel")}:
+      </strong>{" "}
+      {t("about.communityActivities.facts.fridayContributions")}
+    </li>
+  </ul>
 
-  <li>
-    <strong>Friday Contributions:</strong>{" "}
-    Supports the recording and management of weekly
-    contributions and organized financial records.
-  </li>
-</ul>
+  <h2>{t("about.communityActivities.contactHeading")}</h2>
 
-  <h2>Contact Masjidul-Fatwa Shabab</h2>
-
-  <p>
-    For community questions and further information, visit
-    the official website:
-  </p>
+  <p>{t("about.communityActivities.contactDescription")}</p>
 
   <p>
     <a href="https://masjidul-fatwa.vercel.app/">
@@ -169,19 +162,18 @@ function AboutPage({ onNavigate }) {
   </p>
 
   <p>
-    <strong>Email:</strong>{" "}
+    <strong>{t("about.communityActivities.emailLabel")}:</strong>{" "}
     <a href="mailto:masjidulfatwa@gmail.com">
       masjidulfatwa@gmail.com
     </a>
   </p>
 
   <p>
-    <strong>Phone:</strong>{" "}
+    <strong>{t("about.communityActivities.phoneLabel")}:</strong>{" "}
     <a href="tel:+251919543806">
       +251 919 543 806
     </a>
   </p>
-
 </section>
 
         <div className="about-page-contact">
